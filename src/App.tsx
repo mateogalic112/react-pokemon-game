@@ -1,8 +1,6 @@
-import { Box, Button, Spacer } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
-import EnemyStats from './components/EnemyStats'
+import BattleField from './components/BattleField'
 import Navigation from './components/Navigation'
-import PokemonCard from './components/PokemonCard'
 import Layout from './layout/Layout'
 import Pokemon from './models/Pokemon'
 
@@ -10,42 +8,23 @@ const BASE_URL = 'https://pokeapi.co/api/v2'
 
 function App() {
   const [pokemon, setPokemon] = useState<Pokemon | null>(null)
-  const [trainAttack, setTrainAttack] = useState(100)
-  const [winner, setWinner] = useState<string | undefined>(undefined)
+  const [opponent, setOpponent] = useState<Pokemon | null>(null)
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await fetch(`${BASE_URL}/pokemon/1`).then((res) =>
-        res.json(),
-      )
+      const [p1, p2] = await Promise.all([
+        fetch(`${BASE_URL}/pokemon/1`).then((res) => res.json()),
+        fetch(`${BASE_URL}/pokemon/2`).then((res) => res.json()),
+      ])
 
-      setPokemon(new Pokemon(result))
+      setPokemon(new Pokemon(p1))
+      setOpponent(new Pokemon(p2))
     }
 
     fetchData()
   }, [])
 
-  const attackEnemy = (
-    attackFn: Function | undefined,
-    pokemonName: string | undefined,
-  ): void => {
-    if (!attackFn) return
-
-    console.log(attackFn)
-
-    const damage = attackFn()
-
-    if (damage >= trainAttack) {
-      setTrainAttack(0)
-      setWinner(pokemonName)
-
-      return
-    }
-
-    setTrainAttack(trainAttack - damage)
-  }
-
-  if (pokemon === null) {
+  if (pokemon === null || opponent === null) {
     return <h1>Loading...</h1>
   }
 
@@ -53,23 +32,7 @@ function App() {
     <Layout>
       <Navigation />
 
-      <EnemyStats health={trainAttack} name="Enemy" />
-
-      <Box height={10} />
-
-      <div>
-        <PokemonCard pokemon={pokemon} />
-        {winner && <p>Winner is {winner}</p>}
-
-        <Button
-          mt={2}
-          onClick={() =>
-            attackEnemy(pokemon?.attack.bind(pokemon), pokemon?.name)
-          }
-        >
-          Attack
-        </Button>
-      </div>
+      <BattleField pokemon={pokemon} opponent={opponent} />
     </Layout>
   )
 }

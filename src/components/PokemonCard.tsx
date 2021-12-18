@@ -1,9 +1,19 @@
-import { Box, Image, Badge, Flex, Center, Text } from '@chakra-ui/react'
+import { Box, Image, Badge, Flex, Center, Text, Button } from '@chakra-ui/react'
 import Pokemon from '../models/Pokemon'
 
-const PokemonCard = ({ pokemon }: { pokemon: Pokemon }) => {
+const PokemonCard = ({
+  pokemon,
+  attack,
+  hp,
+  active,
+}: {
+  pokemon: Pokemon
+  attack: (damage: number) => void
+  hp: number
+  active: boolean
+}) => {
   return (
-    <Box maxW="xs" borderWidth="1px" borderRadius="lg" py={3}>
+    <Box maxW="sm" borderWidth="1px" borderRadius="lg" py={3}>
       <Image
         boxSize="120px"
         margin="auto"
@@ -36,23 +46,59 @@ const PokemonCard = ({ pokemon }: { pokemon: Pokemon }) => {
           {pokemon.name.toUpperCase()}
         </Box>
 
+        <Flex color="white" gap="1rem" flexWrap="wrap" mb={4}>
+          <Center
+            minW="60px"
+            py={1}
+            px={2}
+            flexDirection="column"
+            borderRadius="10px"
+          >
+            <Text color="gray.700">HP</Text>
+            <Text color="black" size="xl">
+              <b>{hp}</b>
+            </Text>
+          </Center>
+          {pokemon
+            .getStats()
+            .slice(1)
+            .map((stat) => (
+              <Center
+                minW="60px"
+                py={1}
+                px={2}
+                flexDirection="column"
+                borderRadius="10px"
+                key={stat.name}
+              >
+                <Text color="gray.700">{stat.name.toUpperCase()}</Text>
+                <Text color="black" size="xl">
+                  <b>{stat.amount}</b>
+                </Text>
+              </Center>
+            ))}
+        </Flex>
+
         <Flex color="white" gap="1rem" flexWrap="wrap">
-          {pokemon.getStats().map((stat) => (
-            <Center
-              minW="60px"
-              py={1}
-              px={2}
-              bg="green.600"
-              flexDirection="column"
-              borderRadius="10px"
-              key={stat.name}
-            >
-              <Text>{stat.name.toUpperCase()}</Text>
-              <Text color="black" size="xl">
-                <b>{stat.amount}</b>
-              </Text>
-            </Center>
-          ))}
+          {pokemon
+            .getMoves()
+            .slice(0, 3)
+            .map((move) => (
+              <Button
+                key={move.name}
+                bg="gray.500"
+                py={6}
+                onClick={() => attack(move.damage)}
+                disabled={!active}
+              >
+                <Center flexDirection="column">
+                  <Text>{move.name.toUpperCase()}</Text>
+                  <Text color="black" size="xl">
+                    <b>{move.damage}</b>
+                  </Text>
+                </Center>
+              </Button>
+            ))}
         </Flex>
       </Box>
     </Box>

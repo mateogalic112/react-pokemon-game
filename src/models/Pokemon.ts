@@ -32,7 +32,7 @@ class Pokemon {
       }))
       .filter((item) => !item.name.includes('special'))
     this.moves = pokemonData.moves.map((move) => ({
-      damage: 10,
+      damage: Math.round(Math.random() * 10),
       name: move.move.name,
     }))
   }
@@ -49,8 +49,34 @@ class Pokemon {
     return this.stats
   }
 
-  attack() {
-    return this.moves[0].damage
+  getMoves() {
+    return this.moves
+  }
+
+  attack(moveIndex: number): number {
+    const attack =
+      this.stats.find((item) => item.name === 'attack')?.amount ?? 0
+
+    return Math.round((this.moves[moveIndex].damage * attack) / 10)
+  }
+
+  dodge(randomValue: number): boolean {
+    const speed = this.stats.find((item) => item.name === 'speed')?.amount ?? 0
+
+    if (randomValue + speed > 100) return true
+
+    return false
+  }
+
+  defend(damage: number): number {
+    const defense =
+      this.stats.find((item) => item.name === 'defense')?.amount ?? 0
+
+    return damage - defense
+  }
+
+  getHp(): number {
+    return this.stats.find((item) => item.name === 'hp')?.amount ?? 100
   }
 }
 
