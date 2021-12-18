@@ -11,15 +11,15 @@ interface IBattleFieldProps {
 }
 
 const BattleField = ({ pokemon, opponent }: IBattleFieldProps) => {
-  const battle = new Battle(pokemon, opponent)
-
   const [pokeHealth, setPokeHealth] = useState(pokemon.getHp())
   const [opponentHealth, setOpponentHealth] = useState(opponent.getHp())
 
   const [turn, setTurn] = useState(0)
+  const opponentTurn = turn % 2 === 1
+
   const [messages, setMessages] = useState<string[]>([])
 
-  const opponentTurn = turn % 2 === 1
+  const battle = new Battle(pokemon, opponent)
 
   const onPokemonAttack = (
     move: Move,

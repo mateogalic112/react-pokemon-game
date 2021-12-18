@@ -15,7 +15,7 @@ class Battle {
     return damage >= health
   }
 
-  handleBattleAttack = (attacker: Pokemon, defender: Pokemon) => (
+  private handleAttack = (attacker: Pokemon, defender: Pokemon) => (
     move: Move,
     health: number,
   ): { damage: number; messages: string[] } => {
@@ -49,11 +49,12 @@ class Battle {
     }
   }
 
+  // Strategy for attacking based on turn
   attackOpponent = (opponentTurn: boolean) => {
     if (!opponentTurn) {
-      return this.handleBattleAttack(this.attacker, this.defender)
+      return this.handleAttack(this.attacker, this.defender)
     }
-    return this.handleBattleAttack(this.defender, this.attacker)
+    return this.handleAttack(this.defender, this.attacker)
   }
 }
 
