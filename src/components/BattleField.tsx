@@ -1,6 +1,6 @@
 import { Box } from '@chakra-ui/react'
 import { useState } from 'react'
-import Pokemon from '../models/Pokemon'
+import Pokemon, { Move } from '../models/Pokemon'
 import PokemonCard from './PokemonCard'
 
 interface IBattleFieldProps {
@@ -16,20 +16,29 @@ const BattleField = ({ pokemon, opponent }: IBattleFieldProps) => {
 
   const opponentTurn = turn % 2 === 1
 
-  const handleAttack = (damage: number): void => {
+  const handleAttack = (move: Move): void => {
     if (!opponentTurn) {
-      if (checkForGameEnd(damage, opponentHealth)) {
-        setMessage('Game Over, you win')
+      if (checkForGameEnd(move.damage, opponentHealth)) {
+        setMessage(`Game Over, ${pokemon.getName()} wins`)
         return
       }
-      setOpponentHealth((prevHealth) => prevHealth - damage)
+      setMessage(
+        `${pokemon.getName()} attacks with ${move.name.toUpperCase()} and ${
+          move.damage
+        } damage`,
+      )
+      setOpponentHealth((prevHealth) => prevHealth - move.damage)
     } else {
-      checkForGameEnd(damage, pokeHealth)
-      if (checkForGameEnd(damage, pokeHealth)) {
-        setMessage('Game Over, opponent wins')
+      if (checkForGameEnd(move.damage, pokeHealth)) {
+        setMessage(`Game Over, ${opponent.getName()} wins`)
         return
       }
-      setPokeHealth((prevHealth) => prevHealth - damage)
+      setMessage(
+        `${opponent.getName()} attacks with ${move.name.toUpperCase()} and ${
+          move.damage
+        } damage`,
+      )
+      setPokeHealth((prevHealth) => prevHealth - move.damage)
     }
     setTurn(turn + 1)
   }
@@ -40,8 +49,6 @@ const BattleField = ({ pokemon, opponent }: IBattleFieldProps) => {
 
   return (
     <Box>
-      <p>{message}</p>
-      <p>{opponentHealth}</p>
       <PokemonCard
         pokemon={opponent}
         attack={handleAttack}
@@ -49,7 +56,11 @@ const BattleField = ({ pokemon, opponent }: IBattleFieldProps) => {
         active={opponentTurn}
       />
 
-      <Box height={10} />
+      <Box height={5} />
+
+      <p>{message}</p>
+
+      <Box height={5} />
 
       <PokemonCard
         pokemon={pokemon}

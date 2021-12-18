@@ -1,5 +1,5 @@
 import { Box, Image, Badge, Flex, Center, Text, Button } from '@chakra-ui/react'
-import Pokemon from '../models/Pokemon'
+import Pokemon, { Move } from '../models/Pokemon'
 
 const PokemonCard = ({
   pokemon,
@@ -8,7 +8,7 @@ const PokemonCard = ({
   active,
 }: {
   pokemon: Pokemon
-  attack: (damage: number) => void
+  attack: (move: Move) => void
   hp: number
   active: boolean
 }) => {
@@ -88,7 +88,7 @@ const PokemonCard = ({
                 key={move.name}
                 bg="gray.500"
                 py={6}
-                onClick={() => attack(move.damage)}
+                onClick={() => attack(move)}
                 disabled={!active}
               >
                 <Center flexDirection="column">

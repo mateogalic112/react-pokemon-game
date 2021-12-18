@@ -5,7 +5,7 @@ interface Stat {
   name: string
 }
 
-interface Move {
+export interface Move {
   damage: number
   name: string
 }
@@ -42,7 +42,7 @@ class Pokemon {
   }
 
   getName() {
-    return this.name
+    return this.name.toUpperCase()
   }
 
   getStats() {
