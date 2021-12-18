@@ -2,6 +2,7 @@ import { Box } from '@chakra-ui/react'
 import { useState } from 'react'
 import Pokemon, { Move } from '../models/Pokemon'
 import PokemonCard from './PokemonCard'
+import PokemonOpponentCard from './PokemonOpponentCard'
 
 interface IBattleFieldProps {
   pokemon: Pokemon
@@ -9,37 +10,41 @@ interface IBattleFieldProps {
 }
 
 const BattleField = ({ pokemon, opponent }: IBattleFieldProps) => {
-  const [pokeHealth, setPokeHealth] = useState(10)
-  const [opponentHealth, setOpponentHealth] = useState(10)
+  const [pokeHealth, setPokeHealth] = useState(pokemon.getHp())
+  const [opponentHealth, setOpponentHealth] = useState(opponent.getHp())
   const [turn, setTurn] = useState(0)
-  const [message, setMessage] = useState('')
+  const [messages, setMessages] = useState<string[]>([])
 
   const opponentTurn = turn % 2 === 1
 
-  const handleAttack = (move: Move): void => {
-    if (!opponentTurn) {
-      if (checkForGameEnd(move.damage, opponentHealth)) {
-        setMessage(`Game Over, ${pokemon.getName()} wins`)
-        return
-      }
-      setMessage(
-        `${pokemon.getName()} attacks with ${move.name.toUpperCase()} and ${
-          move.damage
-        } damage`,
-      )
-      setOpponentHealth((prevHealth) => prevHealth - move.damage)
-    } else {
-      if (checkForGameEnd(move.damage, pokeHealth)) {
-        setMessage(`Game Over, ${opponent.getName()} wins`)
-        return
-      }
-      setMessage(
-        `${opponent.getName()} attacks with ${move.name.toUpperCase()} and ${
-          move.damage
-        } damage`,
-      )
-      setPokeHealth((prevHealth) => prevHealth - move.damage)
+  const displayMessages = messages
+
+  const handleAttack = (
+    attacker: Pokemon,
+    defender: Pokemon,
+    health: number,
+    setHealth: React.Dispatch<React.SetStateAction<number>>,
+  ) => (move: Move): void => {
+    displayMessages.push(
+      `${attacker.getName()} attacks with ${move.name.toUpperCase()} and ${
+        move.damage
+      } damage`,
+    )
+
+    if (defender.dodge()) {
+      displayMessages.push(`${defender.getName()} dodged the attack!`)
     }
+
+    if (checkForGameEnd(move.damage, health)) {
+      displayMessages.push(`Game over, ${attacker.getName()} wins!`)
+      setMessages([...displayMessages])
+      return
+    }
+
+    setMessages([...displayMessages])
+
+    setHealth((prevHealth) => prevHealth - move.damage)
+
     setTurn(turn + 1)
   }
 
@@ -48,23 +53,30 @@ const BattleField = ({ pokemon, opponent }: IBattleFieldProps) => {
   }
 
   return (
-    <Box>
-      <PokemonCard
+    <Box bg="green.100" p={4}>
+      <PokemonOpponentCard
         pokemon={opponent}
-        attack={handleAttack}
+        attack={handleAttack(opponent, pokemon, pokeHealth, setPokeHealth)}
         hp={opponentHealth}
         active={opponentTurn}
       />
 
       <Box height={5} />
 
-      <p>{message}</p>
+      {messages.map((message) => (
+        <p>{message}</p>
+      ))}
 
       <Box height={5} />
 
       <PokemonCard
         pokemon={pokemon}
-        attack={handleAttack}
+        attack={handleAttack(
+          pokemon,
+          opponent,
+          opponentHealth,
+          setOpponentHealth,
+        )}
         hp={pokeHealth}
         active={!opponentTurn}
       />

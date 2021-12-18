@@ -60,10 +60,10 @@ class Pokemon {
     return Math.round((this.moves[moveIndex].damage * attack) / 10)
   }
 
-  dodge(randomValue: number): boolean {
+  dodge(): boolean {
     const speed = this.stats.find((item) => item.name === 'speed')?.amount ?? 0
 
-    if (randomValue + speed > 100) return true
+    if (Math.random() * 75 + speed > 100) return true
 
     return false
   }

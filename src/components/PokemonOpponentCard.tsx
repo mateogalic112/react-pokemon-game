@@ -1,7 +1,8 @@
 import { Box, Image, Badge, Flex, Center, Text, Button } from '@chakra-ui/react'
+import { useEffect } from 'react'
 import Pokemon, { Move } from '../models/Pokemon'
 
-const PokemonCard = ({
+const PokemonOpponentCard = ({
   pokemon,
   attack,
   hp,
@@ -12,15 +13,18 @@ const PokemonCard = ({
   hp: number
   active: boolean
 }) => {
+  const randomMoveIndex = Math.round(Math.random() * 3)
+
+  useEffect(() => {
+    if (!active) return
+
+    setTimeout(() => {
+      attack(pokemon.moves[randomMoveIndex])
+    }, 2000)
+  }, [active])
+
   return (
     <Box maxW="sm" borderWidth="1px" borderRadius="lg" py={3}>
-      <Image
-        boxSize="120px"
-        margin="auto"
-        src={pokemon.image}
-        alt={pokemon.name}
-      />
-
       <Box px="6" py="1">
         <Box
           mt="1"
@@ -65,7 +69,7 @@ const PokemonCard = ({
             ))}
         </Flex>
 
-        <Flex color="white" gap="1rem" flexWrap="wrap">
+        <Flex color="white" gap="1rem" flexWrap="wrap" display={'none'}>
           {pokemon
             .getMoves()
             .slice(0, 3)
@@ -87,8 +91,15 @@ const PokemonCard = ({
             ))}
         </Flex>
       </Box>
+
+      <Image
+        boxSize="120px"
+        margin="auto"
+        src={pokemon.image}
+        alt={pokemon.name}
+      />
     </Box>
   )
 }
 
-export default PokemonCard
+export default PokemonOpponentCard
