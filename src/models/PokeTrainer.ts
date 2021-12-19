@@ -9,8 +9,6 @@ export interface IPokeTrainer {
   getName(): string
   getPokeBalls(): number
   getPokemons(): IPokemon[]
-
-  catchPokemon(pokemon: IPokemon): string
 }
 
 class PokeTrainer implements IPokeTrainer {
@@ -34,18 +32,6 @@ class PokeTrainer implements IPokeTrainer {
 
   getPokemons() {
     return this.pokemons
-  }
-
-  catchPokemon(pokemon: IPokemon): string {
-    if (this.getPokeBalls() === 0) {
-      return 'Out of pokeballs!'
-    }
-
-    if (Math.random() * 10 > 5) {
-      return `You caught ${pokemon.getName()}!`
-    }
-
-    return `${pokemon.getName()} escaped!`
   }
 }
 

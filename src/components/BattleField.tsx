@@ -12,15 +12,20 @@ interface IBattleFieldProps {
 }
 
 const BattleField = ({ pokemon, opponent }: IBattleFieldProps) => {
+  // Pokemons hp saved in component state
   const [pokeHealth, setPokeHealth] = useState(pokemon.getHp())
   const [opponentHealth, setOpponentHealth] = useState(opponent.getHp())
 
+  // Keep track of who is next in turn for attacking
   const [turn, setTurn] = useState(0)
   const opponentTurn = turn % 2 === 1
 
+  // Display fight messages
   const [messages, setMessages] = useState<string[]>([])
 
+  // Initiliaze fight
   const battle = new Battle(pokemon, opponent)
+  // Get current trainer from context
   const { trainer, catchPokemon, pokeBalls, pokemons } = usePokeTrainerContext()
 
   const onPokemonAttack = (
@@ -28,6 +33,7 @@ const BattleField = ({ pokemon, opponent }: IBattleFieldProps) => {
     health: number,
     setHealth: React.Dispatch<React.SetStateAction<number>>,
   ) => {
+    // HOF for creating attack damage and battle message based on chosen move
     const { damage, messages } = battle.attackOpponent(opponentTurn)(
       move,
       health,
@@ -40,11 +46,14 @@ const BattleField = ({ pokemon, opponent }: IBattleFieldProps) => {
     setTurn(turn + 1)
   }
 
+  // Throw pokeball to catch opponent pokemon
   const onPokeballThrow = () => {
     const caughtMessage = catchPokemon(opponent, opponentHealth)
 
     setMessages((prev) => [...prev, caughtMessage])
   }
+
+  console.log(pokemons)
 
   return (
     <Flex bg="green.100" p={4}>
@@ -68,13 +77,16 @@ const BattleField = ({ pokemon, opponent }: IBattleFieldProps) => {
         />
       </Box>
       <Flex direction="column" pt={10}>
+        <Flex gap="1rem">
+          <p>Pokeballs available: {pokeBalls}</p>
+          <Button onClick={onPokeballThrow}>Throw pokeball</Button>
+        </Flex>
+
+        <Box height={5} />
+
         {messages.map((message, index) => (
           <p key={index}>{message}</p>
         ))}
-      </Flex>
-
-      <Flex>
-        <Button onClick={onPokeballThrow}>Throw pokeball</Button>
       </Flex>
     </Flex>
   )

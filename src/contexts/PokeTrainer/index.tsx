@@ -53,7 +53,7 @@ export const PokeTrainerProvider: FC = ({ children }) => {
   const catchPokemon = (pokemon: IPokemon, hp: number) => {
     if (pokeBalls === 0) return 'You ran out of pokeballs!'
 
-    if (hp >= pokemon.getHp()) {
+    if (hp < pokemon.getHp() / 2) {
       dispatch({
         type: PokeTrainerActionKind.catchPokemon,
         payload: { pokemon },
