@@ -1,7 +1,8 @@
-import { Box, Flex } from '@chakra-ui/react'
+import { Box, Button, Flex } from '@chakra-ui/react'
 import { useState } from 'react'
 import Battle from '../models/Battle'
 import Pokemon, { Move } from '../models/Pokemon'
+import PokeTrainer from '../models/PokeTrainer'
 import PokemonCard from './PokemonCard'
 import PokemonOpponentCard from './PokemonOpponentCard'
 
@@ -20,6 +21,7 @@ const BattleField = ({ pokemon, opponent }: IBattleFieldProps) => {
   const [messages, setMessages] = useState<string[]>([])
 
   const battle = new Battle(pokemon, opponent)
+  const pokeTrainer = new PokeTrainer('Mateo', 0)
 
   const onPokemonAttack = (
     move: Move,
@@ -36,6 +38,13 @@ const BattleField = ({ pokemon, opponent }: IBattleFieldProps) => {
     setHealth((prevHealth) => prevHealth - damage)
 
     setTurn(turn + 1)
+  }
+
+  const onPokeballThrow = () => {
+    const caughtMessage = pokeTrainer.catchPokemon(opponent, opponentHealth)
+    setMessages((prev) => [...prev, caughtMessage])
+
+    console.log(pokeTrainer.getPokemons())
   }
 
   return (
@@ -63,6 +72,10 @@ const BattleField = ({ pokemon, opponent }: IBattleFieldProps) => {
         {messages.map((message, index) => (
           <p key={index}>{message}</p>
         ))}
+      </Flex>
+
+      <Flex>
+        <Button onClick={onPokeballThrow}>Throw pokeball</Button>
       </Flex>
     </Flex>
   )

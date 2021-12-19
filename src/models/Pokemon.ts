@@ -10,7 +10,19 @@ export interface Move {
   name: string
 }
 
-class Pokemon {
+export interface IPokemon {
+  getId(): number
+  getName(): string
+  getStats(): Stat[]
+  getMoves(): Move[]
+
+  attack(moveIndex: number): number
+  dodge(): boolean
+  defend(damage: number): number
+  getHp(): number
+}
+
+class Pokemon implements IPokemon {
   readonly id: number
   height: number
   weight: number
