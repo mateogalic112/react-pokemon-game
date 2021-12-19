@@ -17,8 +17,8 @@ const PokemonCard = ({
       <Image
         boxSize="120px"
         margin="auto"
-        src={pokemon.image}
-        alt={pokemon.name}
+        src={pokemon.getImage()}
+        alt={pokemon.getName()}
       />
 
       <Box px="6" py="1">
@@ -29,7 +29,7 @@ const PokemonCard = ({
           lineHeight="tight"
           isTruncated
         >
-          {pokemon.name.toUpperCase()}
+          {pokemon.getName().toUpperCase()}
         </Box>
 
         <Flex color="white" gap="1rem" flexWrap="wrap" mb={4}>

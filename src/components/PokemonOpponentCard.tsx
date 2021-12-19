@@ -19,7 +19,7 @@ const PokemonOpponentCard = ({
     if (!active) return
 
     setTimeout(() => {
-      attack(pokemon.moves[randomMoveIndex])
+      attack(pokemon.getMoves()[randomMoveIndex])
     }, 2000)
   }, [active])
 
@@ -33,7 +33,7 @@ const PokemonOpponentCard = ({
           lineHeight="tight"
           isTruncated
         >
-          {pokemon.name.toUpperCase()}
+          {pokemon.getName().toUpperCase()}
         </Box>
 
         <Flex color="white" gap="1rem" flexWrap="wrap" mb={4}>
@@ -95,8 +95,8 @@ const PokemonOpponentCard = ({
       <Image
         boxSize="120px"
         margin="auto"
-        src={pokemon.image}
-        alt={pokemon.name}
+        src={pokemon.getImage()}
+        alt={pokemon.getName()}
       />
     </Box>
   )

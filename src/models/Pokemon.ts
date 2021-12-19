@@ -15,6 +15,7 @@ export interface IPokemon {
   getName(): string
   getStats(): Stat[]
   getMoves(): Move[]
+  getImage(): string
 
   attack(moveIndex: number): number
   dodge(): boolean
@@ -51,6 +52,10 @@ class Pokemon implements IPokemon {
 
   getId() {
     return this.id
+  }
+
+  getImage() {
+    return this.image
   }
 
   getName() {
