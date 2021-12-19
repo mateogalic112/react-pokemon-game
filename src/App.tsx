@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import BattleField from './components/BattleField'
 import Navigation from './components/Navigation'
+import { PokeTrainerProvider } from './contexts/PokeTrainer'
 import Layout from './layout/Layout'
 import Pokemon from './models/Pokemon'
 
@@ -32,7 +33,9 @@ function App() {
     <Layout>
       <Navigation />
 
-      <BattleField pokemon={pokemon} opponent={opponent} />
+      <PokeTrainerProvider>
+        <BattleField pokemon={pokemon} opponent={opponent} />
+      </PokeTrainerProvider>
     </Layout>
   )
 }

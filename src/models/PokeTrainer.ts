@@ -6,11 +6,11 @@ enum Gender {
 }
 
 export interface IPokeTrainer {
+  getName(): string
   getPokeBalls(): number
   getPokemons(): IPokemon[]
-  setPokemons(pokemon: IPokemon): void
 
-  catchPokemon(pokemon: IPokemon, hp: number): string
+  catchPokemon(pokemon: IPokemon): string
 }
 
 class PokeTrainer implements IPokeTrainer {
@@ -24,6 +24,10 @@ class PokeTrainer implements IPokeTrainer {
     this.gender = gender
   }
 
+  getName() {
+    return this.name
+  }
+
   getPokeBalls() {
     return this.pokeBalls
   }
@@ -32,17 +36,12 @@ class PokeTrainer implements IPokeTrainer {
     return this.pokemons
   }
 
-  setPokemons(pokemon: IPokemon) {
-    this.pokemons.push(pokemon)
-  }
-
-  catchPokemon(pokemon: IPokemon, hp: number): string {
+  catchPokemon(pokemon: IPokemon): string {
     if (this.getPokeBalls() === 0) {
       return 'Out of pokeballs!'
     }
 
-    if (hp < 50) {
-      this.setPokemons(pokemon)
+    if (Math.random() * 10 > 5) {
       return `You caught ${pokemon.getName()}!`
     }
 
