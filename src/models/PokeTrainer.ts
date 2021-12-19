@@ -7,15 +7,13 @@ enum Gender {
 
 export interface IPokeTrainer {
   getName(): string
-  getPokeBalls(): number
   getPokemons(): IPokemon[]
 }
 
 class PokeTrainer implements IPokeTrainer {
   private readonly name: string
   private readonly gender: Gender
-  private pokeBalls: number = 10
-  private pokemons: IPokemon[] = []
+  private readonly pokemons: IPokemon[] = []
 
   constructor(name: string, gender: Gender) {
     this.name = name
@@ -24,10 +22,6 @@ class PokeTrainer implements IPokeTrainer {
 
   getName() {
     return this.name
-  }
-
-  getPokeBalls() {
-    return this.pokeBalls
   }
 
   getPokemons() {

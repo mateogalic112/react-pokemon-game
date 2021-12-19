@@ -1,8 +1,8 @@
 import Pokemon, { Move } from './Pokemon'
 
 class Battle {
-  attacker: Pokemon
-  defender: Pokemon
+  private readonly attacker: Pokemon
+  private readonly defender: Pokemon
   // battle messages
   messages: string[] = []
 

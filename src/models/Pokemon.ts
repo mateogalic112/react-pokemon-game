@@ -25,12 +25,12 @@ export interface IPokemon {
 
 class Pokemon implements IPokemon {
   private readonly id: number
-  private height: number
-  private weight: number
+  private readonly height: number
+  private readonly weight: number
   private readonly name: string
-  private image: string
-  private stats: Stat[]
-  private moves: Move[]
+  private readonly image: string
+  private readonly stats: Stat[]
+  private readonly moves: Move[]
 
   constructor(pokemonData: PokemonAPIData) {
     this.id = pokemonData.id
