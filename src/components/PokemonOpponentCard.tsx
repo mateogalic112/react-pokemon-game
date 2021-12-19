@@ -1,18 +1,8 @@
 import { Box, Image, Badge, Flex, Center, Text, Button } from '@chakra-ui/react'
 import { useEffect } from 'react'
-import Pokemon, { Move } from '../models/Pokemon'
+import { IPokemonCard } from './PokemonCard'
 
-const PokemonOpponentCard = ({
-  pokemon,
-  attack,
-  hp,
-  active,
-}: {
-  pokemon: Pokemon
-  attack: (move: Move) => void
-  hp: number
-  active: boolean
-}) => {
+const PokemonOpponentCard = ({ pokemon, attack, hp, active }: IPokemonCard) => {
   const randomMoveIndex = Math.round(Math.random() * 3)
 
   useEffect(() => {

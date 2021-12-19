@@ -1,17 +1,14 @@
-import { Box, Image, Badge, Flex, Center, Text, Button } from '@chakra-ui/react'
+import { Box, Image, Flex, Center, Text, Button } from '@chakra-ui/react'
 import Pokemon, { Move } from '../models/Pokemon'
 
-const PokemonCard = ({
-  pokemon,
-  attack,
-  hp,
-  active,
-}: {
+export interface IPokemonCard {
   pokemon: Pokemon
   attack: (move: Move) => void
   hp: number
   active: boolean
-}) => {
+}
+
+const PokemonCard = ({ pokemon, attack, hp, active }: IPokemonCard) => {
   return (
     <Box maxW="sm" borderWidth="1px" borderRadius="lg" py={3}>
       <Image
