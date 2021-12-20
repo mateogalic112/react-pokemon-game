@@ -1,4 +1,4 @@
-import { PokeTrainerState } from '.'
+import { PokeTrainerState } from './index'
 import { IPokemon } from '../../models/Pokemon'
 import PokeTrainerActionKind from './actions'
 

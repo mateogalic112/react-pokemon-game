@@ -1,6 +1,6 @@
 import { Box, Button, Flex } from '@chakra-ui/react'
 import { useState } from 'react'
-import { usePokeTrainerContext } from '../contexts/PokeTrainer'
+import { usePokeTrainerContext } from '../contexts/pokeTrainer'
 import Battle from '../models/Battle'
 import Pokemon, { Move } from '../models/Pokemon'
 import PokemonCard from './PokemonCard'

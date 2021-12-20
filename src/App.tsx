@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import BattleField from './components/BattleField'
 import Navigation from './components/Navigation'
-import { PokeTrainerProvider } from './contexts/PokeTrainer'
+import { PokeTrainerProvider } from './contexts/pokeTrainer'
 import Layout from './layout/Layout'
 import Pokemon from './models/Pokemon'
 
