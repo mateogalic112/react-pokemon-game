@@ -4,7 +4,7 @@ const Navigation = () => {
   return (
     <Flex py="3" alignItems="center">
       <Box pr="4">
-        <Image src="/logo.png" alt="Pokemon logo" w={140} />
+        <Image src="/logo.png" alt="Pokemon logo" w={150} />
       </Box>
       <Spacer />
       <Box pl="4">

@@ -25,7 +25,14 @@ const PokemonCard = ({
         alt={pokemon.getName()}
       />
 
-      <Box px="6" py="2" border="1px" borderColor="gray.400" borderRadius="lg">
+      <Box
+        px="6"
+        pt="2"
+        pb="4"
+        border="1px"
+        borderColor="gray.400"
+        borderRadius="lg"
+      >
         <Box
           my="1"
           fontWeight="semibold"

@@ -1,5 +1,5 @@
 import { Box, Button, Flex, Image } from '@chakra-ui/react'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { usePokeTrainerContext } from '../contexts/pokeTrainer'
 import Battle from '../models/Battle'
 import Pokemon, { Move } from '../models/Pokemon'
@@ -65,7 +65,7 @@ const BattleField = ({ pokemon, opponent }: IBattleFieldProps) => {
   }
 
   return (
-    <Flex bg="blue.100" p={12} borderRadius="5rem">
+    <Flex bg="blue.100" p={12} borderRadius="5rem" position="relative">
       <Box flexBasis="60%">
         <PokemonOpponentCard
           pokemon={opponent}
@@ -115,7 +115,10 @@ const BattleField = ({ pokemon, opponent }: IBattleFieldProps) => {
         <Box height={5} />
 
         {messages.map((message, index) => (
-          <p key={index}>{message}</p>
+          <React.Fragment key={index}>
+            <p>{message}</p>
+            <Box mb="4" />
+          </React.Fragment>
         ))}
       </Flex>
     </Flex>

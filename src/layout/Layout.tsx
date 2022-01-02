@@ -4,7 +4,9 @@ import React from 'react'
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <VStack background="blue.900">
-      <Container maxW="container.xl">{children}</Container>
+      <Container maxW="container.xl" pb={16}>
+        {children}
+      </Container>
     </VStack>
   )
 }
