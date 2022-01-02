@@ -17,7 +17,6 @@ const BattleField = ({ pokemon, opponent }: IBattleFieldProps) => {
   const [opponentHealth, setOpponentHealth] = useState(opponent.getHp())
 
   // Adjust classNames for animations
-  const [struggle, setStruggle] = useState(false)
   const [pokeballActive, setPokeballActive] = useState(false)
 
   // Keep track of who is next in turn for attacking
@@ -53,7 +52,6 @@ const BattleField = ({ pokemon, opponent }: IBattleFieldProps) => {
   // Throw pokeball to catch opponent pokemon
   const onPokeballThrow = async () => {
     setPokeballActive(true)
-    setStruggle(true)
 
     const isCaught = await battle.hasCaughtPokemon(opponentHealth)
 
@@ -61,13 +59,10 @@ const BattleField = ({ pokemon, opponent }: IBattleFieldProps) => {
 
     if (!isCaught) {
       setPokeballActive(false)
-      setStruggle(false)
     }
 
     setMessages((prev) => [...prev, caughtMessage])
   }
-
-  console.log(pokemons)
 
   return (
     <Flex bg="green.100" p={4}>
@@ -77,7 +72,7 @@ const BattleField = ({ pokemon, opponent }: IBattleFieldProps) => {
           attack={(move) => onPokemonAttack(move, pokeHealth, setPokeHealth)}
           hp={opponentHealth}
           active={opponentTurn}
-          struggle={struggle}
+          struggle={pokeballActive}
         />
 
         <Box height={5} />
@@ -88,13 +83,15 @@ const BattleField = ({ pokemon, opponent }: IBattleFieldProps) => {
             onPokemonAttack(move, opponentHealth, setOpponentHealth)
           }
           hp={pokeHealth}
-          active={!opponentTurn}
+          active={!opponentTurn && !pokeballActive}
         />
       </Box>
       <Flex direction="column" pt={10}>
         <Flex gap="1rem">
           <p>Pokeballs available: {pokeBalls}</p>
-          <Button onClick={onPokeballThrow}>Throw pokeball</Button>
+          <Button onClick={onPokeballThrow} disabled={pokeballActive}>
+            Throw pokeball
+          </Button>
           <Image
             boxSize="30px"
             objectFit="cover"

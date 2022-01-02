@@ -52,7 +52,7 @@ class Battle {
   hasCaughtPokemon = (hp: number): Promise<boolean> => {
     return new Promise((resolve, _) => {
       setTimeout(() => {
-        if (hp <= this.defender.getHp() && Math.random() * 10 > 1) {
+        if (hp <= this.defender.getHp() && Math.random() * 10 > 5) {
           resolve(true)
         } else {
           resolve(false)
