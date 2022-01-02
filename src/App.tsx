@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
-import BattleField from './components/BattleField'
-import Navigation from './components/Navigation'
+import Navigation from './layout/Navigation'
 import { PokeTrainerProvider } from './contexts/pokeTrainer'
 import Layout from './layout/Layout'
 import Pokemon from './models/Pokemon'
+import Battlefield from './screens/Battlefield'
 
 const BASE_URL = 'https://pokeapi.co/api/v2'
 
@@ -34,7 +34,7 @@ function App() {
       <Navigation />
 
       <PokeTrainerProvider>
-        <BattleField pokemon={pokemon} opponent={opponent} />
+        <Battlefield pokemon={pokemon} opponent={opponent} />
       </PokeTrainerProvider>
     </Layout>
   )

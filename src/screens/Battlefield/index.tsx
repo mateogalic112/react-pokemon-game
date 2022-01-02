@@ -1,17 +1,18 @@
 import { Box, Button, Flex, Image } from '@chakra-ui/react'
 import React, { useState } from 'react'
-import { usePokeTrainerContext } from '../contexts/pokeTrainer'
-import Battle from '../models/Battle'
-import Pokemon, { Move } from '../models/Pokemon'
-import PokemonCard from './PokemonCard'
-import PokemonOpponentCard from './PokemonOpponentCard'
+import { usePokeTrainerContext } from '../../contexts/pokeTrainer'
+import Battle from '../../models/Battle'
+import Pokemon, { Move } from '../../models/Pokemon'
+import PokemonCard from '../../components/PokeCard/PokemonCard'
+import Sidebar from './Sidebar'
+import PokemonOpponentCard from '../../components/PokeCard/PokemonOpponentCard'
 
-interface IBattleFieldProps {
+interface IBattlefieldProps {
   pokemon: Pokemon
   opponent: Pokemon
 }
 
-const BattleField = ({ pokemon, opponent }: IBattleFieldProps) => {
+const Battlefield = ({ pokemon, opponent }: IBattlefieldProps) => {
   // Pokemons hp saved in component state
   const [pokeHealth, setPokeHealth] = useState(pokemon.getHp())
   const [opponentHealth, setOpponentHealth] = useState(opponent.getHp())
@@ -87,42 +88,14 @@ const BattleField = ({ pokemon, opponent }: IBattleFieldProps) => {
         />
       </Box>
 
-      <Flex
-        direction="column"
-        py={10}
-        px={6}
-        background="blue.200"
-        borderRadius="3rem"
-        flexBasis="40%"
-      >
-        <Flex gap="3rem">
-          <Flex gap="0.25rem" alignItems="center">
-            <Image src="/pokeball.png" alt="Pokeball" w={10} />
-            <b>{pokeBalls}</b>
-          </Flex>
-          <Button onClick={onPokeballThrow} disabled={pokeballActive}>
-            Throw pokeball
-          </Button>
-          <Image
-            boxSize="30px"
-            objectFit="cover"
-            src="/pokeball.png"
-            alt="Pokeball"
-            className={`pokeball ${pokeballActive ? 'thrown' : ''}`}
-          />
-        </Flex>
-
-        <Box height={5} />
-
-        {messages.map((message, index) => (
-          <React.Fragment key={index}>
-            <p>{message}</p>
-            <Box mb="4" />
-          </React.Fragment>
-        ))}
-      </Flex>
+      <Sidebar
+        pokeBallsCount={pokeBalls}
+        onPokeballThrow={onPokeballThrow}
+        pokeballActive={pokeballActive}
+        messages={messages}
+      />
     </Flex>
   )
 }
 
-export default BattleField
+export default Battlefield

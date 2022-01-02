@@ -1,6 +1,6 @@
 import { PokemonAPIData } from './API/PokemonAPIData'
 
-interface Stat {
+export interface Stat {
   amount: number
   name: string
 }
