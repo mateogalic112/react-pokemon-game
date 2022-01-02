@@ -1,10 +1,10 @@
-import { Flex, Box, Heading, Spacer, Button } from '@chakra-ui/react'
+import { Flex, Box, Image, Spacer, Button } from '@chakra-ui/react'
 
 const Navigation = () => {
   return (
     <Flex py="3" alignItems="center">
       <Box pr="4">
-        <Heading size="xl">Pokemon</Heading>
+        <Image src="/logo.png" alt="Pokemon logo" w={140} />
       </Box>
       <Spacer />
       <Box pl="4">

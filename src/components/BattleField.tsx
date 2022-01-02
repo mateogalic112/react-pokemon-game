@@ -65,8 +65,8 @@ const BattleField = ({ pokemon, opponent }: IBattleFieldProps) => {
   }
 
   return (
-    <Flex bg="green.100" p={4}>
-      <Box flexBasis="75%">
+    <Flex bg="blue.100" p={12} borderRadius="5rem">
+      <Box flexBasis="60%">
         <PokemonOpponentCard
           pokemon={opponent}
           attack={(move) => onPokemonAttack(move, pokeHealth, setPokeHealth)}
@@ -86,9 +86,20 @@ const BattleField = ({ pokemon, opponent }: IBattleFieldProps) => {
           active={!opponentTurn && !pokeballActive}
         />
       </Box>
-      <Flex direction="column" pt={10}>
-        <Flex gap="1rem">
-          <p>Pokeballs available: {pokeBalls}</p>
+
+      <Flex
+        direction="column"
+        py={10}
+        px={6}
+        background="blue.200"
+        borderRadius="3rem"
+        flexBasis="40%"
+      >
+        <Flex gap="3rem">
+          <Flex gap="0.25rem" alignItems="center">
+            <Image src="/pokeball.png" alt="Pokeball" w={10} />
+            <b>{pokeBalls}</b>
+          </Flex>
           <Button onClick={onPokeballThrow} disabled={pokeballActive}>
             Throw pokeball
           </Button>

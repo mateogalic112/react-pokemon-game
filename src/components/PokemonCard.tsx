@@ -82,7 +82,7 @@ const PokemonCard = ({
                 boxShadow="xs"
                 p="2"
                 rounded="md"
-                bg="gray.200"
+                bg="gray.100"
                 py={6}
                 onClick={() => attack(move)}
                 disabled={!active}
