@@ -11,3 +11,49 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.pokeball {
+  visibility: hidden;
+  position: absolute;
+  bottom: 10%;
+  left: 20%;
+}
+
+.pokeball.thrown {
+  visibility: visible;
+  animation-name: ball;
+  animation-duration: 2s;
+  animation-fill-mode: forwards;
+}
+
+.struggle {
+  animation-name: oponnent;
+  animation-delay: 1.9s;
+  animation-duration: 0.1s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes oponnent {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes ball {
+  0% {
+    transform: rotate(360deg);
+  }
+  95% {
+    transform: rotate(1800deg);
+    bottom: 60%;
+    left: 20%;
+  }
+  100% {
+    transform: rotate(1800deg);
+    left: 15%;
+    bottom: 60%;
+  }
+}

@@ -21,7 +21,7 @@ interface IPokeTrainerContext {
   pokeBalls: number
   pokemons: IPokemon[]
 
-  catchPokemon: (pokemon: IPokemon, hp: number) => string
+  catchPokemon: (pokemon: IPokemon, isCaught: boolean) => string
 }
 
 const initialContext: IPokeTrainerContext = {
@@ -50,14 +50,18 @@ export const PokeTrainerProvider: FC = ({ children }) => {
     initialState,
   )
 
-  const catchPokemon = (pokemon: IPokemon, hp: number) => {
+  const throwPokeBall = () => {
     if (pokeBalls === 0) return 'You ran out of pokeballs!'
 
     dispatch({
       type: PokeTrainerActionKind.throwPokeBall,
     })
+  }
 
-    if (hp < pokemon.getHp() / 2) {
+  const catchPokemon = (pokemon: IPokemon, isCaught: boolean) => {
+    throwPokeBall()
+
+    if (isCaught) {
       dispatch({
         type: PokeTrainerActionKind.catchPokemon,
         payload: { pokemon },

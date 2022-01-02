@@ -49,6 +49,18 @@ class Battle {
     }
   }
 
+  hasCaughtPokemon = (hp: number): Promise<boolean> => {
+    return new Promise((resolve, _) => {
+      setTimeout(() => {
+        if (hp <= this.defender.getHp() && Math.random() * 10 > 1) {
+          resolve(true)
+        } else {
+          resolve(false)
+        }
+      }, 3000)
+    })
+  }
+
   // Strategy for attacking based on turn
   attackOpponent = (opponentTurn: boolean) => {
     if (!opponentTurn) {

@@ -6,9 +6,15 @@ export interface IPokemonCard {
   attack: (move: Move) => void
   hp: number
   active: boolean
+  struggle: boolean
 }
 
-const PokemonCard = ({ pokemon, attack, hp, active }: IPokemonCard) => {
+const PokemonCard = ({
+  pokemon,
+  attack,
+  hp,
+  active,
+}: Omit<IPokemonCard, 'struggle'>) => {
   return (
     <Box maxW="sm" py={3}>
       <Image

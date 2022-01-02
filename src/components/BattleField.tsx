@@ -1,4 +1,4 @@
-import { Box, Button, Flex } from '@chakra-ui/react'
+import { Box, Button, Flex, Image } from '@chakra-ui/react'
 import { useState } from 'react'
 import { usePokeTrainerContext } from '../contexts/pokeTrainer'
 import Battle from '../models/Battle'
@@ -15,6 +15,10 @@ const BattleField = ({ pokemon, opponent }: IBattleFieldProps) => {
   // Pokemons hp saved in component state
   const [pokeHealth, setPokeHealth] = useState(pokemon.getHp())
   const [opponentHealth, setOpponentHealth] = useState(opponent.getHp())
+
+  // Adjust classNames for animations
+  const [struggle, setStruggle] = useState(false)
+  const [pokeballActive, setPokeballActive] = useState(false)
 
   // Keep track of who is next in turn for attacking
   const [turn, setTurn] = useState(0)
@@ -47,8 +51,18 @@ const BattleField = ({ pokemon, opponent }: IBattleFieldProps) => {
   }
 
   // Throw pokeball to catch opponent pokemon
-  const onPokeballThrow = () => {
-    const caughtMessage = catchPokemon(opponent, opponentHealth)
+  const onPokeballThrow = async () => {
+    setPokeballActive(true)
+    setStruggle(true)
+
+    const isCaught = await battle.hasCaughtPokemon(opponentHealth)
+
+    const caughtMessage = catchPokemon(opponent, isCaught)
+
+    if (!isCaught) {
+      setPokeballActive(false)
+      setStruggle(false)
+    }
 
     setMessages((prev) => [...prev, caughtMessage])
   }
@@ -63,6 +77,7 @@ const BattleField = ({ pokemon, opponent }: IBattleFieldProps) => {
           attack={(move) => onPokemonAttack(move, pokeHealth, setPokeHealth)}
           hp={opponentHealth}
           active={opponentTurn}
+          struggle={struggle}
         />
 
         <Box height={5} />
@@ -80,6 +95,13 @@ const BattleField = ({ pokemon, opponent }: IBattleFieldProps) => {
         <Flex gap="1rem">
           <p>Pokeballs available: {pokeBalls}</p>
           <Button onClick={onPokeballThrow}>Throw pokeball</Button>
+          <Image
+            boxSize="30px"
+            objectFit="cover"
+            src="/pokeball.png"
+            alt="Pokeball"
+            className={`pokeball ${pokeballActive ? 'thrown' : ''}`}
+          />
         </Flex>
 
         <Box height={5} />

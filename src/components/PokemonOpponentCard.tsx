@@ -2,7 +2,13 @@ import { Box, Image, Badge, Flex, Center, Text, Button } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import { IPokemonCard } from './PokemonCard'
 
-const PokemonOpponentCard = ({ pokemon, attack, hp, active }: IPokemonCard) => {
+const PokemonOpponentCard = ({
+  pokemon,
+  attack,
+  hp,
+  active,
+  struggle,
+}: IPokemonCard) => {
   const randomMoveIndex = Math.round(Math.random() * 3)
 
   useEffect(() => {
@@ -64,6 +70,7 @@ const PokemonOpponentCard = ({ pokemon, attack, hp, active }: IPokemonCard) => {
       </Box>
 
       <Image
+        className={`opponentPokemon ${struggle ? 'struggle' : ''}`}
         boxSize="120px"
         margin="auto"
         src={pokemon.getImage()}
