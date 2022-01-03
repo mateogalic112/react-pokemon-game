@@ -16,7 +16,7 @@ code {
   visibility: hidden;
   position: absolute;
   bottom: 10%;
-  left: 25%;
+  left: 30%;
 }
 
 .pokeball.thrown {
@@ -46,14 +46,14 @@ code {
   0% {
     transform: rotate(360deg);
   }
-  95% {
+  99% {
     transform: rotate(1800deg);
     bottom: 65%;
-    left: 25%;
+    left: 30%;
   }
   100% {
     transform: rotate(1800deg);
-    left: 20%;
+    left: 28%;
     bottom: 65%;
   }
 }

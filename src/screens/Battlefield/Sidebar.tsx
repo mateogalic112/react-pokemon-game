@@ -15,8 +15,7 @@ const Sidebar = ({
   messages,
 }: IBattlefieldSidebarProps) => {
   return (
-    <Flex
-      direction="column"
+    <Box
       py={10}
       px={6}
       background="blue.200"
@@ -50,7 +49,7 @@ const Sidebar = ({
           <Box mb="4" />
         </React.Fragment>
       ))}
-    </Flex>
+    </Box>
   )
 }
 

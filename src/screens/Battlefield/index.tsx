@@ -65,6 +65,8 @@ const Battlefield = ({ pokemon, opponent }: IBattlefieldProps) => {
     setMessages((prev) => [...prev, caughtMessage])
   }
 
+  console.log(pokemons)
+
   return (
     <Flex bg="blue.100" p={12} borderRadius="5rem" position="relative">
       <Box flexBasis="60%">

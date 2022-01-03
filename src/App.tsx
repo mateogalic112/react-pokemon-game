@@ -4,6 +4,8 @@ import { PokeTrainerProvider } from './contexts/pokeTrainer'
 import Layout from './layout/Layout'
 import Pokemon from './models/Pokemon'
 import Battlefield from './screens/Battlefield'
+import { Route, Routes } from 'react-router-dom'
+import Home from './screens/Home'
 
 const BASE_URL = 'https://pokeapi.co/api/v2'
 
@@ -30,13 +32,19 @@ function App() {
   }
 
   return (
-    <Layout>
-      <Navigation />
+    <PokeTrainerProvider>
+      <Layout>
+        <Navigation />
 
-      <PokeTrainerProvider>
-        <Battlefield pokemon={pokemon} opponent={opponent} />
-      </PokeTrainerProvider>
-    </Layout>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route
+            path="battlefield"
+            element={<Battlefield pokemon={pokemon} opponent={opponent} />}
+          />
+        </Routes>
+      </Layout>
+    </PokeTrainerProvider>
   )
 }
 
