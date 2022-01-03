@@ -1,5 +1,5 @@
 import { createContext, FC, useContext, useReducer } from 'react'
-import { IPokemon } from '../../models/Pokemon'
+import Pokemon from '../../models/Pokemon'
 import PokeTrainer, { IPokeTrainer } from '../../models/PokeTrainer'
 import PokeTrainerActionKind from './actions'
 import pokeTrainerReducer from './reducer'
@@ -7,7 +7,7 @@ import pokeTrainerReducer from './reducer'
 export type PokeTrainerState = {
   trainer: IPokeTrainer
   pokeBalls: number
-  pokemons: IPokemon[]
+  pokemons: Pokemon[]
 }
 
 const initialState: PokeTrainerState = {
@@ -19,9 +19,10 @@ const initialState: PokeTrainerState = {
 interface IPokeTrainerContext {
   trainer: IPokeTrainer
   pokeBalls: number
-  pokemons: IPokemon[]
+  pokemons: Pokemon[]
 
-  catchPokemon: (pokemon: IPokemon, isCaught: boolean) => string
+  catchPokemon: (pokemon: Pokemon, isCaught: boolean) => string
+  choosePokemon: (pokemon: Pokemon) => string
 }
 
 const initialContext: IPokeTrainerContext = {
@@ -30,6 +31,7 @@ const initialContext: IPokeTrainerContext = {
   pokemons: initialState.pokemons,
 
   catchPokemon: () => '',
+  choosePokemon: () => '',
 }
 
 const PokeTrainerContext = createContext<IPokeTrainerContext>(initialContext)
@@ -58,7 +60,7 @@ export const PokeTrainerProvider: FC = ({ children }) => {
     })
   }
 
-  const catchPokemon = (pokemon: IPokemon, isCaught: boolean) => {
+  const catchPokemon = (pokemon: Pokemon, isCaught: boolean) => {
     throwPokeBall()
 
     if (isCaught) {
@@ -73,9 +75,18 @@ export const PokeTrainerProvider: FC = ({ children }) => {
     return `${pokemon.getName()} escaped!`
   }
 
+  const choosePokemon = (pokemon: Pokemon) => {
+    dispatch({
+      type: PokeTrainerActionKind.choosePokemon,
+      payload: { pokemon },
+    })
+
+    return `${pokemon.getName()} is now yours!!`
+  }
+
   return (
     <PokeTrainerContext.Provider
-      value={{ trainer, pokeBalls, pokemons, catchPokemon }}
+      value={{ trainer, pokeBalls, pokemons, catchPokemon, choosePokemon }}
     >
       {children}
     </PokeTrainerContext.Provider>

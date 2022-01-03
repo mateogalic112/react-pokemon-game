@@ -1,14 +1,18 @@
 import { PokeTrainerState } from './index'
-import { IPokemon } from '../../models/Pokemon'
+import Pokemon from '../../models/Pokemon'
 import PokeTrainerActionKind from './actions'
 
 type PokeTrainerAction =
   | {
       type: PokeTrainerActionKind.catchPokemon
-      payload: { pokemon: IPokemon }
+      payload: { pokemon: Pokemon }
     }
   | {
       type: PokeTrainerActionKind.throwPokeBall
+    }
+  | {
+      type: PokeTrainerActionKind.choosePokemon
+      payload: { pokemon: Pokemon }
     }
 
 export default function (
@@ -22,6 +26,11 @@ export default function (
         pokeBalls: state.pokeBalls - 1,
       }
     case PokeTrainerActionKind.catchPokemon:
+      return {
+        ...state,
+        pokemons: [...state.pokemons, action.payload.pokemon],
+      }
+    case PokeTrainerActionKind.choosePokemon:
       return {
         ...state,
         pokemons: [...state.pokemons, action.payload.pokemon],

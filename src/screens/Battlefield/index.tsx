@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Image } from '@chakra-ui/react'
+import { Box, Flex } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { usePokeTrainerContext } from '../../contexts/pokeTrainer'
 import Battle from '../../models/Battle'
@@ -6,6 +6,7 @@ import Pokemon, { Move } from '../../models/Pokemon'
 import PokemonCard from '../../components/PokeCard/PokemonCard'
 import Sidebar from './Sidebar'
 import PokemonOpponentCard from '../../components/PokeCard/PokemonOpponentCard'
+import { useNavigate } from 'react-router-dom'
 
 interface IBattlefieldProps {
   pokemon: Pokemon
@@ -13,6 +14,7 @@ interface IBattlefieldProps {
 }
 
 const Battlefield = ({ pokemon, opponent }: IBattlefieldProps) => {
+  let navigate = useNavigate()
   // Pokemons hp saved in component state
   const [pokeHealth, setPokeHealth] = useState(pokemon.getHp())
   const [opponentHealth, setOpponentHealth] = useState(opponent.getHp())
@@ -60,6 +62,10 @@ const Battlefield = ({ pokemon, opponent }: IBattlefieldProps) => {
 
     if (!isCaught) {
       setPokeballActive(false)
+    } else {
+      setTimeout(() => {
+        navigate('/pokedex')
+      }, 3000)
     }
 
     setMessages((prev) => [...prev, caughtMessage])

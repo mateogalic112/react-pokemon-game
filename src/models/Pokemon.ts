@@ -1,4 +1,4 @@
-import { PokemonAPIData } from './API/PokemonAPIData'
+import { PokemonAPIData } from '../api/models/PokemonAPIData'
 
 export interface Stat {
   amount: number
