@@ -23,6 +23,15 @@ const Battlefield = ({
 }: IBattlefieldProps) => {
   let navigate = useNavigate()
 
+  // Keep track of pokemons used in battle -> [ pokemonId, hp ]
+  const [usedPokemons, setUsedPokemons] = useState(
+    new Map<number, number>([[pokemon.getId(), pokemon.getHp()]]),
+  )
+
+  const storeUsedPokemon = (pokemonId: number, hp: number) => {
+    setUsedPokemons(new Map(usedPokemons.set(pokemonId, hp)))
+  }
+
   // Pokemons hp saved in component state
   const [pokeHealth, setPokeHealth] = useState(pokemon.getHp())
   const [opponentHealth, setOpponentHealth] = useState(opponent.getHp())
@@ -103,6 +112,23 @@ const Battlefield = ({
     navigate('/pokedex')
   }
 
+  const onPokemonSwitch = (oldPokemon: Pokemon, newPokemon: Pokemon): void => {
+    // Store old pokemon health in state
+    storeUsedPokemon(oldPokemon.getId(), pokeHealth)
+
+    //Check if he already was in battle
+    const pokemonHealth =
+      usedPokemons.get(newPokemon.getId()) ?? newPokemon.getHp()
+    if (pokemonHealth > 0) {
+      setPokeHealth(pokemonHealth)
+    } else {
+      return
+    }
+
+    // switch to new pokemon
+    switchPokemon(newPokemon)
+  }
+
   // Calculate available pokemons
   const availablePokemons = pokemons.filter(
     (item) => item.getId() !== pokemon.getId(),
@@ -149,7 +175,9 @@ const Battlefield = ({
             <SwitchPokemonMenu
               pokemons={availablePokemons}
               title="Switch pokemon"
-              selectPokemon={(pokemon: Pokemon) => switchPokemon(pokemon)}
+              selectPokemon={(newPokemon: Pokemon) =>
+                onPokemonSwitch(pokemon, newPokemon)
+              }
             />
           )}
 
