@@ -7,7 +7,6 @@ enum Gender {
 
 export interface IPokeTrainer {
   getName(): string
-  getPokemons(): IPokemon[]
 }
 
 class PokeTrainer implements IPokeTrainer {

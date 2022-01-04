@@ -4,9 +4,11 @@ import { usePokeTrainerContext } from '../../contexts/pokeTrainer'
 import Pokemon from '../../models/Pokemon'
 import ChooseCard from './ChooseCard'
 import { useNavigate } from 'react-router-dom'
+import { useState } from 'react'
 
 const Home = () => {
   let navigate = useNavigate()
+  const [message, setMessage] = useState('')
 
   const results = useFetchInitialPokemons([1, 4, 7])
 
@@ -18,9 +20,11 @@ const Home = () => {
   const { choosePokemon, pokemons: allPokemons } = usePokeTrainerContext()
 
   const onPokemonChoose = (pokemon: Pokemon): void => {
-    const message = choosePokemon(pokemon)
+    setMessage(choosePokemon(pokemon))
 
-    navigate('/battlefield')
+    setTimeout(() => {
+      navigate('/battlefield')
+    }, 3000)
   }
 
   return (
@@ -33,7 +37,7 @@ const Home = () => {
         fontSize="6xl"
         fontWeight="extrabold"
       >
-        Welcome to Pokemon
+        {message ? message : 'Welcome to Pokemon'}
       </Text>
 
       <HStack spacing="24px" wrap="wrap" justifyContent="space-around">

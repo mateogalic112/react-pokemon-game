@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { FC } from 'react'
 import { Flex, Image, Button, Box } from '@chakra-ui/react'
 
 interface IBattlefieldSidebarProps {
@@ -8,12 +8,13 @@ interface IBattlefieldSidebarProps {
   messages: string[]
 }
 
-const Sidebar = ({
+const Sidebar: FC<IBattlefieldSidebarProps> = ({
   pokeBallsCount,
   onPokeballThrow,
   pokeballActive,
   messages,
-}: IBattlefieldSidebarProps) => {
+  children,
+}) => {
   return (
     <Box
       py={10}
@@ -40,6 +41,8 @@ const Sidebar = ({
           className={`pokeball ${pokeballActive ? 'thrown' : ''}`}
         />
       </Flex>
+
+      {children}
 
       <Box height={5} />
 

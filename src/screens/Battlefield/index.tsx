@@ -1,4 +1,4 @@
-import { Box, Flex } from '@chakra-ui/react'
+import { Box, Button, Flex, VStack } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { usePokeTrainerContext } from '../../contexts/pokeTrainer'
 import Battle from '../../models/Battle'
@@ -7,13 +7,21 @@ import PokemonCard from '../../components/PokeCard/PokemonCard'
 import Sidebar from './Sidebar'
 import PokemonOpponentCard from '../../components/PokeCard/PokemonOpponentCard'
 import { useNavigate } from 'react-router-dom'
+import SwitchPokemonMenu from '../../components/SwitchPokemonMenu'
+import { focusManager } from 'react-query'
+import EscapePopover from '../../components/EscapePopover'
 
 interface IBattlefieldProps {
   pokemon: Pokemon
   opponent: Pokemon
+  switchPokemon: (newPokemon: Pokemon) => void
 }
 
-const Battlefield = ({ pokemon, opponent }: IBattlefieldProps) => {
+const Battlefield = ({
+  pokemon,
+  opponent,
+  switchPokemon,
+}: IBattlefieldProps) => {
   let navigate = useNavigate()
   // Pokemons hp saved in component state
   const [pokeHealth, setPokeHealth] = useState(pokemon.getHp())
@@ -71,7 +79,16 @@ const Battlefield = ({ pokemon, opponent }: IBattlefieldProps) => {
     setMessages((prev) => [...prev, caughtMessage])
   }
 
-  console.log(pokemons)
+  const onEscape = () => {
+    navigate('/pokedex')
+  }
+
+  // Calculate available pokemons
+  const availablePokemons = pokemons.filter(
+    (item) => item.getId() !== pokemon.getId(),
+  )
+
+  console.log(trainer)
 
   return (
     <Flex bg="blue.100" p={12} borderRadius="5rem" position="relative">
@@ -101,7 +118,19 @@ const Battlefield = ({ pokemon, opponent }: IBattlefieldProps) => {
         onPokeballThrow={onPokeballThrow}
         pokeballActive={pokeballActive}
         messages={messages}
-      />
+      >
+        <VStack alignItems="flex-end">
+          {availablePokemons.length > 0 && (
+            <SwitchPokemonMenu
+              pokemons={availablePokemons}
+              title="Switch pokemon"
+              selectPokemon={(pokemon: Pokemon) => switchPokemon(pokemon)}
+            />
+          )}
+
+          <EscapePopover onClick={onEscape} />
+        </VStack>
+      </Sidebar>
     </Flex>
   )
 }
