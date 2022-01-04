@@ -11,12 +11,6 @@ export interface Move {
 }
 
 export interface IPokemon {
-  getId(): number
-  getName(): string
-  getStats(): Stat[]
-  getMoves(): Move[]
-  getImage(): string
-
   attack(moveIndex: number): number
   dodge(): boolean
   defend(damage: number): number
