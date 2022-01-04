@@ -6,9 +6,16 @@ interface ICardStatsProps {
   stats: Stat[]
   hp: number
   children: React.ReactNode | null
+  isDamaging: boolean
 }
 
-const CardStats = ({ title, stats, hp, children }: ICardStatsProps) => {
+const CardStats = ({
+  title,
+  stats,
+  hp,
+  children,
+  isDamaging,
+}: ICardStatsProps) => {
   return (
     <Box
       px="6"
@@ -39,7 +46,7 @@ const CardStats = ({ title, stats, hp, children }: ICardStatsProps) => {
         >
           <Text color="gray.700">HP</Text>
           <Text color="black" size="xl">
-            <b>{hp}</b>
+            <b className={`hp ${isDamaging ? 'damaging' : ''}`.trim()}>{hp}</b>
           </Text>
         </Center>
         {stats.map((stat) => (

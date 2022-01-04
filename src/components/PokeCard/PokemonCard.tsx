@@ -35,6 +35,7 @@ const PokemonCard = ({
         title={pokemon.getName()}
         stats={pokemon.getStats().slice(1)}
         hp={hp}
+        isDamaging={isDamaging}
       >
         <CardAction
           moves={pokemon.getMoves().slice(0, 6)}

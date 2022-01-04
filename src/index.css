@@ -52,6 +52,28 @@ code {
   animation-fill-mode: forwards;
 }
 
+b.hp.damaging {
+  animation-name: hpDamage;
+  animation-delay: 0.25s;
+  animation-duration: 0.75s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes hpDamage {
+  0% {
+    color: black;
+    font-size: 1em;
+  }
+  25% {
+    color: red;
+    font-size: 1.15em;
+  }
+  100% {
+    color: black;
+    font-size: 1em;
+  }
+}
+
 @keyframes caught {
   0% {
     opacity: 1;

@@ -30,6 +30,7 @@ const PokemonOpponentCard = ({
         stats={pokemon.getStats().slice(1)}
         hp={hp}
         children={null}
+        isDamaging={isDamaging}
       />
 
       <CardImage
