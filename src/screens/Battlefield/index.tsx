@@ -1,4 +1,4 @@
-import { Box, Button, Flex, VStack } from '@chakra-ui/react'
+import { Box, Flex, VStack } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { usePokeTrainerContext } from '../../contexts/pokeTrainer'
 import Battle from '../../models/Battle'
@@ -8,7 +8,6 @@ import Sidebar from './Sidebar'
 import PokemonOpponentCard from '../../components/PokeCard/PokemonOpponentCard'
 import { useNavigate } from 'react-router-dom'
 import SwitchPokemonMenu from '../../components/SwitchPokemonMenu'
-import { focusManager } from 'react-query'
 import EscapePopover from '../../components/EscapePopover'
 
 interface IBattlefieldProps {
@@ -23,12 +22,15 @@ const Battlefield = ({
   switchPokemon,
 }: IBattlefieldProps) => {
   let navigate = useNavigate()
+
   // Pokemons hp saved in component state
   const [pokeHealth, setPokeHealth] = useState(pokemon.getHp())
   const [opponentHealth, setOpponentHealth] = useState(opponent.getHp())
 
   // Adjust classNames for animations
   const [pokeballActive, setPokeballActive] = useState(false)
+  const [pokemonAttackActive, setPokemonAttackActive] = useState(false)
+  const [pokemonDamageActive, setPokemonDamageActive] = useState(false)
 
   // Keep track of who is next in turn for attacking
   const [turn, setTurn] = useState(0)
@@ -42,16 +44,34 @@ const Battlefield = ({
   // Get current trainer from context
   const { trainer, catchPokemon, pokeBalls, pokemons } = usePokeTrainerContext()
 
-  const onPokemonAttack = (
+  const onPokemonAttack = async (
     move: Move,
     health: number,
     setHealth: React.Dispatch<React.SetStateAction<number>>,
   ) => {
+    setPokemonAttackActive(true)
+
+    await new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(setPokemonAttackActive(false))
+      }, 1200)
+    })
+
     // HOF for creating attack damage and battle message based on chosen move
     const { damage, messages } = battle.attackOpponent(opponentTurn)(
       move,
       health,
     )
+
+    if (damage > 0) {
+      setPokemonDamageActive(true)
+
+      await new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(setPokemonDamageActive(false))
+        }, 750)
+      })
+    }
 
     setMessages((prev) => [...prev, ...messages])
 
@@ -73,7 +93,7 @@ const Battlefield = ({
     } else {
       setTimeout(() => {
         navigate('/pokedex')
-      }, 3000)
+      }, 1000)
     }
 
     setMessages((prev) => [...prev, caughtMessage])
@@ -88,8 +108,6 @@ const Battlefield = ({
     (item) => item.getId() !== pokemon.getId(),
   )
 
-  console.log(trainer)
-
   return (
     <Flex bg="blue.100" p={12} borderRadius="5rem" position="relative">
       <Box flexBasis="60%">
@@ -97,8 +115,10 @@ const Battlefield = ({
           pokemon={opponent}
           attack={(move) => onPokemonAttack(move, pokeHealth, setPokeHealth)}
           hp={opponentHealth}
-          active={opponentTurn}
-          struggle={pokeballActive}
+          isActive={opponentTurn}
+          isStruggling={!opponentTurn && pokeballActive}
+          isAttacking={opponentTurn && pokemonAttackActive}
+          isDamaging={!opponentTurn && pokemonDamageActive}
         />
 
         <Box height={5} />
@@ -109,7 +129,9 @@ const Battlefield = ({
             onPokemonAttack(move, opponentHealth, setOpponentHealth)
           }
           hp={pokeHealth}
-          active={!opponentTurn && !pokeballActive}
+          isActive={!opponentTurn && !pokeballActive}
+          isAttacking={!opponentTurn && pokemonAttackActive}
+          isDamaging={opponentTurn && pokemonDamageActive}
         />
       </Box>
 
@@ -118,6 +140,9 @@ const Battlefield = ({
         onPokeballThrow={onPokeballThrow}
         pokeballActive={pokeballActive}
         messages={messages}
+        isActive={
+          !pokemonAttackActive && !pokemonDamageActive && !pokeballActive
+        }
       >
         <VStack alignItems="flex-end">
           {availablePokemons.length > 0 && (

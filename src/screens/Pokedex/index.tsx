@@ -10,7 +10,7 @@ const Pokedex = () => {
   useEffect(() => {
     setTimeout(() => {
       navigate('/battlefield')
-    }, 2000)
+    }, 1000)
   })
 
   return (
@@ -21,7 +21,7 @@ const Pokedex = () => {
 
       <VStack>
         {pokemons.map((pokemon) => (
-          <Heading>{pokemon.getName()}</Heading>
+          <Heading key={pokemon.getId()}>{pokemon.getName()}</Heading>
         ))}
       </VStack>
     </section>

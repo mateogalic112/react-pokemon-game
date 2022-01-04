@@ -6,6 +6,7 @@ interface IBattlefieldSidebarProps {
   onPokeballThrow: () => void
   pokeballActive: boolean
   messages: string[]
+  isActive: boolean
 }
 
 const Sidebar: FC<IBattlefieldSidebarProps> = ({
@@ -14,6 +15,7 @@ const Sidebar: FC<IBattlefieldSidebarProps> = ({
   pokeballActive,
   messages,
   children,
+  isActive,
 }) => {
   return (
     <Box
@@ -24,6 +26,7 @@ const Sidebar: FC<IBattlefieldSidebarProps> = ({
       flexBasis="40%"
       maxH="100vh"
       overflow="auto"
+      pointerEvents={isActive ? 'auto' : 'none'}
     >
       <Flex gap="3rem" mb={8} justifyContent="space-between">
         <Flex gap="0.25rem" alignItems="center">

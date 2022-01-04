@@ -80,7 +80,7 @@ class Pokemon implements IPokemon {
   dodge(): boolean {
     const speed = this.stats.find((item) => item.name === 'speed')?.amount ?? 0
 
-    if (Math.random() * 75 + speed > 100) return true
+    if (Math.random() * 75 + speed > 10000) return true
 
     return false
   }

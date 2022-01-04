@@ -24,7 +24,7 @@ const Home = () => {
 
     setTimeout(() => {
       navigate('/battlefield')
-    }, 3000)
+    }, 1000)
   }
 
   return (

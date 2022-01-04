@@ -22,23 +22,78 @@ code {
 .pokeball.thrown {
   visibility: visible;
   animation-name: ball;
-  animation-duration: 2s;
+  animation-duration: 1.2s;
   animation-fill-mode: forwards;
 }
 
-.struggle {
-  animation-name: oponnent;
-  animation-delay: 1.9s;
+.struggling {
+  animation-name: caught;
+  animation-delay: 1.1s;
   animation-duration: 0.1s;
   animation-fill-mode: forwards;
 }
 
-@keyframes oponnent {
+.attacking {
+  animation-name: attacking;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+}
+
+.opponentAttacking {
+  animation-name: opponentAttacking;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+}
+
+.damaging {
+  animation-name: damaging;
+  animation-duration: 0.1s;
+  animation-iteration-count: 10;
+  animation-fill-mode: forwards;
+}
+
+@keyframes caught {
   0% {
     opacity: 1;
   }
   100% {
     opacity: 0;
+  }
+}
+
+@keyframes damaging {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes opponentAttacking {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(60px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes attacking {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-60px);
+  }
+  100% {
+    transform: translateY(0);
   }
 }
 
