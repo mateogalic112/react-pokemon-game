@@ -19,6 +19,15 @@ export interface PokemonAPIData {
       }
     },
   ]
+  types: [
+    {
+      slot: number
+      type: {
+        name: string
+        url: string
+      }
+    }
+  ]
   moves: [
     {
       move: {

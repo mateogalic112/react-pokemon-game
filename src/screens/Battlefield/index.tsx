@@ -9,6 +9,8 @@ import PokemonOpponentCard from '../../components/PokeCard/PokemonOpponentCard'
 import { useNavigate } from 'react-router-dom'
 import SwitchPokemonMenu from '../../components/SwitchPokemonMenu'
 import EscapePopover from '../../components/EscapePopover'
+import { useSpeechSynthesis } from 'react-speech-kit';
+import Pokedex from '../../components/Pokedex'
 
 interface IBattlefieldProps {
   pokemon: Pokemon
@@ -51,7 +53,14 @@ const Battlefield = ({
   // Initiliaze fight
   const battle = new Battle(pokemon, opponent)
   // Get current trainer from context
-  const { trainer, catchPokemon, pokeBalls, pokemons } = usePokeTrainerContext()
+  const { catchPokemon, pokeBalls, pokemons } = usePokeTrainerContext()
+
+  // Pokedex speak
+  const { speak, speaking } = useSpeechSynthesis();
+  const onPokedexClick = async () => {
+    const text = opponent.getPokedexData()
+    speak({ text })
+  }
 
   const onPokemonAttack = async (
     move: Move,
@@ -170,6 +179,14 @@ const Battlefield = ({
           !pokemonAttackActive && !pokemonDamageActive && !pokeballActive
         }
       >
+        <Pokedex
+          onPokedexClick={onPokedexClick}
+          isDisabled={pokeballActive}
+          pokemonImage={opponent.getImage()}
+          pokemonName={opponent.getName()}
+          isSpeaking={speaking}
+        />
+
         <VStack alignItems="flex-end">
           {availablePokemons.length > 0 && (
             <SwitchPokemonMenu

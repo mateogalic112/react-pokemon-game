@@ -10,6 +10,11 @@ export interface Move {
   name: string
 }
 
+export interface Type {
+  name: string
+  url: string
+}
+
 export interface IPokemon {
   attack(moveIndex: number): number
   dodge(): boolean
@@ -25,6 +30,7 @@ class Pokemon implements IPokemon {
   private readonly image: string
   private readonly stats: Stat[]
   private readonly moves: Move[]
+  private readonly types: Type[]
 
   constructor(pokemonData: PokemonAPIData) {
     this.id = pokemonData.id
@@ -41,6 +47,10 @@ class Pokemon implements IPokemon {
     this.moves = pokemonData.moves.map((move) => ({
       damage: Math.round(Math.random() * 10),
       name: move.move.name,
+    }))
+    this.types = pokemonData.types.map(type => ({
+      name: type.type.name,
+      url: type.type.url
     }))
   }
 
@@ -88,6 +98,10 @@ class Pokemon implements IPokemon {
 
   getHp(): number {
     return this.stats.find((item) => item.name === 'hp')?.amount ?? 100
+  }
+
+  getPokedexData() {
+    return `${this.name.toUpperCase()} is of ${this.types.slice(0,2).map(t => t.name.toUpperCase()).join(' and ')} type. Common moves are ${this.moves.slice(0, 2).map(m => m.name.toUpperCase()).join(' and ')}.`
   }
 }
 
