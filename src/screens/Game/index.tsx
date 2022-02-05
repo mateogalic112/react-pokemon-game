@@ -2,6 +2,8 @@ import { Box, Grid, GridItem } from '@chakra-ui/react'
 import { useEffect, useRef, useState } from 'react'
 import Player from './Player'
 import FoePokemon from './FoePokemon'
+import { useFetchInitialPokemons } from '../../api/pokemons/useFetchInitialPokemons'
+import Pokemon from '../../models/Pokemon'
 
 // Board dimensions
 const GRID_ROWS = 20
@@ -30,12 +32,36 @@ const goLeft = (position: number): number => position - 1
 
 const Game = () => {
   const [playerPosition, setPlayerPosition] = useState(10)
-  const foePositions = [4, 24, 44, 88]
 
   const gameBoardRef = useRef<HTMLInputElement>(null)
   useEffect(() => {
     gameBoardRef.current.focus()
   }, [])
+
+  const foePokemonsResult = useFetchInitialPokemons([10, 40, 70])
+  const foePokemons =
+    foePokemonsResult?.map((item) => {
+      if (item?.data) {
+        return new Pokemon(item?.data)
+      }
+      return undefined
+    }) || []
+
+  const foePokemonsWithPositions: Record<number, Pokemon> = foePokemons.reduce(
+    (acc, foe, idx) => {
+      return {
+        ...acc,
+        [24 * (idx + 1)]: foe,
+      }
+    },
+    {}
+  )
+
+  const foePositions = Array.from(Object.keys(foePokemonsWithPositions)).map(
+    Number
+  )
+
+  console.log(foePokemons)
 
   const checkEncounterWithFoe = (position: number): boolean => {
     if (foePositions.includes(position)) {
@@ -102,14 +128,17 @@ const Game = () => {
             key={idx}
             w="100%"
             h="5"
-            bg="#55C233"
+            bg="#99EE99"
             display="flex"
             justifyContent="center"
             alignItems="center"
           >
             {idx === playerPosition ? <Player /> : null}
             {foePositions.includes(idx) ? (
-              <FoePokemon emoji={'&#128640;'} />
+              <FoePokemon
+                image={foePokemonsWithPositions[idx].getImage()}
+                name={foePokemonsWithPositions[idx].getName()}
+              />
             ) : null}
           </GridItem>
         ))}

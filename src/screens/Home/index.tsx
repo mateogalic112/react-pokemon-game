@@ -15,6 +15,8 @@ const Home = () => {
   const pokemons =
     results?.map((item) => {
       if (item?.data) return new Pokemon(item?.data)
+
+      return undefined
     }) || []
 
   const { choosePokemon, pokemons: allPokemons } = usePokeTrainerContext()
