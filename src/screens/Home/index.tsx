@@ -23,7 +23,7 @@ const Home = () => {
     setMessage(choosePokemon(pokemon))
 
     setTimeout(() => {
-      navigate('/battlefield')
+      navigate('/game')
     }, 1000)
   }
 

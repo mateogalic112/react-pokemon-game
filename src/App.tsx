@@ -5,6 +5,7 @@ import { Route, Routes } from 'react-router-dom'
 import Home from './screens/Home'
 import PrepareBattle from './screens/Battlefield/PrepareBattle'
 import Pokedex from './screens/Pokedex'
+import Game from './screens/Game'
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
 
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="game" element={<Game />} />
           <Route path="battlefield" element={<PrepareBattle />} />
           <Route path="pokedex" element={<Pokedex />} />
         </Routes>
