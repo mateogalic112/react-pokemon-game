@@ -23,7 +23,7 @@ const Home = () => {
     setMessage(choosePokemon(pokemon))
 
     setTimeout(() => {
-      navigate('/game')
+      navigate('/battlefield')
     }, 1000)
   }
 
@@ -50,7 +50,7 @@ const Home = () => {
                 alt={pokemon.getName()}
                 onClick={() => onPokemonChoose(pokemon)}
               />
-            ),
+            )
         )}
       </HStack>
     </VStack>

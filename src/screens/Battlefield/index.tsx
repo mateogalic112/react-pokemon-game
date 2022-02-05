@@ -9,7 +9,7 @@ import PokemonOpponentCard from '../../components/PokeCard/PokemonOpponentCard'
 import { useNavigate } from 'react-router-dom'
 import SwitchPokemonMenu from '../../components/SwitchPokemonMenu'
 import EscapePopover from '../../components/EscapePopover'
-import { useSpeechSynthesis } from 'react-speech-kit';
+import { useSpeechSynthesis } from 'react-speech-kit'
 import Pokedex from '../../components/Pokedex'
 
 interface IBattlefieldProps {
@@ -27,7 +27,7 @@ const Battlefield = ({
 
   // Keep track of pokemons used in battle -> [ pokemonId, hp ]
   const [usedPokemons, setUsedPokemons] = useState(
-    new Map<number, number>([[pokemon.getId(), pokemon.getHp()]]),
+    new Map<number, number>([[pokemon.getId(), pokemon.getHp()]])
   )
 
   const storeUsedPokemon = (pokemonId: number, hp: number) => {
@@ -56,16 +56,19 @@ const Battlefield = ({
   const { catchPokemon, pokeBalls, pokemons } = usePokeTrainerContext()
 
   // Pokedex speak
-  const { speak, speaking } = useSpeechSynthesis();
+  const { speak, speaking } = useSpeechSynthesis()
   const onPokedexClick = async () => {
     const text = opponent.getPokedexData()
     speak({ text })
   }
 
+  // Victory sound
+  const victory = new Audio('/victory.mp3')
+
   const onPokemonAttack = async (
     move: Move,
     health: number,
-    setHealth: React.Dispatch<React.SetStateAction<number>>,
+    setHealth: React.Dispatch<React.SetStateAction<number>>
   ) => {
     setPokemonAttackActive(true)
 
@@ -78,7 +81,7 @@ const Battlefield = ({
     // HOF for creating attack damage and battle message based on chosen move
     const { damage, messages } = battle.attackOpponent(opponentTurn)(
       move,
-      health,
+      health
     )
 
     if (damage > 0) {
@@ -109,9 +112,10 @@ const Battlefield = ({
     if (!isCaught) {
       setPokeballActive(false)
     } else {
+      victory.play()
       setTimeout(() => {
         navigate('/pokedex')
-      }, 1000)
+      }, 5500)
     }
 
     setMessages((prev) => [...prev, caughtMessage])
@@ -140,7 +144,7 @@ const Battlefield = ({
 
   // Calculate available pokemons
   const availablePokemons = pokemons.filter(
-    (item) => item.getId() !== pokemon.getId(),
+    (item) => item.getId() !== pokemon.getId()
   )
 
   return (
