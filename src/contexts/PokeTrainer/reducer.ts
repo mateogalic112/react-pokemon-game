@@ -17,7 +17,7 @@ type PokeTrainerAction =
 
 export default function (
   state: PokeTrainerState,
-  action: PokeTrainerAction,
+  action: PokeTrainerAction
 ): PokeTrainerState {
   switch (action.type) {
     case PokeTrainerActionKind.throwPokeBall:

@@ -49,7 +49,7 @@ export const usePokeTrainerContext = () => {
 export const PokeTrainerProvider: FC = ({ children }) => {
   const [{ trainer, pokeBalls, pokemons }, dispatch] = useReducer(
     pokeTrainerReducer,
-    initialState,
+    initialState
   )
 
   const throwPokeBall = () => {

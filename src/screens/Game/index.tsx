@@ -1,5 +1,5 @@
 import { Box, Grid, GridItem } from '@chakra-ui/react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import Player from './Player'
 import FoePokemon from './FoePokemon'
 import { useFetchInitialPokemons } from '../../api/pokemons/useFetchInitialPokemons'
@@ -33,19 +33,27 @@ const goLeft = (position: number): number => position - 1
 const Game = () => {
   const [playerPosition, setPlayerPosition] = useState(10)
 
+  const foePokemonsResult = useFetchInitialPokemons([10, 40, 70])
+  const foePokemons = useMemo(
+    () =>
+      foePokemonsResult?.map((item) => {
+        if (item?.data) {
+          return new Pokemon(item?.data)
+        }
+        return undefined
+      }) || [],
+    [foePokemonsResult]
+  )
+
   const gameBoardRef = useRef<HTMLInputElement>(null)
   useEffect(() => {
-    gameBoardRef.current.focus()
-  }, [])
+    if (foePokemons.every(Boolean)) {
+      gameBoardRef.current.focus()
+    }
+  }, [foePokemons])
+  console.log({ foePokemons })
 
-  const foePokemonsResult = useFetchInitialPokemons([10, 40, 70])
-  const foePokemons =
-    foePokemonsResult?.map((item) => {
-      if (item?.data) {
-        return new Pokemon(item?.data)
-      }
-      return undefined
-    }) || []
+  if (foePokemons.some((p) => typeof p === 'undefined')) return <h1>Hello</h1>
 
   const foePokemonsWithPositions: Record<number, Pokemon> = foePokemons.reduce(
     (acc, foe, idx) => {
@@ -61,14 +69,14 @@ const Game = () => {
     Number
   )
 
-  console.log(foePokemons)
-
   const checkEncounterWithFoe = (position: number): boolean => {
     if (foePositions.includes(position)) {
       return true
     }
     return false
   }
+
+  if (!foePokemons) return null
 
   const onKeyDownHandler = (event: React.KeyboardEvent<HTMLDivElement>) => {
     switch (event.code) {
