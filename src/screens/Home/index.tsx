@@ -1,6 +1,6 @@
 import { VStack, Text, HStack } from '@chakra-ui/react'
 import { useFetchInitialPokemons } from '../../api/pokemons/useFetchInitialPokemons'
-import { usePokeTrainerContext } from '../../contexts/pokeTrainer'
+import { usePokeTrainerContext } from '../../contexts/poke-trainer'
 import Pokemon from '../../models/Pokemon'
 import ChooseCard from './ChooseCard'
 import { useNavigate } from 'react-router-dom'
@@ -19,13 +19,13 @@ const Home = () => {
       return undefined
     }) || []
 
-  const { choosePokemon, pokemons: allPokemons } = usePokeTrainerContext()
+  const { choosePokemon } = usePokeTrainerContext()
 
   const onPokemonChoose = (pokemon: Pokemon): void => {
     setMessage(choosePokemon(pokemon))
 
     setTimeout(() => {
-      navigate('/battlefield')
+      navigate('/game')
     }, 1000)
   }
 

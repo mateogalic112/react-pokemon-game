@@ -1,7 +1,7 @@
 import { Heading, Text, VStack } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { usePokeTrainerContext } from '../../contexts/pokeTrainer'
+import { usePokeTrainerContext } from '../../contexts/poke-trainer'
 
 const Pokedex = () => {
   let navigate = useNavigate()
@@ -9,7 +9,7 @@ const Pokedex = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      navigate('/battlefield')
+      navigate('/game')
     }, 1000)
   })
 

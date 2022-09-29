@@ -1,9 +1,11 @@
 import { Box, Grid, GridItem } from '@chakra-ui/react'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Player from './Player'
 import FoePokemon from './FoePokemon'
 import { useFetchInitialPokemons } from '../../api/pokemons/useFetchInitialPokemons'
 import Pokemon from '../../models/Pokemon'
+import { useBattleContext } from '../../contexts/battle'
+import { useNavigate } from 'react-router-dom'
 
 // Board dimensions
 const GRID_ROWS = 20
@@ -31,84 +33,77 @@ const goUp = (position: number): number => position - GRID_COLUMNS
 const goLeft = (position: number): number => position - 1
 
 const Game = () => {
-  const [playerPosition, setPlayerPosition] = useState(10)
+  let navigate = useNavigate()
 
+  const [playerPosition, setPlayerPosition] = useState(10)
+  const [freezePlayer, setFreezePlayer] = useState(false)
+
+  const { storeOpponent } = useBattleContext()
   const foePokemonsResult = useFetchInitialPokemons([10, 40, 70])
-  const foePokemons = useMemo(
-    () =>
-      foePokemonsResult?.map((item) => {
-        if (item?.data) {
-          return new Pokemon(item?.data)
-        }
-        return undefined
-      }) || [],
-    [foePokemonsResult]
-  )
 
   const gameBoardRef = useRef<HTMLInputElement>(null)
   useEffect(() => {
-    if (foePokemons.every(Boolean)) {
-      gameBoardRef.current.focus()
-    }
-  }, [foePokemons])
-  console.log({ foePokemons })
+    gameBoardRef.current.focus()
+  }, [])
 
-  if (foePokemons.some((p) => typeof p === 'undefined')) return <h1>Hello</h1>
+  const foePokemons = foePokemonsResult
+    .map((item) => (item.data ? new Pokemon(item?.data) : undefined))
+    .filter(Boolean)
 
+  const foePokemonPositions = foePokemons.map((_, idx) => 24 * (idx + 1))
   const foePokemonsWithPositions: Record<number, Pokemon> = foePokemons.reduce(
     (acc, foe, idx) => {
       return {
         ...acc,
-        [24 * (idx + 1)]: foe,
+        [foePokemonPositions[idx]]: foe,
       }
     },
     {}
   )
 
-  const foePositions = Array.from(Object.keys(foePokemonsWithPositions)).map(
-    Number
-  )
-
   const checkEncounterWithFoe = (position: number): boolean => {
-    if (foePositions.includes(position)) {
-      return true
-    }
+    if (foePokemonPositions.includes(position)) return true
     return false
   }
 
-  if (!foePokemons) return null
+  const battleWithFoe = (foe: Pokemon) => {
+    storeOpponent(foe)
+    setFreezePlayer(true)
+    setTimeout(() => {
+      navigate('/battlefield')
+    }, 1500)
+  }
 
   const onKeyDownHandler = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (freezePlayer) return
     switch (event.code) {
       case 'ArrowDown':
         if (invalidGoDown(playerPosition)) return
         if (checkEncounterWithFoe(goDown(playerPosition))) {
-          console.log('Foe')
-          return
+          return battleWithFoe(foePokemonsWithPositions[goDown(playerPosition)])
         }
         setPlayerPosition(goDown(playerPosition))
         break
       case 'ArrowRight':
         if (invalidGoRight(playerPosition)) return
         if (checkEncounterWithFoe(goRight(playerPosition))) {
-          console.log('Foe')
-          return
+          return battleWithFoe(
+            foePokemonsWithPositions[goRight(playerPosition)]
+          )
         }
         setPlayerPosition(goRight(playerPosition))
         break
       case 'ArrowUp':
         if (invalidGoUp(playerPosition)) return
         if (checkEncounterWithFoe(goUp(playerPosition))) {
-          console.log('Foe')
-          return
+          return battleWithFoe(foePokemonsWithPositions[goUp(playerPosition)])
         }
         setPlayerPosition(goUp(playerPosition))
         break
       case 'ArrowLeft':
         if (invalidGoLeft(playerPosition)) return
         if (checkEncounterWithFoe(goLeft(playerPosition))) {
-          console.log('Foe')
-          return
+          return battleWithFoe(foePokemonsWithPositions[goLeft(playerPosition)])
         }
         setPlayerPosition(goLeft(playerPosition))
         break
@@ -142,7 +137,7 @@ const Game = () => {
             alignItems="center"
           >
             {idx === playerPosition ? <Player /> : null}
-            {foePositions.includes(idx) ? (
+            {foePokemonPositions.includes(idx) ? (
               <FoePokemon
                 image={foePokemonsWithPositions[idx].getImage()}
                 name={foePokemonsWithPositions[idx].getName()}

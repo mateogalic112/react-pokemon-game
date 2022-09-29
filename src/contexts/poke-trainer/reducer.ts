@@ -15,10 +15,10 @@ type PokeTrainerAction =
       payload: { pokemon: Pokemon }
     }
 
-export default function (
+const pokeTrainerReducer = (
   state: PokeTrainerState,
   action: PokeTrainerAction
-): PokeTrainerState {
+): PokeTrainerState => {
   switch (action.type) {
     case PokeTrainerActionKind.throwPokeBall:
       return {
@@ -39,3 +39,5 @@ export default function (
       throw new Error('Action not allowed')
   }
 }
+
+export default pokeTrainerReducer

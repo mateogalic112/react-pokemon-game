@@ -15,27 +15,32 @@ class Battle {
     return damage >= health
   }
 
-  private handleAttack = (attacker: Pokemon, defender: Pokemon) => (
-    move: Move,
-    health: number,
-  ): { damage: number; messages: string[] } => {
-    this.messages.push(
-      `${attacker.getName()} attacks with ${move.name.toUpperCase()} and ${
-        move.damage
-      } damage`,
-    )
+  private handleAttack =
+    (attacker: Pokemon, defender: Pokemon) =>
+    (move: Move, health: number): { damage: number; messages: string[] } => {
+      this.messages.push(
+        `${attacker.getName()} attacks with ${move.name.toUpperCase()} and ${
+          move.damage
+        } damage`
+      )
 
-    if (defender.dodge()) {
-      this.messages.push(`${defender.getName()} dodged the attack!`)
+      if (defender.dodge()) {
+        this.messages.push(`${defender.getName()} dodged the attack!`)
 
-      return {
-        damage: 0,
-        messages: this.messages,
+        return {
+          damage: 0,
+          messages: this.messages,
+        }
       }
-    }
 
-    if (this.checkForGameEnd(move.damage, health)) {
-      this.messages.push(`Game over, ${attacker.getName()} wins!`)
+      if (this.checkForGameEnd(move.damage, health)) {
+        this.messages.push(`Game over, ${attacker.getName()} wins!`)
+
+        return {
+          damage: move.damage,
+          messages: this.messages,
+        }
+      }
 
       return {
         damage: move.damage,
@@ -43,14 +48,8 @@ class Battle {
       }
     }
 
-    return {
-      damage: move.damage,
-      messages: this.messages,
-    }
-  }
-
   hasCaughtPokemon = (hp: number): Promise<boolean> => {
-    return new Promise((resolve, _) => {
+    return new Promise((resolve) => {
       setTimeout(() => {
         if (hp <= this.defender.getHp() && Math.random() * 10 > 5) {
           resolve(true)

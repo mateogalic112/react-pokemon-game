@@ -1,6 +1,6 @@
 import { Box, Flex, VStack } from '@chakra-ui/react'
 import React, { useState } from 'react'
-import { usePokeTrainerContext } from '../../contexts/pokeTrainer'
+import { usePokeTrainerContext } from '../../contexts/poke-trainer'
 import Battle from '../../models/Battle'
 import Pokemon, { Move } from '../../models/Pokemon'
 import PokemonCard from '../../components/PokeCard/PokemonCard'
@@ -11,19 +11,18 @@ import SwitchPokemonMenu from '../../components/SwitchPokemonMenu'
 import EscapePopover from '../../components/EscapePopover'
 import { useSpeechSynthesis } from 'react-speech-kit'
 import Pokedex from '../../components/Pokedex'
+import { useBattleContext } from '../../contexts/battle'
 
-interface IBattlefieldProps {
-  pokemon: Pokemon
-  opponent: Pokemon
-  switchPokemon: (newPokemon: Pokemon) => void
-}
-
-const Battlefield = ({
-  pokemon,
-  opponent,
-  switchPokemon,
-}: IBattlefieldProps) => {
+const Battlefield = () => {
   let navigate = useNavigate()
+
+  const { foe: opponent } = useBattleContext()
+  const { catchPokemon, pokeBalls, pokemons } = usePokeTrainerContext()
+  const [pokemon, setPokemon] = useState<Pokemon | null>(pokemons[0] ?? null)
+
+  const switchPokemon = (newPokemon: Pokemon) => {
+    setPokemon(newPokemon)
+  }
 
   // Keep track of pokemons used in battle -> [ pokemonId, hp ]
   const [usedPokemons, setUsedPokemons] = useState(
@@ -53,7 +52,6 @@ const Battlefield = ({
   // Initiliaze fight
   const battle = new Battle(pokemon, opponent)
   // Get current trainer from context
-  const { catchPokemon, pokeBalls, pokemons } = usePokeTrainerContext()
 
   // Pokedex speak
   const { speak, speaking } = useSpeechSynthesis()
@@ -122,7 +120,7 @@ const Battlefield = ({
   }
 
   const onEscape = () => {
-    navigate('/pokedex')
+    navigate('/game')
   }
 
   const onPokemonSwitch = (oldPokemon: Pokemon, newPokemon: Pokemon): void => {
