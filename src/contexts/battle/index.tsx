@@ -18,7 +18,7 @@ interface IBattleContext {
 
 const initialContext: IBattleContext = {
   foe: initialState.foe,
-  storeOpponent: (pokemon: Pokemon) => {},
+  storeOpponent: () => {},
 }
 
 const BattleContext = createContext<IBattleContext>(initialContext)
@@ -37,6 +37,10 @@ export const BattleProvider: FC = ({ children }) => {
   const [{ foe }, dispatch] = useReducer(battleReducer, initialState)
 
   const storeOpponent = (foe: Pokemon) => {
+    // Battle sound
+    const battle = new Audio('/battle.mp3')
+    battle.play()
+
     dispatch({
       type: BattleActionKind.storeOpponent,
       payload: { foe },

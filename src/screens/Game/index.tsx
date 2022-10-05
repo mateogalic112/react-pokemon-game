@@ -66,12 +66,13 @@ const Game = () => {
     return false
   }
 
+  // Battle sound
   const battleWithFoe = (foe: Pokemon) => {
     storeOpponent(foe)
     setFreezePlayer(true)
     setTimeout(() => {
       navigate('/battlefield')
-    }, 1500)
+    }, 2500)
   }
 
   const onKeyDownHandler = (event: React.KeyboardEvent<HTMLDivElement>) => {
