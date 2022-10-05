@@ -11,7 +11,7 @@ export type PokeTrainerState = {
 }
 
 const initialState: PokeTrainerState = {
-  trainer: new PokeTrainer('Mateo', 0),
+  trainer: new PokeTrainer('Mateo' + Math.random(), 0),
   pokeBalls: 10,
   pokemons: [],
 }

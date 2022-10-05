@@ -6,6 +6,9 @@ import { useFetchInitialPokemons } from '../../api/pokemons/useFetchInitialPokem
 import Pokemon from '../../models/Pokemon'
 import { useBattleContext } from '../../contexts/battle'
 import { useNavigate } from 'react-router-dom'
+import { usePokeTrainerContext } from '../../contexts/poke-trainer'
+import useGameSocket from '../../api/useGameSocket'
+import { useFetchGamePlayers } from '../../api/sockets/useGamePlayers'
 
 // Board dimensions
 const GRID_ROWS = 20
@@ -35,7 +38,14 @@ const goLeft = (position: number): number => position - 1
 const Game = () => {
   let navigate = useNavigate()
 
-  const [playerPosition, setPlayerPosition] = useState(10)
+  const socket = useGameSocket()
+  const { data: onlinePlayers } = useFetchGamePlayers()
+  const { trainer } = usePokeTrainerContext()
+
+  const me = onlinePlayers?.find(
+    (player) => player.trainerName === trainer.getName()
+  )
+
   const [freezePlayer, setFreezePlayer] = useState(false)
 
   const { storeOpponent } = useBattleContext()
@@ -75,7 +85,10 @@ const Game = () => {
     }, 2500)
   }
 
-  const onKeyDownHandler = (event: React.KeyboardEvent<HTMLDivElement>) => {
+  const onKeyDownHandler = (
+    event: React.KeyboardEvent<HTMLDivElement>,
+    playerPosition: number
+  ) => {
     if (freezePlayer) return
     switch (event.code) {
       case 'ArrowDown':
@@ -83,7 +96,10 @@ const Game = () => {
         if (checkEncounterWithFoe(goDown(playerPosition))) {
           return battleWithFoe(foePokemonsWithPositions[goDown(playerPosition)])
         }
-        setPlayerPosition(goDown(playerPosition))
+        socket.emit('update_player_position', {
+          trainerName: trainer.getName(),
+          newPosition: goDown(playerPosition),
+        })
         break
       case 'ArrowRight':
         if (invalidGoRight(playerPosition)) return
@@ -92,21 +108,30 @@ const Game = () => {
             foePokemonsWithPositions[goRight(playerPosition)]
           )
         }
-        setPlayerPosition(goRight(playerPosition))
+        socket.emit('update_player_position', {
+          trainerName: trainer.getName(),
+          newPosition: goRight(playerPosition),
+        })
         break
       case 'ArrowUp':
         if (invalidGoUp(playerPosition)) return
         if (checkEncounterWithFoe(goUp(playerPosition))) {
           return battleWithFoe(foePokemonsWithPositions[goUp(playerPosition)])
         }
-        setPlayerPosition(goUp(playerPosition))
+        socket.emit('update_player_position', {
+          trainerName: trainer.getName(),
+          newPosition: goUp(playerPosition),
+        })
         break
       case 'ArrowLeft':
         if (invalidGoLeft(playerPosition)) return
         if (checkEncounterWithFoe(goLeft(playerPosition))) {
           return battleWithFoe(foePokemonsWithPositions[goLeft(playerPosition)])
         }
-        setPlayerPosition(goLeft(playerPosition))
+        socket.emit('update_player_position', {
+          trainerName: trainer.getName(),
+          newPosition: goLeft(playerPosition),
+        })
         break
       default:
         break
@@ -120,7 +145,7 @@ const Game = () => {
       p={12}
       tabIndex={0}
       position="relative"
-      onKeyDown={onKeyDownHandler}
+      onKeyDown={(e) => onKeyDownHandler(e, me?.position)}
       ref={gameBoardRef}
     >
       <Grid
@@ -137,7 +162,9 @@ const Game = () => {
             justifyContent="center"
             alignItems="center"
           >
-            {idx === playerPosition ? <Player /> : null}
+            {!!onlinePlayers?.find((player) => player.position === idx) ? (
+              <Player />
+            ) : null}
             {foePokemonPositions.includes(idx) ? (
               <FoePokemon
                 image={foePokemonsWithPositions[idx].getImage()}
