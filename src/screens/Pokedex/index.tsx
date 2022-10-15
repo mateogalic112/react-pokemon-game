@@ -5,7 +5,7 @@ import { usePokeTrainerContext } from '../../contexts/poke-trainer'
 
 const Pokedex = () => {
   let navigate = useNavigate()
-  const { pokemons } = usePokeTrainerContext()
+  const { trainer } = usePokeTrainerContext()
 
   useEffect(() => {
     setTimeout(() => {
@@ -20,8 +20,8 @@ const Pokedex = () => {
       <Text>My pokemons</Text>
 
       <VStack>
-        {pokemons.map((pokemon) => (
-          <Heading key={pokemon.getId()}>{pokemon.getName()}</Heading>
+        {trainer.pokemons.map((pokemon) => (
+          <Heading key={pokemon.id}>{pokemon.name}</Heading>
         ))}
       </VStack>
     </section>

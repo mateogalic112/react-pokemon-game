@@ -17,8 +17,10 @@ const Battlefield = () => {
   let navigate = useNavigate()
 
   const { foe: opponent } = useBattleContext()
-  const { catchPokemon, pokeBalls, pokemons } = usePokeTrainerContext()
-  const [pokemon, setPokemon] = useState<Pokemon | null>(pokemons[0] ?? null)
+  const { trainer, catchPokemon } = usePokeTrainerContext()
+  const [pokemon, setPokemon] = useState<Pokemon | null>(
+    trainer.pokemons[0] ?? null
+  )
 
   const switchPokemon = (newPokemon: Pokemon) => {
     setPokemon(newPokemon)
@@ -26,7 +28,7 @@ const Battlefield = () => {
 
   // Keep track of pokemons used in battle -> [ pokemonId, hp ]
   const [usedPokemons, setUsedPokemons] = useState(
-    new Map<number, number>([[pokemon.getId(), pokemon.getHp()]])
+    new Map<number, number>([[pokemon.id, pokemon.getHp()]])
   )
 
   const storeUsedPokemon = (pokemonId: number, hp: number) => {
@@ -105,7 +107,7 @@ const Battlefield = () => {
 
     const isCaught = await battle.hasCaughtPokemon(opponentHealth)
 
-    const caughtMessage = catchPokemon(opponent, isCaught)
+    const caughtMessage = await catchPokemon(opponent, isCaught)
 
     if (!isCaught) {
       setPokeballActive(false)
@@ -125,11 +127,10 @@ const Battlefield = () => {
 
   const onPokemonSwitch = (oldPokemon: Pokemon, newPokemon: Pokemon): void => {
     // Store old pokemon health in state
-    storeUsedPokemon(oldPokemon.getId(), pokeHealth)
+    storeUsedPokemon(oldPokemon.id, pokeHealth)
 
     //Check if he already was in battle
-    const pokemonHealth =
-      usedPokemons.get(newPokemon.getId()) ?? newPokemon.getHp()
+    const pokemonHealth = usedPokemons.get(newPokemon.id) ?? newPokemon.getHp()
     if (pokemonHealth > 0) {
       setPokeHealth(pokemonHealth)
     } else {
@@ -141,8 +142,8 @@ const Battlefield = () => {
   }
 
   // Calculate available pokemons
-  const availablePokemons = pokemons.filter(
-    (item) => item.getId() !== pokemon.getId()
+  const availablePokemons = trainer.pokemons.filter(
+    (item) => item.id !== pokemon.id
   )
 
   return (
@@ -173,7 +174,7 @@ const Battlefield = () => {
       </Box>
 
       <Sidebar
-        pokeBallsCount={pokeBalls}
+        pokeBallsCount={trainer.pokeballs}
         onPokeballThrow={onPokeballThrow}
         pokeballActive={pokeballActive}
         messages={messages}
@@ -184,8 +185,8 @@ const Battlefield = () => {
         <Pokedex
           onPokedexClick={onPokedexClick}
           isDisabled={pokeballActive}
-          pokemonImage={opponent.getImage()}
-          pokemonName={opponent.getName()}
+          pokemonImage={opponent.image}
+          pokemonName={opponent.name}
           isSpeaking={speaking}
         />
 

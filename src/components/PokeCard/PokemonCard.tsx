@@ -25,20 +25,20 @@ const PokemonCard = ({
   return (
     <Box maxW="sm" py={3} m="auto">
       <CardImage
-        src={pokemon.getImage()}
-        alt={pokemon.getName()}
+        src={pokemon.image}
+        alt={pokemon.name}
         isAttacking={isAttacking}
         isDamaging={isDamaging}
       />
 
       <CardStats
-        title={pokemon.getName()}
-        stats={pokemon.getStats().slice(1)}
+        title={pokemon.name}
+        stats={pokemon.stats.slice(1)}
         hp={hp}
         isDamaging={isDamaging}
       >
         <CardAction
-          moves={pokemon.getMoves().slice(0, 6)}
+          moves={pokemon.moves.slice(0, 6)}
           attack={attack}
           active={isActive}
         />

@@ -23,17 +23,23 @@ const pokeTrainerReducer = (
     case PokeTrainerActionKind.throwPokeBall:
       return {
         ...state,
-        pokeBalls: state.pokeBalls - 1,
+        trainer: { ...state.trainer, pokeballs: state.trainer.pokeballs - 1 },
       }
     case PokeTrainerActionKind.catchPokemon:
       return {
         ...state,
-        pokemons: [...state.pokemons, action.payload.pokemon],
+        trainer: {
+          ...state.trainer,
+          pokemons: [...state.trainer.pokemons, action.payload.pokemon],
+        },
       }
     case PokeTrainerActionKind.choosePokemon:
       return {
         ...state,
-        pokemons: [...state.pokemons, action.payload.pokemon],
+        trainer: {
+          ...state.trainer,
+          pokemons: [...state.trainer.pokemons, action.payload.pokemon],
+        },
       }
     default:
       throw new Error('Action not allowed')

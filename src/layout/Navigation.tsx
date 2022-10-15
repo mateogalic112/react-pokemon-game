@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom'
 import { usePokeTrainerContext } from '../contexts/poke-trainer'
 
 const Navigation = () => {
-  const { pokemons } = usePokeTrainerContext()
+  const { trainer } = usePokeTrainerContext()
 
-  const to = pokemons.length === 0 ? '/' : 'pokedex'
+  const to = trainer.pokemons.length === 0 ? '/' : 'pokedex'
 
   return (
     <Flex py="3" alignItems="center">

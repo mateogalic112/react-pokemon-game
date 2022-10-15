@@ -23,19 +23,17 @@ export interface IPokemon {
 }
 
 class Pokemon implements IPokemon {
-  private readonly id: number
-  private readonly height: number
-  private readonly weight: number
-  private readonly name: string
-  private readonly image: string
-  private readonly stats: Stat[]
-  private readonly moves: Move[]
-  private readonly types: Type[]
+  public readonly id: number
+  public readonly name: string
+  public readonly image: string
+  public hp: number
+  public stats: Stat[]
+  public moves: Move[]
+  public types: Type[]
 
-  constructor(pokemonData: PokemonAPIData) {
+  constructor(pokemonData: PokemonAPIData, hp: number = 100) {
     this.id = pokemonData.id
-    this.height = pokemonData.height
-    this.weight = pokemonData.weight
+    this.hp = hp
     this.name = pokemonData.name
     this.image = pokemonData.sprites.other.dream_world.front_default
     this.stats = pokemonData.stats
@@ -48,30 +46,10 @@ class Pokemon implements IPokemon {
       damage: Math.round(Math.random() * 10),
       name: move.move.name,
     }))
-    this.types = pokemonData.types.map(type => ({
+    this.types = pokemonData.types.map((type) => ({
       name: type.type.name,
-      url: type.type.url
+      url: type.type.url,
     }))
-  }
-
-  getId() {
-    return this.id
-  }
-
-  getImage() {
-    return this.image
-  }
-
-  getName() {
-    return this.name.toUpperCase()
-  }
-
-  getStats() {
-    return this.stats
-  }
-
-  getMoves() {
-    return this.moves
   }
 
   attack(moveIndex: number): number {
@@ -97,11 +75,17 @@ class Pokemon implements IPokemon {
   }
 
   getHp(): number {
-    return this.stats.find((item) => item.name === 'hp')?.amount ?? 100
+    return this.hp
   }
 
   getPokedexData() {
-    return `${this.name.toUpperCase()} is of ${this.types.slice(0,2).map(t => t.name.toUpperCase()).join(' and ')} type. Common moves are ${this.moves.slice(0, 2).map(m => m.name.toUpperCase()).join(' and ')}.`
+    return `${this.name.toUpperCase()} is of ${this.types
+      .slice(0, 2)
+      .map((t) => t.name.toUpperCase())
+      .join(' and ')} type. Common moves are ${this.moves
+      .slice(0, 2)
+      .map((m) => m.name.toUpperCase())
+      .join(' and ')}.`
   }
 }
 

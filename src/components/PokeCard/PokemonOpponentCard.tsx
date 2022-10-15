@@ -19,23 +19,23 @@ const PokemonOpponentCard = ({
     if (!isActive) return
 
     setTimeout(() => {
-      attack(pokemon.getMoves()[randomMoveIndex])
+      attack(pokemon.moves[randomMoveIndex])
     }, 500)
   }, [isActive])
 
   return (
     <Box maxW="sm" py={3} m="auto">
       <CardStats
-        title={pokemon.getName()}
-        stats={pokemon.getStats().slice(1)}
+        title={pokemon.name}
+        stats={pokemon.stats.slice(1)}
         hp={hp}
         children={null}
         isDamaging={isDamaging}
       />
 
       <CardImage
-        src={pokemon.getImage()}
-        alt={pokemon.getName()}
+        src={pokemon.image}
+        alt={pokemon.name}
         isStruggling={isStruggling}
         isAttacking={isAttacking}
         isDamaging={isDamaging}

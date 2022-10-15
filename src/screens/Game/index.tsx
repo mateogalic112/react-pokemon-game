@@ -43,7 +43,7 @@ const Game = () => {
   const { trainer } = usePokeTrainerContext()
 
   const me = onlinePlayers?.find(
-    (player) => player.trainerName === trainer.getName()
+    (player) => player.trainerName === trainer.name
   )
 
   const [freezePlayer, setFreezePlayer] = useState(false)
@@ -97,7 +97,7 @@ const Game = () => {
           return battleWithFoe(foePokemonsWithPositions[goDown(playerPosition)])
         }
         socket.emit('update_player_position', {
-          trainerName: trainer.getName(),
+          trainerName: trainer.name,
           newPosition: goDown(playerPosition),
         })
         break
@@ -109,7 +109,7 @@ const Game = () => {
           )
         }
         socket.emit('update_player_position', {
-          trainerName: trainer.getName(),
+          trainerName: trainer.name,
           newPosition: goRight(playerPosition),
         })
         break
@@ -119,7 +119,7 @@ const Game = () => {
           return battleWithFoe(foePokemonsWithPositions[goUp(playerPosition)])
         }
         socket.emit('update_player_position', {
-          trainerName: trainer.getName(),
+          trainerName: trainer.name,
           newPosition: goUp(playerPosition),
         })
         break
@@ -129,7 +129,7 @@ const Game = () => {
           return battleWithFoe(foePokemonsWithPositions[goLeft(playerPosition)])
         }
         socket.emit('update_player_position', {
-          trainerName: trainer.getName(),
+          trainerName: trainer.name,
           newPosition: goLeft(playerPosition),
         })
         break
@@ -167,8 +167,8 @@ const Game = () => {
             ) : null}
             {foePokemonPositions.includes(idx) ? (
               <FoePokemon
-                image={foePokemonsWithPositions[idx].getImage()}
-                name={foePokemonsWithPositions[idx].getName()}
+                image={foePokemonsWithPositions[idx].image}
+                name={foePokemonsWithPositions[idx].name}
               />
             ) : null}
           </GridItem>

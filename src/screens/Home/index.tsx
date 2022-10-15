@@ -47,9 +47,9 @@ const Home = () => {
           (pokemon) =>
             pokemon && (
               <ChooseCard
-                key={pokemon.getId()}
-                src={pokemon.getImage()}
-                alt={pokemon.getName()}
+                key={pokemon.id}
+                src={pokemon.image}
+                alt={pokemon.name}
                 onClick={() => onPokemonChoose(pokemon)}
               />
             )

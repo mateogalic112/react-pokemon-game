@@ -29,15 +29,12 @@ const SwitchPokemonMenu = ({
       </MenuButton>
       <MenuList>
         {pokemons.map((pokemon) => (
-          <MenuItem
-            key={pokemon.getId()}
-            onClick={() => selectPokemon(pokemon)}
-          >
-            <Image w="40px" src={pokemon.getImage()} alt={pokemon.getName()} />
+          <MenuItem key={pokemon.id} onClick={() => selectPokemon(pokemon)}>
+            <Image w="40px" src={pokemon.image} alt={pokemon.name} />
 
             <Box mr={3} />
 
-            <Text>{pokemon.getName()}</Text>
+            <Text>{pokemon.name}</Text>
           </MenuItem>
         ))}
       </MenuList>

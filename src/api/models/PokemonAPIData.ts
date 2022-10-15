@@ -1,7 +1,5 @@
 export interface PokemonAPIData {
   id: number
-  height: number
-  weight: number
   name: string
   sprites: {
     other: {
@@ -17,7 +15,7 @@ export interface PokemonAPIData {
         name: string
         url: string
       }
-    },
+    }
   ]
   types: [
     {
@@ -33,6 +31,6 @@ export interface PokemonAPIData {
       move: {
         name: string
       }
-    },
+    }
   ]
 }

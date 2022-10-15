@@ -19,13 +19,13 @@ class Battle {
     (attacker: Pokemon, defender: Pokemon) =>
     (move: Move, health: number): { damage: number; messages: string[] } => {
       this.messages.push(
-        `${attacker.getName()} attacks with ${move.name.toUpperCase()} and ${
+        `${attacker.name} attacks with ${move.name.toUpperCase()} and ${
           move.damage
         } damage`
       )
 
       if (defender.dodge()) {
-        this.messages.push(`${defender.getName()} dodged the attack!`)
+        this.messages.push(`${defender.name} dodged the attack!`)
 
         return {
           damage: 0,
@@ -34,7 +34,7 @@ class Battle {
       }
 
       if (this.checkForGameEnd(move.damage, health)) {
-        this.messages.push(`Game over, ${attacker.getName()} wins!`)
+        this.messages.push(`Game over, ${attacker.name} wins!`)
 
         return {
           damage: move.damage,

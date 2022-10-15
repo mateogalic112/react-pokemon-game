@@ -6,7 +6,7 @@ import { usePokeTrainerContext } from '../contexts/poke-trainer'
 const useGameSocket = () => {
   const [socket, setSocket] = useState(null)
   const queryClient = useQueryClient()
-  const { trainer, pokemons } = usePokeTrainerContext()
+  const { trainer } = usePokeTrainerContext()
 
   useEffect(() => {
     const s = io('http://localhost:4000')
@@ -20,10 +20,10 @@ const useGameSocket = () => {
   useEffect(() => {
     if (!socket) return
     socket.emit('join_game', {
-      trainerName: trainer.getName(),
-      pokemonId: pokemons[0].getId(),
+      trainerName: trainer.name,
+      pokemonId: trainer.pokemons[0].id,
     })
-  }, [socket, queryClient, pokemons, trainer])
+  }, [socket, queryClient, trainer])
 
   useEffect(() => {
     if (!socket) return
