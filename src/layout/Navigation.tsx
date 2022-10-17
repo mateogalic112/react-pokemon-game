@@ -5,7 +5,7 @@ import { usePokeTrainerContext } from '../contexts/poke-trainer'
 const Navigation = () => {
   const { trainer } = usePokeTrainerContext()
 
-  const to = trainer.pokemons.length === 0 ? '/' : 'pokedex'
+  const to = trainer && trainer.pokemons.length === 0 ? '/' : 'pokedex'
 
   return (
     <Flex py="3" alignItems="center">

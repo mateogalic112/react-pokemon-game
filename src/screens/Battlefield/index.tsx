@@ -19,7 +19,7 @@ const Battlefield = () => {
   const { foe: opponent } = useBattleContext()
   const { trainer, catchPokemon } = usePokeTrainerContext()
   const [pokemon, setPokemon] = useState<Pokemon | null>(
-    trainer.pokemons[0] ?? null
+    trainer?.pokemons[0] ?? null
   )
 
   const switchPokemon = (newPokemon: Pokemon) => {
@@ -27,9 +27,7 @@ const Battlefield = () => {
   }
 
   // Keep track of pokemons used in battle -> [ pokemonId, hp ]
-  const [usedPokemons, setUsedPokemons] = useState(
-    new Map<number, number>([[pokemon.id, pokemon.getHp()]])
-  )
+  const [usedPokemons, setUsedPokemons] = useState(new Map<number, number>())
 
   const storeUsedPokemon = (pokemonId: number, hp: number) => {
     setUsedPokemons(new Map(usedPokemons.set(pokemonId, hp)))
@@ -174,7 +172,6 @@ const Battlefield = () => {
       </Box>
 
       <Sidebar
-        pokeBallsCount={trainer.pokeballs}
         onPokeballThrow={onPokeballThrow}
         pokeballActive={pokeballActive}
         messages={messages}

@@ -8,7 +8,7 @@ interface IPokemonDB {
   pokeTrainerId: number
 }
 
-export interface IGetPokeTrainerResponse {
+export interface IPokeTrainerResponse {
   id: number
   name: string
   pokeballs: number
@@ -17,8 +17,8 @@ export interface IGetPokeTrainerResponse {
 
 const getPokeTrainer = async (
   trainerId: number
-): Promise<IGetPokeTrainerResponse> => {
-  const response = await api.get<IGetPokeTrainerResponse>(
+): Promise<IPokeTrainerResponse> => {
+  const response = await api.get<IPokeTrainerResponse>(
     `poke-trainers/${trainerId}`
   )
   return response.data

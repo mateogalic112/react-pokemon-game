@@ -1,10 +1,10 @@
 import { useQueries, UseQueryResult } from 'react-query'
 import { PokemonAPIData } from '../models/PokemonAPIData'
 import { fetchInitialPokemon } from '../pokemons/useFetchInitialPokemons'
-import { IGetPokeTrainerResponse } from './useGetPokeTrainer'
+import { IPokeTrainerResponse } from './useGetPokeTrainer'
 
 export const useGetTrainerPokemons = (
-  pokeTrainer: IGetPokeTrainerResponse | null
+  pokeTrainer: IPokeTrainerResponse | null
 ): UseQueryResult<PokemonAPIData>[] => {
   const pokemons = pokeTrainer?.pokemons ?? []
   return useQueries(

@@ -1,8 +1,8 @@
 import React, { FC } from 'react'
 import { Flex, Image, Button, Box } from '@chakra-ui/react'
+import { usePokeTrainerContext } from '../../contexts/poke-trainer'
 
 interface IBattlefieldSidebarProps {
-  pokeBallsCount: number
   onPokeballThrow: () => void
   pokeballActive: boolean
   messages: string[]
@@ -10,13 +10,14 @@ interface IBattlefieldSidebarProps {
 }
 
 const Sidebar: FC<IBattlefieldSidebarProps> = ({
-  pokeBallsCount,
   onPokeballThrow,
   pokeballActive,
   messages,
   children,
   isActive,
 }) => {
+  const { trainer } = usePokeTrainerContext()
+
   return (
     <Box
       py={10}
@@ -31,7 +32,7 @@ const Sidebar: FC<IBattlefieldSidebarProps> = ({
       <Flex gap="3rem" mb={8} justifyContent="space-between">
         <Flex gap="0.25rem" alignItems="center">
           <Image src="/pokeball.png" alt="Pokeball" w={10} />
-          <b>{pokeBallsCount}</b>
+          <b>{trainer.pokeballs}</b>
         </Flex>
         <Button onClick={onPokeballThrow} disabled={pokeballActive}>
           Throw pokeball

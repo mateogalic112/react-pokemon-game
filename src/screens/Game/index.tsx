@@ -6,9 +6,9 @@ import { useFetchInitialPokemons } from '../../api/pokemons/useFetchInitialPokem
 import Pokemon from '../../models/Pokemon'
 import { useBattleContext } from '../../contexts/battle'
 import { useNavigate } from 'react-router-dom'
-import { usePokeTrainerContext } from '../../contexts/poke-trainer'
 import useGameSocket from '../../api/useGameSocket'
 import { useFetchGamePlayers } from '../../api/sockets/useGamePlayers'
+import { useGetPokeTrainer } from '../../api/pokeTrainer/useGetPokeTrainer'
 
 // Board dimensions
 const GRID_ROWS = 20
@@ -40,11 +40,13 @@ const Game = () => {
 
   const socket = useGameSocket()
   const { data: onlinePlayers } = useFetchGamePlayers()
-  const { trainer } = usePokeTrainerContext()
+  const { data: trainer } = useGetPokeTrainer(1)
 
   const me = onlinePlayers?.find(
-    (player) => player.trainerName === trainer.name
+    (player) => player.trainerName === trainer?.name
   )
+
+  console.log(onlinePlayers)
 
   const [freezePlayer, setFreezePlayer] = useState(false)
 

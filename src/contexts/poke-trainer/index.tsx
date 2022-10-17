@@ -2,26 +2,25 @@ import { createContext, FC, useContext, useReducer } from 'react'
 import { useCreatePokemon } from '../../api/pokemons/useCreatePokemon'
 import { useGetPokeTrainer } from '../../api/pokeTrainer/useGetPokeTrainer'
 import { useGetTrainerPokemons } from '../../api/pokeTrainer/useGetTrainerPokemons'
+import { useUpdatePokeballs } from '../../api/pokeTrainer/useUpdatePokeballs'
 import Pokemon from '../../models/Pokemon'
 import PokeTrainer from '../../models/PokeTrainer'
 import PokeTrainerActionKind from './actions'
 import pokeTrainerReducer from './reducer'
 
 export type PokeTrainerState = {
-  trainer: PokeTrainer
+  trainer: PokeTrainer | null
 }
 
-const defaultTrainer = new PokeTrainer(1, 'Mateo' + Math.random(), 10, [])
-
 interface IPokeTrainerContext {
-  trainer: PokeTrainer
+  trainer: PokeTrainer | null
 
   catchPokemon: (pokemon: Pokemon, isCaught: boolean) => Promise<string>
   choosePokemon: (pokemon: Pokemon) => string
 }
 
 const initialContext: IPokeTrainerContext = {
-  trainer: defaultTrainer,
+  trainer: null,
 
   catchPokemon: async () => '',
   choosePokemon: () => '',
@@ -31,6 +30,8 @@ const PokeTrainerContext = createContext<IPokeTrainerContext>(initialContext)
 
 export const PokeTrainerProvider: FC = ({ children }) => {
   const capturePokemon = useCreatePokemon()
+  const updatePokeballs = useUpdatePokeballs()
+
   const { data: queryTrainer } = useGetPokeTrainer(1)
   const trainerPokemonResults = useGetTrainerPokemons(queryTrainer)
 
@@ -58,15 +59,12 @@ export const PokeTrainerProvider: FC = ({ children }) => {
           queryTrainer.pokeballs,
           createTrainerPokemons()
         )
-      : defaultTrainer,
+      : null,
   })
 
-  const throwPokeBall = () => {
+  const throwPokeBall = async () => {
     if (trainer.pokeballs === 0) return 'You ran out of pokeballs!'
-
-    dispatch({
-      type: PokeTrainerActionKind.throwPokeBall,
-    })
+    await updatePokeballs.mutateAsync(trainer.pokeballs - 1)
   }
 
   const catchPokemon = async (pokemon: Pokemon, isCaught: boolean) => {
