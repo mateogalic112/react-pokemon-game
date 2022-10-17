@@ -1,4 +1,4 @@
-import { createContext, FC, useContext, useReducer } from 'react'
+import { createContext, FC, useContext, useEffect, useReducer } from 'react'
 import { useCreatePokemon } from '../../api/pokemons/useCreatePokemon'
 import { useGetPokeTrainer } from '../../api/pokeTrainer/useGetPokeTrainer'
 import { useGetTrainerPokemons } from '../../api/pokeTrainer/useGetTrainerPokemons'
@@ -52,15 +52,26 @@ export const PokeTrainerProvider: FC = ({ children }) => {
   }
 
   const [{ trainer }, dispatch] = useReducer(pokeTrainerReducer, {
-    trainer: hasFetchedData
-      ? new PokeTrainer(
-          queryTrainer.id,
-          queryTrainer.name,
-          queryTrainer.pokeballs,
-          createTrainerPokemons()
-        )
-      : null,
+    trainer: null,
   })
+
+  useEffect(() => {
+    if (hasFetchedData) {
+      dispatch({
+        type: PokeTrainerActionKind.setTrainer,
+        payload: {
+          trainer: new PokeTrainer(
+            queryTrainer.id,
+            queryTrainer.name,
+            queryTrainer.pokeballs,
+            createTrainerPokemons()
+          ),
+        },
+      })
+    }
+  }, [hasFetchedData])
+
+  console.log({ trainer })
 
   const throwPokeBall = async () => {
     if (trainer.pokeballs === 0) return 'You ran out of pokeballs!'

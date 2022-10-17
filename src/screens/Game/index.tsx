@@ -46,8 +46,6 @@ const Game = () => {
     (player) => player.trainerName === trainer?.name
   )
 
-  console.log(onlinePlayers)
-
   const [freezePlayer, setFreezePlayer] = useState(false)
 
   const { storeOpponent } = useBattleContext()

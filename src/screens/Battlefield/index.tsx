@@ -18,17 +18,14 @@ const Battlefield = () => {
 
   const { foe: opponent } = useBattleContext()
   const { trainer, catchPokemon } = usePokeTrainerContext()
-  const [pokemon, setPokemon] = useState<Pokemon | null>(
-    trainer?.pokemons[0] ?? null
-  )
 
+  const [pokemon, setPokemon] = useState<Pokemon>(trainer.pokemons[0])
   const switchPokemon = (newPokemon: Pokemon) => {
     setPokemon(newPokemon)
   }
 
   // Keep track of pokemons used in battle -> [ pokemonId, hp ]
   const [usedPokemons, setUsedPokemons] = useState(new Map<number, number>())
-
   const storeUsedPokemon = (pokemonId: number, hp: number) => {
     setUsedPokemons(new Map(usedPokemons.set(pokemonId, hp)))
   }

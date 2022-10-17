@@ -1,6 +1,7 @@
 import { PokeTrainerState } from './index'
 import Pokemon from '../../models/Pokemon'
 import PokeTrainerActionKind from './actions'
+import PokeTrainer from '../../models/PokeTrainer'
 
 type PokeTrainerAction =
   | {
@@ -13,6 +14,10 @@ type PokeTrainerAction =
   | {
       type: PokeTrainerActionKind.choosePokemon
       payload: { pokemon: Pokemon }
+    }
+  | {
+      type: PokeTrainerActionKind.setTrainer
+      payload: { trainer: PokeTrainer }
     }
 
 const pokeTrainerReducer = (
@@ -40,6 +45,11 @@ const pokeTrainerReducer = (
           ...state.trainer,
           pokemons: [...state.trainer.pokemons, action.payload.pokemon],
         },
+      }
+    case PokeTrainerActionKind.setTrainer:
+      return {
+        ...state,
+        trainer: { ...state.trainer, ...action.payload.trainer },
       }
     default:
       throw new Error('Action not allowed')
