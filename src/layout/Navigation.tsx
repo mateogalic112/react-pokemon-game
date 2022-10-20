@@ -1,9 +1,9 @@
 import { Flex, Box, Image, Spacer, Button } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
-import { usePokeTrainerContext } from '../contexts/poke-trainer'
+import { useGetPokeTrainer } from '../api/pokeTrainer/useGetPokeTrainer'
 
 const Navigation = () => {
-  const { trainer } = usePokeTrainerContext()
+  const { data: trainer } = useGetPokeTrainer(1)
 
   const to = trainer && trainer.pokemons.length === 0 ? '/' : 'pokedex'
 

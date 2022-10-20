@@ -34,7 +34,7 @@ const SwitchPokemonMenu = ({
 
             <Box mr={3} />
 
-            <Text>{pokemon.name}</Text>
+            <Text>{pokemon.id}</Text>
           </MenuItem>
         ))}
       </MenuList>

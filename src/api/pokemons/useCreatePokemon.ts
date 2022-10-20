@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from 'react-query'
-import { usePokeTrainerContext } from '../../contexts/poke-trainer'
 import api from '../base'
+import { useGetPokeTrainer } from '../pokeTrainer/useGetPokeTrainer'
 
 interface ICreatePokemonRequest {
   pokemonID: number
@@ -22,7 +22,7 @@ const createPokemon = async (
 
 export const useCreatePokemon = () => {
   const queryClient = useQueryClient()
-  const { trainer } = usePokeTrainerContext()
+  const { data: trainer } = useGetPokeTrainer(1)
 
   return useMutation(
     (request: ICreatePokemonRequest) => createPokemon(request),

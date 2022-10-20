@@ -1,4 +1,11 @@
-import { createContext, FC, useContext, useEffect, useReducer } from 'react'
+import {
+  createContext,
+  FC,
+  useCallback,
+  useContext,
+  useEffect,
+  useReducer,
+} from 'react'
 import { useCreatePokemon } from '../../api/pokemons/useCreatePokemon'
 import { useGetPokeTrainer } from '../../api/pokeTrainer/useGetPokeTrainer'
 import { useGetTrainerPokemons } from '../../api/pokeTrainer/useGetTrainerPokemons'
@@ -40,16 +47,21 @@ export const PokeTrainerProvider: FC = ({ children }) => {
   )
   const hasFetchedData = queryTrainer && hasFetchedTrainerPokemons
 
-  const createTrainerPokemons = () => {
+  const createTrainerPokemons = useCallback(() => {
     if (!hasFetchedData) return []
-    return trainerPokemonResults.map(
-      ({ data }) =>
-        new Pokemon(
-          data,
-          queryTrainer.pokemons.find((p) => p.pokemonID === data.id)?.hp
-        )
-    )
-  }
+    return queryTrainer.pokemons.map((trainerPokemon) => {
+      const fetchedPokemon = trainerPokemonResults.find(
+        ({ data }) => data.id === trainerPokemon.pokemonID
+      )
+      return new Pokemon(
+        {
+          ...fetchedPokemon.data,
+          id: trainerPokemon.id,
+        },
+        trainerPokemon.hp
+      )
+    })
+  }, [hasFetchedData, queryTrainer?.pokemons, trainerPokemonResults])
 
   const [{ trainer }, dispatch] = useReducer(pokeTrainerReducer, {
     trainer: null,
@@ -70,8 +82,6 @@ export const PokeTrainerProvider: FC = ({ children }) => {
       })
     }
   }, [hasFetchedData])
-
-  console.log({ trainer })
 
   const throwPokeBall = async () => {
     if (trainer.pokeballs === 0) return 'You ran out of pokeballs!'

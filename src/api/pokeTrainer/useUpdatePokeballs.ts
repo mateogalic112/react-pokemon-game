@@ -1,7 +1,6 @@
 import { useMutation, useQueryClient } from 'react-query'
-import { usePokeTrainerContext } from '../../contexts/poke-trainer'
 import api from '../base'
-import { IPokeTrainerResponse } from './useGetPokeTrainer'
+import { IPokeTrainerResponse, useGetPokeTrainer } from './useGetPokeTrainer'
 
 const updatePokeballs = async (
   trainerId: number,
@@ -16,7 +15,7 @@ const updatePokeballs = async (
 
 export const useUpdatePokeballs = () => {
   const queryClient = useQueryClient()
-  const { trainer } = usePokeTrainerContext()
+  const { data: trainer } = useGetPokeTrainer(1)
 
   return useMutation(
     (pokeballs: number) => updatePokeballs(trainer.id, pokeballs),
