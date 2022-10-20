@@ -102,7 +102,7 @@ const Battlefield = () => {
 
     const isCaught = await battle.hasCaughtPokemon(opponentHealth)
 
-    const caughtMessage = await catchPokemon(opponent, false)
+    const caughtMessage = await catchPokemon(opponent, isCaught)
 
     if (!isCaught) {
       setPokeballActive(false)
