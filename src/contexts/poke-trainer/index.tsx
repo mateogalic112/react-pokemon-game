@@ -1,11 +1,4 @@
-import {
-  createContext,
-  FC,
-  useCallback,
-  useContext,
-  useEffect,
-  useReducer,
-} from 'react'
+import { createContext, FC, useContext, useEffect, useReducer } from 'react'
 import { useCreatePokemon } from '../../api/pokemons/useCreatePokemon'
 import { useGetPokeTrainer } from '../../api/pokeTrainer/useGetPokeTrainer'
 import { useGetTrainerPokemons } from '../../api/pokeTrainer/useGetTrainerPokemons'
@@ -47,9 +40,14 @@ export const PokeTrainerProvider: FC = ({ children }) => {
   )
   const hasFetchedData = queryTrainer && hasFetchedTrainerPokemons
 
-  const createTrainerPokemons = useCallback(() => {
-    if (!hasFetchedData) return []
-    return queryTrainer.pokemons.map((trainerPokemon) => {
+  const [{ trainer }, dispatch] = useReducer(pokeTrainerReducer, {
+    trainer: null,
+  })
+
+  useEffect(() => {
+    if (!hasFetchedData) return
+
+    const trainerPokemons = queryTrainer.pokemons.map((trainerPokemon) => {
       const fetchedPokemon = trainerPokemonResults.find(
         ({ data }) => data.id === trainerPokemon.pokemonID
       )
@@ -61,35 +59,32 @@ export const PokeTrainerProvider: FC = ({ children }) => {
         trainerPokemon.hp
       )
     })
-  }, [hasFetchedData, queryTrainer?.pokemons, trainerPokemonResults])
 
-  const [{ trainer }, dispatch] = useReducer(pokeTrainerReducer, {
-    trainer: null,
-  })
-
-  useEffect(() => {
-    if (hasFetchedData) {
-      dispatch({
-        type: PokeTrainerActionKind.setTrainer,
-        payload: {
-          trainer: new PokeTrainer(
-            queryTrainer.id,
-            queryTrainer.name,
-            queryTrainer.pokeballs,
-            createTrainerPokemons()
-          ),
-        },
-      })
-    }
-  }, [hasFetchedData])
+    dispatch({
+      type: PokeTrainerActionKind.setTrainer,
+      payload: {
+        trainer: new PokeTrainer(
+          queryTrainer.id,
+          queryTrainer.name,
+          queryTrainer.pokeballs,
+          trainerPokemons
+        ),
+      },
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasFetchedData, queryTrainer])
 
   const throwPokeBall = async () => {
-    if (trainer.pokeballs === 0) return 'You ran out of pokeballs!'
-    await updatePokeballs.mutateAsync(trainer.pokeballs - 1)
+    if (trainer.pokeballs > 0) {
+      await updatePokeballs.mutateAsync(trainer.pokeballs - 1)
+      return true
+    }
+    return false
   }
 
   const catchPokemon = async (pokemon: Pokemon, isCaught: boolean) => {
-    throwPokeBall()
+    const result = await throwPokeBall()
+    if (!result) return 'You ran out of pokeballs!'
 
     if (isCaught) {
       dispatch({

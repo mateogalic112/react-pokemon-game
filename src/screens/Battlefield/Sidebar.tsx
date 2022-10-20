@@ -34,7 +34,10 @@ const Sidebar: FC<IBattlefieldSidebarProps> = ({
           <Image src="/pokeball.png" alt="Pokeball" w={10} />
           <b>{trainer.pokeballs}</b>
         </Flex>
-        <Button onClick={onPokeballThrow} disabled={pokeballActive}>
+        <Button
+          onClick={onPokeballThrow}
+          disabled={pokeballActive || trainer.pokeballs === 0}
+        >
           Throw pokeball
         </Button>
         <Image
