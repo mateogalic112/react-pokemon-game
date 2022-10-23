@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useQueryClient } from 'react-query'
 import { io } from 'socket.io-client'
+import { SocketPlayers } from './models/Player'
 import { useGetPokeTrainer } from './pokeTrainer/useGetPokeTrainer'
 
 const useGameSocket = () => {
@@ -27,7 +28,7 @@ const useGameSocket = () => {
 
   useEffect(() => {
     if (!socket) return
-    socket.on('game_players', (data) => {
+    socket.on('game_players', (data: SocketPlayers) => {
       queryClient.setQueryData(['game_players'], () => [...data.players])
     })
 
