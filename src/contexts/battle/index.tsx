@@ -42,6 +42,7 @@ interface IBattleContext extends BattleState {
 
 const initialContext: IBattleContext = {
   ...initialState,
+
   pokemon: null,
   pokemonHealth: 0,
   opponentHealth: 0,

@@ -8,10 +8,8 @@ import { useSpeechSynthesis } from 'react-speech-kit'
 import Pokedex from '../../components/Pokedex'
 import { getOpponentTurn, useBattleContext } from '../../contexts/battle'
 import { useOpponentContext } from '../../contexts/opponent'
-import { usePokeTrainerContext } from '../../contexts/poke-trainer'
 
 const Battlefield = () => {
-  const { trainer } = usePokeTrainerContext()
   const { foe: opponent } = useOpponentContext()
   const {
     pokemon,
@@ -32,11 +30,6 @@ const Battlefield = () => {
     const text = opponent.getPokedexData()
     speak({ text })
   }
-
-  // Calculate available pokemons
-  const availablePokemons = trainer.pokemons.filter(
-    (item) => item.id !== pokemon.id
-  )
 
   return (
     <Flex bg="blue.100" p={12} borderRadius="5rem" position="relative">
@@ -82,13 +75,10 @@ const Battlefield = () => {
         />
 
         <VStack alignItems="flex-end">
-          {availablePokemons.length > 0 && (
-            <SwitchPokemonMenu
-              pokemons={availablePokemons}
-              title="Switch pokemon"
-              selectPokemon={switchPokemon}
-            />
-          )}
+          <SwitchPokemonMenu
+            activePokemonId={pokemon.id}
+            selectPokemon={switchPokemon}
+          />
 
           <EscapePopover />
         </VStack>
