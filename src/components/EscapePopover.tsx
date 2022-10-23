@@ -8,12 +8,14 @@ import {
   PopoverTrigger,
   Portal,
 } from '@chakra-ui/react'
+import { useNavigate } from 'react-router-dom'
 
-interface IEscapePopoverProps {
-  onClick: () => void
-}
+const EscapePopover = () => {
+  let navigate = useNavigate()
+  const onEscape = () => {
+    navigate('/game')
+  }
 
-const EscapePopover = ({ onClick }: IEscapePopoverProps) => {
   return (
     <Popover placement="bottom-start">
       <PopoverTrigger>
@@ -24,7 +26,7 @@ const EscapePopover = ({ onClick }: IEscapePopoverProps) => {
           <PopoverHeader>Are you sure?</PopoverHeader>
           <PopoverCloseButton />
           <PopoverBody>
-            <Button colorScheme="blue" onClick={onClick}>
+            <Button colorScheme="blue" onClick={onEscape}>
               Escape
             </Button>
           </PopoverBody>

@@ -1,12 +1,19 @@
-import { createContext, FC, useContext, useReducer, useState } from 'react'
+import {
+  createContext,
+  FC,
+  useContext,
+  useMemo,
+  useReducer,
+  useState,
+} from 'react'
 import Battle from '../../models/Battle'
 import Pokemon, { Move } from '../../models/Pokemon'
 import { usePokeTrainerContext } from '../poke-trainer'
 import BattleActionKind from './actions'
 import battleReducer from './reducer'
-import { useSpeechSynthesis } from 'react-speech-kit'
 import { useNavigate } from 'react-router-dom'
 import { useOpponentContext } from '../opponent'
+import { usePatchPokemonHealth } from '../../api/pokemons/usePatchPokemonHealth'
 
 export interface BattleState {
   turn: number
@@ -18,10 +25,35 @@ const initialState: BattleState = {
   battleMessages: [],
 }
 
-interface IBattleContext extends BattleState {}
+interface IBattleContext extends BattleState {
+  pokemon: Pokemon
+  pokemonHealth: number
+  opponentHealth: number
+  animations: {
+    pokeballActive: boolean
+    pokemonAttackActive: boolean
+    pokemonDamageActive: boolean
+  }
+
+  onPokemonAttack: (move: Move, health: number) => Promise<void>
+  onPokeballThrow: () => Promise<void>
+  switchPokemon: (newPokemon: Pokemon) => void
+}
 
 const initialContext: IBattleContext = {
   ...initialState,
+  pokemon: null,
+  pokemonHealth: 0,
+  opponentHealth: 0,
+  animations: {
+    pokeballActive: false,
+    pokemonAttackActive: false,
+    pokemonDamageActive: false,
+  },
+
+  onPokemonAttack: async (move: Move, health: number) => {},
+  onPokeballThrow: async () => {},
+  switchPokemon: (newPokemon: Pokemon) => {},
 }
 
 const BattleContext = createContext<IBattleContext>(initialContext)
@@ -35,6 +67,8 @@ export const useBattleContext = () => {
   return context
 }
 
+export const getOpponentTurn = (turn: number) => turn % 2 === 1
+
 export const BattleProvider: FC = ({ children }) => {
   const [{ turn, battleMessages }, dispatch] = useReducer(
     battleReducer,
@@ -42,41 +76,24 @@ export const BattleProvider: FC = ({ children }) => {
   )
   const { foe } = useOpponentContext()
   const { trainer, catchPokemon } = usePokeTrainerContext()
+  const updateHealth = usePatchPokemonHealth()
   let navigate = useNavigate()
 
   // Currently fighting pokemon
-  const [pokemon, setPokemon] = useState<Pokemon | null>(trainer?.pokemons[0])
+  const [pokemon, setPokemon] = useState<Pokemon>(trainer.pokemons[0])
   const switchPokemon = (newPokemon: Pokemon) => {
     setPokemon(newPokemon)
   }
-
-  // Keep track of pokemons used in battle -> [ pokemonId, hp ]
-  const [usedPokemons, setUsedPokemons] = useState(new Map<number, number>())
-  const storeUsedPokemon = (pokemonId: number, hp: number) => {
-    setUsedPokemons(new Map(usedPokemons.set(pokemonId, hp)))
-  }
-
-  // Pokemons hp saved in component state
-  const [pokeHealth, setPokeHealth] = useState(pokemon?.hp ?? 0)
-  const [opponentHealth, setOpponentHealth] = useState(foe.hp)
 
   // Adjust classNames for animations
   const [pokeballActive, setPokeballActive] = useState(false)
   const [pokemonAttackActive, setPokemonAttackActive] = useState(false)
   const [pokemonDamageActive, setPokemonDamageActive] = useState(false)
 
-  // Keep track of who is next in turn for attacking
-  const opponentTurn = turn % 2 === 1
-
-  // Initiliaze fight
   const battle = new Battle(pokemon, foe)
-
-  // Pokedex speak
-  const { speak, speaking } = useSpeechSynthesis()
-  const onPokedexClick = async () => {
-    const text = foe.getPokedexData()
-    speak({ text })
-  }
+  const [pokemonHealth, setPokemonHealth] = useState(pokemon.hp)
+  const [opponentHealth, setOpponentHealth] = useState(foe.hp)
+  const opponentTurn = getOpponentTurn(turn)
 
   const onPokemonAttack = async (move: Move, health: number) => {
     setPokemonAttackActive(true)
@@ -108,24 +125,28 @@ export const BattleProvider: FC = ({ children }) => {
       payload: { newMessages: [...messages] },
     })
 
-    const setHealthRef = opponentTurn ? setPokeHealth : setOpponentHealth
-
-    setHealthRef((prevHealth) => prevHealth - damage)
+    if (opponentTurn) {
+      updateHealth.mutate({
+        id: pokemon.id,
+        hp: pokemon.hp - damage,
+      })
+      setPokemonHealth((prevHealth) => prevHealth - damage)
+    } else {
+      setOpponentHealth((prevHealth) => prevHealth - damage)
+    }
   }
-
-  // Victory sound
-  const victory = new Audio('/victory.mp3')
 
   // Throw pokeball to catch opponent pokemon
   const onPokeballThrow = async () => {
     setPokeballActive(true)
-
     const isCaught = await battle.hasCaughtPokemon(opponentHealth)
     const caughtTryMessage = await catchPokemon(foe, isCaught)
 
     if (!isCaught) {
       setPokeballActive(false)
     } else {
+      // Victory sound
+      const victory = new Audio('/victory.mp3')
       victory.play()
       setTimeout(() => {
         navigate('/pokedex')
@@ -138,36 +159,23 @@ export const BattleProvider: FC = ({ children }) => {
     })
   }
 
-  const onEscape = () => {
-    navigate('/game')
-  }
-
-  const onPokemonSwitch = (oldPokemon: Pokemon, newPokemon: Pokemon): void => {
-    // Store old pokemon health in state
-    storeUsedPokemon(oldPokemon.id, pokeHealth)
-
-    //Check if he already was in battle
-    const pokemonHealth = usedPokemons.get(newPokemon.id) ?? newPokemon.hp
-    if (pokemonHealth > 0) {
-      setPokeHealth(pokemonHealth)
-    } else {
-      return
-    }
-
-    // switch to new pokemon
-    switchPokemon(newPokemon)
-  }
-
-  // Calculate available pokemons
-  const availablePokemons = trainer.pokemons.filter(
-    (item) => item.id !== pokemon.id
+  const animations = useMemo(
+    () => ({ pokeballActive, pokemonAttackActive, pokemonDamageActive }),
+    [pokeballActive, pokemonAttackActive, pokemonDamageActive]
   )
 
   return (
     <BattleContext.Provider
       value={{
+        pokemon,
+        pokemonHealth,
         battleMessages,
         turn,
+        animations,
+        onPokemonAttack,
+        onPokeballThrow,
+        switchPokemon,
+        opponentHealth,
       }}
     >
       {children}

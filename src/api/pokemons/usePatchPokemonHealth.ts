@@ -3,28 +3,28 @@ import api from '../base'
 import { IPokemonDB } from '../models/PokemonDB'
 import { useGetPokeTrainer } from '../pokeTrainer/useGetPokeTrainer'
 
-interface ICreatePokemonRequest {
+interface IPatchPokemonHealthRequest {
+  id: number
   hp: number
-  pokemonID: number
-  pokeTrainerId: number
 }
 
-const createPokemon = async (
-  request: ICreatePokemonRequest
+const patchPokemonHealth = async (
+  request: IPatchPokemonHealthRequest
 ): Promise<IPokemonDB> => {
-  const response = await api.post<IPokemonDB>('pokemons', request)
+  const response = await api.patch<IPokemonDB>(`pokemons/${request.id}`, {
+    hp: request.hp,
+  })
   return response.data
 }
 
-export const useCreatePokemon = () => {
+export const usePatchPokemonHealth = () => {
   const queryClient = useQueryClient()
   const { data: trainer } = useGetPokeTrainer(1)
 
   return useMutation(
-    (request: ICreatePokemonRequest) => createPokemon(request),
+    (request: IPatchPokemonHealthRequest) => patchPokemonHealth(request),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(['trainers', trainer.id])
         queryClient.invalidateQueries(['trainers', 'pokemons', trainer.id])
       },
       onError: (error: Error) => {},

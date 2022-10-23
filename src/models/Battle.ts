@@ -3,7 +3,6 @@ import Pokemon, { Move } from './Pokemon'
 class Battle {
   private readonly attacker: Pokemon
   private readonly defender: Pokemon
-  // battle messages
   messages: string[] = []
 
   constructor(attaker: Pokemon, defender: Pokemon) {

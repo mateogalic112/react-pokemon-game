@@ -1,138 +1,36 @@
 import { Box, Flex, VStack } from '@chakra-ui/react'
-import React, { useState } from 'react'
-import { usePokeTrainerContext } from '../../contexts/poke-trainer'
-import Battle from '../../models/Battle'
-import Pokemon, { Move } from '../../models/Pokemon'
 import PokemonCard from '../../components/PokeCard/PokemonCard'
 import Sidebar from './Sidebar'
 import PokemonOpponentCard from '../../components/PokeCard/PokemonOpponentCard'
-import { useNavigate } from 'react-router-dom'
 import SwitchPokemonMenu from '../../components/SwitchPokemonMenu'
 import EscapePopover from '../../components/EscapePopover'
 import { useSpeechSynthesis } from 'react-speech-kit'
 import Pokedex from '../../components/Pokedex'
+import { getOpponentTurn, useBattleContext } from '../../contexts/battle'
 import { useOpponentContext } from '../../contexts/opponent'
+import { usePokeTrainerContext } from '../../contexts/poke-trainer'
 
 const Battlefield = () => {
-  let navigate = useNavigate()
-
+  const { trainer } = usePokeTrainerContext()
   const { foe: opponent } = useOpponentContext()
-  const { trainer, catchPokemon } = usePokeTrainerContext()
-
-  const [pokemon, setPokemon] = useState<Pokemon>(trainer.pokemons[0])
-  const switchPokemon = (newPokemon: Pokemon) => {
-    setPokemon(newPokemon)
-  }
-
-  // Keep track of pokemons used in battle -> [ pokemonId, hp ]
-  const [usedPokemons, setUsedPokemons] = useState(new Map<number, number>())
-  const storeUsedPokemon = (pokemonId: number, hp: number) => {
-    setUsedPokemons(new Map(usedPokemons.set(pokemonId, hp)))
-  }
-
-  // Pokemons hp saved in component state
-  const [pokeHealth, setPokeHealth] = useState(pokemon.hp)
-  const [opponentHealth, setOpponentHealth] = useState(opponent.hp)
-
-  // Adjust classNames for animations
-  const [pokeballActive, setPokeballActive] = useState(false)
-  const [pokemonAttackActive, setPokemonAttackActive] = useState(false)
-  const [pokemonDamageActive, setPokemonDamageActive] = useState(false)
-
-  // Keep track of who is next in turn for attacking
-  const [turn, setTurn] = useState(0)
-  const opponentTurn = turn % 2 === 1
-
-  // Display fight messages
-  const [messages, setMessages] = useState<string[]>([])
-
-  // Initiliaze fight
-  const battle = new Battle(pokemon, opponent)
+  const {
+    pokemon,
+    pokemonHealth,
+    switchPokemon,
+    battleMessages,
+    turn,
+    animations,
+    onPokemonAttack,
+    onPokeballThrow,
+    opponentHealth,
+  } = useBattleContext()
+  const opponentTurn = getOpponentTurn(turn)
 
   // Pokedex speak
   const { speak, speaking } = useSpeechSynthesis()
   const onPokedexClick = async () => {
     const text = opponent.getPokedexData()
     speak({ text })
-  }
-
-  // Victory sound
-  const victory = new Audio('/victory.mp3')
-
-  const onPokemonAttack = async (
-    move: Move,
-    health: number,
-    setHealth: React.Dispatch<React.SetStateAction<number>>
-  ) => {
-    setPokemonAttackActive(true)
-
-    await new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(setPokemonAttackActive(false))
-      }, 1200)
-    })
-
-    // HOF for creating attack damage and battle message based on chosen move
-    const { damage, messages } = battle.attackOpponent(opponentTurn)(
-      move,
-      health
-    )
-
-    if (damage > 0) {
-      setPokemonDamageActive(true)
-
-      await new Promise((resolve) => {
-        setTimeout(() => {
-          resolve(setPokemonDamageActive(false))
-        }, 750)
-      })
-    }
-
-    setMessages((prev) => [...prev, ...messages])
-
-    setHealth((prevHealth) => prevHealth - damage)
-
-    setTurn(turn + 1)
-  }
-
-  // Throw pokeball to catch opponent pokemon
-  const onPokeballThrow = async () => {
-    setPokeballActive(true)
-
-    const isCaught = await battle.hasCaughtPokemon(opponentHealth)
-
-    const caughtMessage = await catchPokemon(opponent, isCaught)
-
-    if (!isCaught) {
-      setPokeballActive(false)
-    } else {
-      victory.play()
-      setTimeout(() => {
-        navigate('/pokedex')
-      }, 5500)
-    }
-
-    setMessages((prev) => [...prev, caughtMessage])
-  }
-
-  const onEscape = () => {
-    navigate('/game')
-  }
-
-  const onPokemonSwitch = (oldPokemon: Pokemon, newPokemon: Pokemon): void => {
-    // Store old pokemon health in state
-    storeUsedPokemon(oldPokemon.id, pokeHealth)
-
-    //Check if he already was in battle
-    const pokemonHealth = usedPokemons.get(newPokemon.id) ?? newPokemon.hp
-    if (pokemonHealth > 0) {
-      setPokeHealth(pokemonHealth)
-    } else {
-      return
-    }
-
-    // switch to new pokemon
-    switchPokemon(newPokemon)
   }
 
   // Calculate available pokemons
@@ -145,39 +43,39 @@ const Battlefield = () => {
       <Box flexBasis="60%">
         <PokemonOpponentCard
           pokemon={opponent}
-          attack={(move) => onPokemonAttack(move, pokeHealth, setPokeHealth)}
+          attack={(move) => onPokemonAttack(move, pokemon.hp)}
           hp={opponentHealth}
           isActive={opponentTurn}
-          isStruggling={!opponentTurn && pokeballActive}
-          isAttacking={opponentTurn && pokemonAttackActive}
-          isDamaging={!opponentTurn && pokemonDamageActive}
+          isStruggling={!opponentTurn && animations.pokeballActive}
+          isAttacking={opponentTurn && animations.pokemonAttackActive}
+          isDamaging={!opponentTurn && animations.pokemonDamageActive}
         />
 
         <Box height={5} />
 
         <PokemonCard
           pokemon={pokemon}
-          attack={(move) =>
-            onPokemonAttack(move, opponentHealth, setOpponentHealth)
-          }
-          hp={pokeHealth}
-          isActive={!opponentTurn && !pokeballActive}
-          isAttacking={!opponentTurn && pokemonAttackActive}
-          isDamaging={opponentTurn && pokemonDamageActive}
+          attack={(move) => onPokemonAttack(move, opponentHealth)}
+          hp={pokemonHealth}
+          isActive={!opponentTurn && !animations.pokeballActive}
+          isAttacking={!opponentTurn && animations.pokemonAttackActive}
+          isDamaging={opponentTurn && animations.pokemonDamageActive}
         />
       </Box>
 
       <Sidebar
         onPokeballThrow={onPokeballThrow}
-        pokeballActive={pokeballActive}
-        messages={messages}
+        pokeballActive={animations.pokeballActive}
+        messages={battleMessages}
         isActive={
-          !pokemonAttackActive && !pokemonDamageActive && !pokeballActive
+          !animations.pokemonAttackActive &&
+          !animations.pokemonDamageActive &&
+          !animations.pokeballActive
         }
       >
         <Pokedex
           onPokedexClick={onPokedexClick}
-          isDisabled={pokeballActive}
+          isDisabled={animations.pokeballActive}
           pokemonImage={opponent.image}
           pokemonName={opponent.name}
           isSpeaking={speaking}
@@ -188,13 +86,11 @@ const Battlefield = () => {
             <SwitchPokemonMenu
               pokemons={availablePokemons}
               title="Switch pokemon"
-              selectPokemon={(newPokemon: Pokemon) =>
-                onPokemonSwitch(pokemon, newPokemon)
-              }
+              selectPokemon={switchPokemon}
             />
           )}
 
-          <EscapePopover onClick={onEscape} />
+          <EscapePopover />
         </VStack>
       </Sidebar>
     </Flex>
