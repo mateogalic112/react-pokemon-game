@@ -1,6 +1,8 @@
 import Pokemon from './Pokemon'
 
-interface IPokeTrainer {}
+interface IPokeTrainer {
+  throwPokeball: () => number
+}
 
 class PokeTrainer implements IPokeTrainer {
   public readonly id: number
@@ -18,6 +20,11 @@ class PokeTrainer implements IPokeTrainer {
     this.name = name
     this.pokeballs = pokeballs
     this.pokemons = pokemons
+  }
+
+  throwPokeball() {
+    if (this.pokeballs > 0) return this.pokeballs - 1
+    return 0
   }
 }
 

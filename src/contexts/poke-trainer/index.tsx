@@ -72,24 +72,14 @@ export const PokeTrainerProvider: FC = ({ children }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasFetchedData, queryTrainer])
 
-  const throwPokeBall = async () => {
-    if (trainer.pokeballs > 0) {
-      await updatePokeballs.mutateAsync(trainer.pokeballs - 1)
-      return true
-    }
-    return false
-  }
-
   const catchPokemon = async (pokemon: Pokemon, isCaught: boolean) => {
-    const result = await throwPokeBall()
-    if (!result) return 'You ran out of pokeballs!'
+    const currentPokeballCount = trainer.throwPokeball()
+    if (!currentPokeballCount) {
+      return 'You ran out of pokeballs!'
+    }
+    await updatePokeballs.mutateAsync(currentPokeballCount)
 
     if (isCaught) {
-      dispatch({
-        type: PokeTrainerActionKind.catchPokemon,
-        payload: { pokemon },
-      })
-
       await capturePokemon.mutateAsync({
         hp: pokemon.hp,
         pokemonID: pokemon.id,
