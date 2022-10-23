@@ -10,7 +10,7 @@ export const useGetTrainerPokemons = (
   return useQueries(
     pokemons.map((pokemon) => {
       return {
-        queryKey: ['trainer-pokemon', pokeTrainer.id, pokemon.pokemonID],
+        queryKey: ['trainers', 'pokemons', pokeTrainer.id, pokemon.pokemonID],
         queryFn: () => fetchInitialPokemon(pokemon.pokemonID),
         enabled: !!pokeTrainer,
       }

@@ -8,7 +8,7 @@ import { useGetPokeTrainer } from '../../api/pokeTrainer/useGetPokeTrainer'
 import { useCreatePokemon } from '../../api/pokemons/useCreatePokemon'
 
 const Home = () => {
-  const createPokemon = useCreatePokemon()
+  const assignPokemon = useCreatePokemon()
   const initialPokemonResults = useFetchInitialPokemons([1, 4, 7])
   const { data: trainer } = useGetPokeTrainer(1)
 
@@ -21,7 +21,8 @@ const Home = () => {
   const [message, setMessage] = useState('')
   const onPokemonChoose = async (pokemon: Pokemon): Promise<void> => {
     setMessage(`You have choosen ${pokemon.name}`)
-    await createPokemon.mutateAsync({
+    await assignPokemon.mutateAsync({
+      hp: pokemon.hp,
       pokemonID: pokemon.id,
       pokeTrainerId: trainer?.id,
     })

@@ -16,7 +16,7 @@ export const useFetchInitialPokemons = (
   return useQueries(
     pokemonIds.map((id) => {
       return {
-        queryKey: ['pokemon', id],
+        queryKey: ['pokemons', id],
         queryFn: () => fetchInitialPokemon(id),
       }
     })

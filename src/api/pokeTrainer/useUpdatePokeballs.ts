@@ -22,29 +22,29 @@ export const useUpdatePokeballs = () => {
     {
       onMutate: async (pokeballs: number) => {
         // Cancel any outgoing refetches (so they don't overwrite our optimistic update)
-        await queryClient.cancelQueries(['poke-trainers', trainer.id])
+        await queryClient.cancelQueries(['trainers', trainer.id])
 
         // Snapshot the previous value
         const previousTrainer = queryClient.getQueryData([
-          'poke-trainers',
+          'trainers',
           trainer.id,
         ]) as IPokeTrainerResponse
 
         // Optimistically update to the new value
         const newTrainer = { ...trainer, pokeballs }
-        queryClient.setQueryData(['poke-trainers', trainer.id], newTrainer)
+        queryClient.setQueryData(['trainers', trainer.id], newTrainer)
 
         // Return a context with the previous and new todo
         return { previousTrainer, newTrainer }
       },
       onError: (error: Error, newTrainer, context) => {
         queryClient.setQueryData(
-          ['poke-trainers', trainer.id],
+          ['trainers', trainer.id],
           context?.previousTrainer
         )
       },
       onSettled: () => {
-        queryClient.invalidateQueries(['poke-trainers', trainer.id])
+        queryClient.invalidateQueries(['trainers', trainer.id])
       },
     }
   )

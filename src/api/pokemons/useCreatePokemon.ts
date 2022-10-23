@@ -3,12 +3,14 @@ import api from '../base'
 import { useGetPokeTrainer } from '../pokeTrainer/useGetPokeTrainer'
 
 interface ICreatePokemonRequest {
+  hp: number
   pokemonID: number
   pokeTrainerId: number
 }
 
 interface ICreatePokemonResponse {
   id: number
+  hp: number
   pokemonID: number
   pokeTrainerId: number
 }
@@ -28,8 +30,8 @@ export const useCreatePokemon = () => {
     (request: ICreatePokemonRequest) => createPokemon(request),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(['poke-trainers', trainer.id])
-        queryClient.invalidateQueries(['trainer-pokemon', trainer.id])
+        queryClient.invalidateQueries(['trainers', trainer.id])
+        queryClient.invalidateQueries(['trainers', 'pokemons', trainer.id])
       },
       onError: (error: Error) => {},
     }

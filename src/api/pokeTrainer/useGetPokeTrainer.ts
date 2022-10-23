@@ -25,5 +25,5 @@ const getPokeTrainer = async (
 }
 
 export const useGetPokeTrainer = (trainerId: number) => {
-  return useQuery(['poke-trainers', trainerId], () => getPokeTrainer(trainerId))
+  return useQuery(['trainers', trainerId], () => getPokeTrainer(trainerId))
 }

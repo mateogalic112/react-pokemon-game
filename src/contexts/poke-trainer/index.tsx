@@ -92,12 +92,11 @@ export const PokeTrainerProvider: FC = ({ children }) => {
         payload: { pokemon },
       })
 
-      const createdPokemon = await capturePokemon.mutateAsync({
+      await capturePokemon.mutateAsync({
+        hp: pokemon.hp,
         pokemonID: pokemon.id,
         pokeTrainerId: 1,
       })
-
-      console.log({ createdPokemon })
 
       return `You caught ${pokemon.name}!`
     }
