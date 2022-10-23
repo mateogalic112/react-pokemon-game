@@ -1,34 +1,45 @@
 import { Button, Flex, Image, Box } from '@chakra-ui/react'
+import { useSpeechSynthesis } from 'react-speech-kit'
+import { useBattleContext } from '../contexts/battle'
 
-interface IPokedexProps {
-  onPokedexClick: () => void
-  isDisabled: boolean
-  pokemonImage: string
-  pokemonName: string
-  isSpeaking: boolean
-}
+const Pokedex = () => {
+  const { animations } = useBattleContext()
+  const { pokemon } = useBattleContext()
 
-const Pokedex = ({ onPokedexClick, isDisabled, isSpeaking, pokemonImage, pokemonName }: IPokedexProps) => {
-  const className = ['pokedex']
-
-  switch (true) {
-    case isSpeaking:
-      className.push('speaking')
-      break
-    default:
-      break
+  // Pokedex speak
+  const { speak, speaking } = useSpeechSynthesis()
+  const onPokedexClick = async () => {
+    const text = pokemon.getPokedexData()
+    speak({ text })
   }
 
   return (
     <>
-      <Button display='block' ml='auto' mb='4' alignSelf='flex-end' onClick={onPokedexClick} disabled={isDisabled}>
+      <Button
+        display="block"
+        ml="auto"
+        mb="4"
+        alignSelf="flex-end"
+        onClick={onPokedexClick}
+        disabled={animations.pokeballActive}
+      >
         Pokedex
       </Button>
 
-      <Flex gap="0.25rem" alignItems="center" className={className.join(' ')}>
+      <Flex
+        gap="0.25rem"
+        alignItems="center"
+        className={`pokedex ${speaking ? 'speaking' : ''}`}
+      >
         <Image src="/pokedex.png" alt="Pokedex" w={80} />
         <Box pos="absolute" top="25%" left="0" w={40} h={20}>
-          <Image transform='translate(110%, 40%)' w='50px' h='50px' src={pokemonImage} alt={pokemonName} />
+          <Image
+            transform="translate(110%, 40%)"
+            w="50px"
+            h="50px"
+            src={pokemon.image}
+            alt={pokemon.name}
+          />
         </Box>
       </Flex>
     </>

@@ -9,23 +9,15 @@ import {
   Box,
   Text,
 } from '@chakra-ui/react'
+import { useBattleContext } from '../contexts/battle'
 import { usePokeTrainerContext } from '../contexts/poke-trainer'
-import Pokemon from '../models/Pokemon'
 
-interface ISwitchPokemonMenuProps {
-  activePokemonId: number
-  selectPokemon: (pokemon: Pokemon) => void
-}
-
-const SwitchPokemonMenu = ({
-  activePokemonId,
-  selectPokemon,
-}: ISwitchPokemonMenuProps) => {
+const SwitchPokemonMenu = () => {
   const { trainer } = usePokeTrainerContext()
+  const { switchPokemon, pokemon } = useBattleContext()
 
-  // Calculate available pokemons
   const availablePokemons = trainer.pokemons.filter(
-    (item) => item.id !== activePokemonId
+    (item) => item.id !== pokemon.id
   )
 
   if (!availablePokemons.length) return null
@@ -37,7 +29,7 @@ const SwitchPokemonMenu = ({
       </MenuButton>
       <MenuList>
         {availablePokemons.map((pokemon) => (
-          <MenuItem key={pokemon.id} onClick={() => selectPokemon(pokemon)}>
+          <MenuItem key={pokemon.id} onClick={() => switchPokemon(pokemon)}>
             <Image w="40px" src={pokemon.image} alt={pokemon.name} />
 
             <Box mr={3} />

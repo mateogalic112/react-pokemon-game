@@ -1,22 +1,17 @@
 import React, { FC } from 'react'
 import { Flex, Image, Button, Box } from '@chakra-ui/react'
 import { usePokeTrainerContext } from '../../contexts/poke-trainer'
+import { useBattleContext } from '../../contexts/battle'
 
-interface IBattlefieldSidebarProps {
-  onPokeballThrow: () => void
-  pokeballActive: boolean
-  messages: string[]
-  isActive: boolean
-}
+interface IBattlefieldSidebarProps {}
 
-const Sidebar: FC<IBattlefieldSidebarProps> = ({
-  onPokeballThrow,
-  pokeballActive,
-  messages,
-  children,
-  isActive,
-}) => {
+const Sidebar: FC<IBattlefieldSidebarProps> = ({ children }) => {
   const { trainer } = usePokeTrainerContext()
+  const { animations, battleMessages, onPokeballThrow } = useBattleContext()
+  const isActive =
+    !animations.pokemonAttackActive &&
+    !animations.pokemonDamageActive &&
+    !animations.pokeballActive
 
   return (
     <Box
@@ -36,7 +31,7 @@ const Sidebar: FC<IBattlefieldSidebarProps> = ({
         </Flex>
         <Button
           onClick={onPokeballThrow}
-          disabled={pokeballActive || trainer.pokeballs === 0}
+          disabled={animations.pokeballActive || trainer.pokeballs === 0}
         >
           Throw pokeball
         </Button>
@@ -45,7 +40,7 @@ const Sidebar: FC<IBattlefieldSidebarProps> = ({
           objectFit="cover"
           src="/pokeball.png"
           alt="Pokeball"
-          className={`pokeball ${pokeballActive ? 'thrown' : ''}`}
+          className={`pokeball ${animations.pokeballActive ? 'thrown' : ''}`}
         />
       </Flex>
 
@@ -53,7 +48,7 @@ const Sidebar: FC<IBattlefieldSidebarProps> = ({
 
       <Box height={5} />
 
-      {messages.map((message, index) => (
+      {battleMessages.map((message, index) => (
         <React.Fragment key={index}>
           <p>{message}</p>
           <Box mb="4" />

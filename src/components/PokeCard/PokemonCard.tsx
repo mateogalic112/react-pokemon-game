@@ -1,27 +1,21 @@
 import { Box } from '@chakra-ui/react'
-import Pokemon, { Move } from '../../models/Pokemon'
+import { getOpponentTurn, useBattleContext } from '../../contexts/battle'
 import CardAction from './components/CardAction'
 import CardImage from './components/CardImage'
 import CardStats from './components/CardStats'
 
-export interface IPokemonCard {
-  pokemon: Pokemon
-  attack: (move: Move) => void
-  hp: number
-  isActive: boolean
-  isStruggling: boolean
-  isAttacking: boolean
-  isDamaging: boolean
-}
+export interface IPokemonCard {}
 
-const PokemonCard = ({
-  pokemon,
-  attack,
-  hp,
-  isActive,
-  isAttacking,
-  isDamaging,
-}: Omit<IPokemonCard, 'isStruggling'>) => {
+const PokemonCard = () => {
+  const { pokemon, onPokemonAttack, opponentHealth, pokemonHealth, turn } =
+    useBattleContext()
+  const opponentTurn = getOpponentTurn(turn)
+
+  const { animations } = useBattleContext()
+  const isActive = !opponentTurn && !animations.pokeballActive
+  const isAttacking = !opponentTurn && animations.pokemonAttackActive
+  const isDamaging = opponentTurn && animations.pokemonDamageActive
+
   return (
     <Box maxW="sm" py={3} m="auto">
       <CardImage
@@ -34,12 +28,12 @@ const PokemonCard = ({
       <CardStats
         title={pokemon.name}
         stats={pokemon.stats.slice(1)}
-        hp={hp}
+        hp={pokemonHealth}
         isDamaging={isDamaging}
       >
         <CardAction
           moves={pokemon.moves.slice(0, 6)}
-          attack={attack}
+          attack={(move) => onPokemonAttack(move, opponentHealth)}
           active={isActive}
         />
       </CardStats>
