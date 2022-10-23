@@ -27,6 +27,10 @@ const initialContext: IPokeTrainerContext = {
 const PokeTrainerContext = createContext<IPokeTrainerContext>(initialContext)
 
 export const PokeTrainerProvider: FC = ({ children }) => {
+  const [{ trainer }, dispatch] = useReducer(pokeTrainerReducer, {
+    trainer: null,
+  })
+
   const capturePokemon = useCreatePokemon()
   const updatePokeballs = useUpdatePokeballs()
 
@@ -37,10 +41,6 @@ export const PokeTrainerProvider: FC = ({ children }) => {
     Boolean(data)
   )
   const hasFetchedData = queryTrainer && hasFetchedTrainerPokemons
-
-  const [{ trainer }, dispatch] = useReducer(pokeTrainerReducer, {
-    trainer: null,
-  })
 
   useEffect(() => {
     if (!hasFetchedData) return

@@ -11,12 +11,12 @@ import SwitchPokemonMenu from '../../components/SwitchPokemonMenu'
 import EscapePopover from '../../components/EscapePopover'
 import { useSpeechSynthesis } from 'react-speech-kit'
 import Pokedex from '../../components/Pokedex'
-import { useBattleContext } from '../../contexts/battle'
+import { useOpponentContext } from '../../contexts/opponent'
 
 const Battlefield = () => {
   let navigate = useNavigate()
 
-  const { foe: opponent } = useBattleContext()
+  const { foe: opponent } = useOpponentContext()
   const { trainer, catchPokemon } = usePokeTrainerContext()
 
   const [pokemon, setPokemon] = useState<Pokemon>(trainer.pokemons[0])
@@ -48,7 +48,6 @@ const Battlefield = () => {
 
   // Initiliaze fight
   const battle = new Battle(pokemon, opponent)
-  // Get current trainer from context
 
   // Pokedex speak
   const { speak, speaking } = useSpeechSynthesis()

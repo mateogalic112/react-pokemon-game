@@ -4,11 +4,11 @@ import Player from './Player'
 import FoePokemon from './FoePokemon'
 import { useFetchInitialPokemons } from '../../api/pokemons/useFetchInitialPokemons'
 import Pokemon from '../../models/Pokemon'
-import { useBattleContext } from '../../contexts/battle'
 import { useNavigate } from 'react-router-dom'
 import useGameSocket from '../../api/useGameSocket'
 import { useFetchGamePlayers } from '../../api/sockets/useGamePlayers'
 import { useGetPokeTrainer } from '../../api/pokeTrainer/useGetPokeTrainer'
+import { useOpponentContext } from '../../contexts/opponent'
 
 // Board dimensions
 const GRID_ROWS = 20
@@ -48,7 +48,7 @@ const Game = () => {
 
   const [freezePlayer, setFreezePlayer] = useState(false)
 
-  const { storeOpponent } = useBattleContext()
+  const { storeOpponent } = useOpponentContext()
   const foePokemonsResult = useFetchInitialPokemons([10, 40, 70])
 
   const gameBoardRef = useRef<HTMLInputElement>(null)
