@@ -12,10 +12,6 @@ type PokeTrainerAction =
       type: PokeTrainerActionKind.throwPokeBall
     }
   | {
-      type: PokeTrainerActionKind.choosePokemon
-      payload: { pokemon: Pokemon }
-    }
-  | {
       type: PokeTrainerActionKind.setTrainer
       payload: { trainer: PokeTrainer }
     }
@@ -38,14 +34,7 @@ const pokeTrainerReducer = (
           pokemons: [...state.trainer.pokemons, action.payload.pokemon],
         },
       }
-    case PokeTrainerActionKind.choosePokemon:
-      return {
-        ...state,
-        trainer: {
-          ...state.trainer,
-          pokemons: [...state.trainer.pokemons, action.payload.pokemon],
-        },
-      }
+
     case PokeTrainerActionKind.setTrainer:
       return {
         ...state,

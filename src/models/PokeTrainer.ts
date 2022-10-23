@@ -1,6 +1,8 @@
 import Pokemon from './Pokemon'
 
-class PokeTrainer {
+interface IPokeTrainer {}
+
+class PokeTrainer implements IPokeTrainer {
   public readonly id: number
   public readonly name: string
   public pokeballs: number

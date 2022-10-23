@@ -16,14 +16,12 @@ interface IPokeTrainerContext {
   trainer: PokeTrainer | null
 
   catchPokemon: (pokemon: Pokemon, isCaught: boolean) => Promise<string>
-  choosePokemon: (pokemon: Pokemon) => string
 }
 
 const initialContext: IPokeTrainerContext = {
   trainer: null,
 
   catchPokemon: async () => '',
-  choosePokemon: () => '',
 }
 
 const PokeTrainerContext = createContext<IPokeTrainerContext>(initialContext)
@@ -104,19 +102,8 @@ export const PokeTrainerProvider: FC = ({ children }) => {
     return `${pokemon.name} escaped!`
   }
 
-  const choosePokemon = (pokemon: Pokemon) => {
-    dispatch({
-      type: PokeTrainerActionKind.choosePokemon,
-      payload: { pokemon },
-    })
-
-    return `${pokemon.name} is now yours!!`
-  }
-
   return (
-    <PokeTrainerContext.Provider
-      value={{ trainer, catchPokemon, choosePokemon }}
-    >
+    <PokeTrainerContext.Provider value={{ trainer, catchPokemon }}>
       {children}
     </PokeTrainerContext.Provider>
   )

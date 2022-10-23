@@ -31,8 +31,8 @@ const Battlefield = () => {
   }
 
   // Pokemons hp saved in component state
-  const [pokeHealth, setPokeHealth] = useState(pokemon.getHp())
-  const [opponentHealth, setOpponentHealth] = useState(opponent.getHp())
+  const [pokeHealth, setPokeHealth] = useState(pokemon.hp)
+  const [opponentHealth, setOpponentHealth] = useState(opponent.hp)
 
   // Adjust classNames for animations
   const [pokeballActive, setPokeballActive] = useState(false)
@@ -125,7 +125,7 @@ const Battlefield = () => {
     storeUsedPokemon(oldPokemon.id, pokeHealth)
 
     //Check if he already was in battle
-    const pokemonHealth = usedPokemons.get(newPokemon.id) ?? newPokemon.getHp()
+    const pokemonHealth = usedPokemons.get(newPokemon.id) ?? newPokemon.hp
     if (pokemonHealth > 0) {
       setPokeHealth(pokemonHealth)
     } else {
