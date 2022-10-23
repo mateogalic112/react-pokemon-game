@@ -19,7 +19,6 @@ export interface IPokemon {
   attack(moveIndex: number): number
   dodge(): boolean
   defend(damage: number): number
-  getHp(): number
 }
 
 class Pokemon implements IPokemon {
@@ -72,10 +71,6 @@ class Pokemon implements IPokemon {
       this.stats.find((item) => item.name === 'defense')?.amount ?? 0
 
     return damage - defense
-  }
-
-  getHp(): number {
-    return this.hp
   }
 
   getPokedexData() {
