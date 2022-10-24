@@ -21,9 +21,14 @@ const TownScreen = () => {
     new Phaser.Game(config)
   }, [])
   return (
-    <div>
+    <div style={{ position: 'relative' }}>
       <div id="game" tabIndex={0} />
-      <h1>Hello world</h1>
+      <h1
+        style={{ position: 'absolute', top: '50%', left: '50%' }}
+        onClick={() => console.log('hello')}
+      >
+        Hello world
+      </h1>
     </div>
   )
 }

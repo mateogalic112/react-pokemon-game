@@ -1,9 +1,10 @@
 import Phaser from 'phaser'
 
 export default class TownScene extends Phaser.Scene {
-  private platforms?: Phaser.Physics.Arcade.StaticGroup
-  private player?: Phaser.Physics.Arcade.Sprite
-  private cursors?: Phaser.Types.Input.Keyboard.CursorKeys
+  private platforms: Phaser.Physics.Arcade.StaticGroup
+  private player: Phaser.Physics.Arcade.Sprite
+  private cursors: Phaser.Types.Input.Keyboard.CursorKeys
+  private stars: Phaser.Physics.Arcade.Group
 
   constructor() {
     super('town-scene')
@@ -23,13 +24,31 @@ export default class TownScene extends Phaser.Scene {
   create() {
     this.createGround()
     this.createPlayer()
+    this.createStars()
     this.cursors = this.input.keyboard.createCursorKeys()
 
     this.physics.add.collider(this.player, this.platforms)
+    this.physics.add.collider(this.stars, this.platforms)
+
+    this.physics.add.overlap(
+      this.player,
+      this.stars,
+      this.collectStar,
+      null,
+      this
+    )
   }
 
   update() {
     this.createCursorCommands()
+  }
+
+  private collectStar(
+    _: Phaser.GameObjects.GameObject,
+    s: Phaser.GameObjects.GameObject
+  ) {
+    const star = s as Phaser.Physics.Arcade.Image
+    star.disableBody(true, true)
   }
 
   private createGround() {
@@ -89,5 +108,17 @@ export default class TownScene extends Phaser.Scene {
     if (this.cursors.up.isDown && this.player.body.touching.down) {
       this.player.setVelocityY(-330)
     }
+  }
+
+  private createStars() {
+    this.stars = this.physics.add.group({
+      key: 'star',
+      repeat: 11,
+      setXY: { x: 12, y: 0, stepX: 70 },
+    })
+
+    this.stars.children.iterate(function (child: Phaser.Physics.Arcade.Image) {
+      child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8))
+    })
   }
 }
