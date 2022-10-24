@@ -4,13 +4,13 @@ import Pokemon from '../../models/Pokemon'
 import ChooseCard from './ChooseCard'
 import { useNavigate } from 'react-router-dom'
 import { useLayoutEffect, useState } from 'react'
-import { useGetPokeTrainer } from '../../api/pokeTrainer/useGetPokeTrainer'
 import { useCreatePokemon } from '../../api/pokemons/useCreatePokemon'
+import { usePokeTrainerContext } from '../../contexts/poke-trainer'
 
 const Home = () => {
   const assignPokemon = useCreatePokemon()
   const initialPokemonResults = useFetchInitialPokemons([1, 4, 7])
-  const { data: trainer } = useGetPokeTrainer(1)
+  const { trainer } = usePokeTrainerContext()
 
   let navigate = useNavigate()
   // navigate before chance to paint the screen
