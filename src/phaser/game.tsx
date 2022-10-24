@@ -12,17 +12,17 @@ const TownScreen = () => {
       physics: {
         default: 'arcade',
         arcade: {
-          gravity: { y: 200 },
+          gravity: { y: 300 },
         },
       },
-      scene: TownScene,
+      scene: [TownScene],
     }
 
-    const game = new Phaser.Game(config)
+    new Phaser.Game(config)
   }, [])
   return (
     <div>
-      <div id="game" />
+      <div id="game" tabIndex={0} />
       <h1>Hello world</h1>
     </div>
   )
