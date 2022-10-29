@@ -6,6 +6,9 @@ export default class TownScene extends Phaser.Scene {
   private cursors: Phaser.Types.Input.Keyboard.CursorKeys
   private stars: Phaser.Physics.Arcade.Group
 
+  private score = 0
+  private scoreText: Phaser.GameObjects.Text
+
   constructor() {
     super('town-scene')
   }
@@ -37,6 +40,11 @@ export default class TownScene extends Phaser.Scene {
       null,
       this
     )
+
+    this.scoreText = this.add.text(16, 16, 'Score: 0', {
+      fontSize: '32px',
+      color: 'black',
+    })
   }
 
   update() {
@@ -49,6 +57,9 @@ export default class TownScene extends Phaser.Scene {
   ) {
     const star = s as Phaser.Physics.Arcade.Image
     star.disableBody(true, true)
+
+    this.score += 10
+    this.scoreText.setText('Score: ' + this.score)
   }
 
   private createGround() {

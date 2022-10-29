@@ -15,6 +15,10 @@ const TownScreen = () => {
           gravity: { y: 300 },
         },
       },
+      scale: {
+        parent: 'game',
+        autoCenter: Phaser.Scale.CENTER_HORIZONTALLY,
+      },
       scene: [TownScene],
     }
 
