@@ -15,14 +15,16 @@ import {
   InputRightElement,
 } from '@chakra-ui/react'
 import { useLogin } from '../../api/auth/useLogin'
+import { useNavigate } from 'react-router-dom'
 
 const initialLoginData = {
-  email: '',
-  password: '',
+  email: 'mateogalic112@gmail.com',
+  password: 'hello-there',
 }
 
 const LoginPage = () => {
   const login = useLogin()
+  const navigate = useNavigate()
 
   const [loginData, setLoginData] = useState(initialLoginData)
   const handleLoginDataChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,8 +33,8 @@ const LoginPage = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const authData = await login.mutateAsync(loginData)
-    console.log({ authData })
+    await login.mutateAsync(loginData)
+    navigate('/')
   }
 
   const [showPassword, setShowPassword] = useState(false)

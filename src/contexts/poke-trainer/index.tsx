@@ -34,7 +34,7 @@ export const PokeTrainerProvider: FC = ({ children }) => {
   const capturePokemon = useCreatePokemon()
   const updatePokeballs = useUpdatePokeballs()
 
-  const { data: queryTrainer } = useGetPokeTrainer(1)
+  const { data: queryTrainer } = useGetPokeTrainer()
   const trainerPokemonResults = useGetTrainerPokemons(queryTrainer)
 
   const hasFetchedTrainerPokemons = trainerPokemonResults.every(({ data }) =>
@@ -83,7 +83,7 @@ export const PokeTrainerProvider: FC = ({ children }) => {
       await capturePokemon.mutateAsync({
         hp: pokemon.hp,
         pokemonID: pokemon.id,
-        pokeTrainerId: 1,
+        pokeTrainerId: trainer.id,
       })
 
       return `You caught ${pokemon.name}!`

@@ -15,7 +15,7 @@ const updatePokeballs = async (
 
 export const useUpdatePokeballs = () => {
   const queryClient = useQueryClient()
-  const { data: trainer } = useGetPokeTrainer(1)
+  const { data: trainer } = useGetPokeTrainer()
 
   return useMutation(
     (pokeballs: number) => updatePokeballs(trainer.id, pokeballs),

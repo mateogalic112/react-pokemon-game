@@ -1,7 +1,8 @@
 import { useMutation, useQueryClient } from 'react-query'
+import { useSelector } from 'react-redux'
+import { selectUser } from '../../redux/user'
 import api from '../base'
 import { IPokemonDB } from '../models/PokemonDB'
-import { useGetPokeTrainer } from '../pokeTrainer/useGetPokeTrainer'
 
 interface ICreatePokemonRequest {
   hp: number
@@ -18,14 +19,16 @@ const createPokemon = async (
 
 export const useCreatePokemon = () => {
   const queryClient = useQueryClient()
-  const { data: trainer } = useGetPokeTrainer(1)
+  const {
+    authData: { trainerId },
+  } = useSelector(selectUser)
 
   return useMutation(
     (request: ICreatePokemonRequest) => createPokemon(request),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(['trainers', trainer.id])
-        queryClient.invalidateQueries(['trainers', 'pokemons', trainer.id])
+        queryClient.invalidateQueries(['trainers', trainerId])
+        queryClient.invalidateQueries(['trainers', 'pokemons', trainerId])
       },
       onError: (error: Error) => {},
     }

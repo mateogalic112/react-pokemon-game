@@ -7,7 +7,7 @@ import { useGetPokeTrainer } from './pokeTrainer/useGetPokeTrainer'
 const useGameSocket = () => {
   const [socket, setSocket] = useState(null)
   const queryClient = useQueryClient()
-  const { data: trainer } = useGetPokeTrainer(1)
+  const { data: trainer } = useGetPokeTrainer()
 
   useEffect(() => {
     const s = io('http://localhost:4000')
@@ -19,7 +19,7 @@ const useGameSocket = () => {
   }, [])
 
   useEffect(() => {
-    if (!socket) return
+    if (!socket || !socket.connected) return
     socket.emit('join_game', {
       trainerName: trainer.name,
       pokemonId: trainer.pokemons[0].id,
@@ -27,7 +27,7 @@ const useGameSocket = () => {
   }, [socket, queryClient, trainer])
 
   useEffect(() => {
-    if (!socket) return
+    if (!socket || !socket.connected) return
     socket.on('game_players', (data: SocketPlayers) => {
       queryClient.setQueryData(['game_players'], () => [...data.players])
     })

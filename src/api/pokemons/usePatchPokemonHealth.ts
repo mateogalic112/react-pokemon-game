@@ -19,7 +19,7 @@ const patchPokemonHealth = async (
 
 export const usePatchPokemonHealth = () => {
   const queryClient = useQueryClient()
-  const { data: trainer } = useGetPokeTrainer(1)
+  const { data: trainer } = useGetPokeTrainer()
 
   return useMutation(
     (request: IPatchPokemonHealthRequest) => patchPokemonHealth(request),

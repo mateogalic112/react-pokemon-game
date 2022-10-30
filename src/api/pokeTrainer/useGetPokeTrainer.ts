@@ -1,4 +1,6 @@
 import { useQuery } from 'react-query'
+import { useSelector } from 'react-redux'
+import { selectUser } from '../../redux/user'
 import api from '../base'
 
 interface IPokemonDB {
@@ -24,6 +26,10 @@ const getPokeTrainer = async (
   return response.data
 }
 
-export const useGetPokeTrainer = (trainerId: number) => {
-  return useQuery(['trainers', trainerId], () => getPokeTrainer(trainerId))
+export const useGetPokeTrainer = () => {
+  const user = useSelector(selectUser)
+  const trainerId = user.authData?.trainerId
+  return useQuery(['trainers', trainerId], () => getPokeTrainer(trainerId), {
+    enabled: !!trainerId,
+  })
 }

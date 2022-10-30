@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useGetPokeTrainer } from '../api/pokeTrainer/useGetPokeTrainer'
 
 const Navigation = () => {
-  const { data: trainer } = useGetPokeTrainer(1)
+  const { data: trainer } = useGetPokeTrainer()
 
   const to = trainer && trainer.pokemons.length === 0 ? '/' : 'pokedex'
 

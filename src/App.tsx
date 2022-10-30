@@ -16,29 +16,43 @@ import { store } from './redux/store'
 function App() {
   return (
     <Provider store={store}>
-      <PokeTrainerProvider>
-        <OpponentProvider>
-          <Layout>
-            <Navigation />
+      <Layout>
+        <Navigation />
 
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/town" element={<TownScreen />} />
-              <Route path="game" element={<Game />} />
-              <Route
-                path="battlefield"
-                element={
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <PokeTrainerProvider>
+                <Home />
+              </PokeTrainerProvider>
+            }
+          />
+          <Route path="login" element={<LoginPage />} />
+          <Route path="town" element={<TownScreen />} />
+          <Route
+            path="game"
+            element={
+              <OpponentProvider>
+                <Game />
+              </OpponentProvider>
+            }
+          />
+          <Route
+            path="battlefield"
+            element={
+              <PokeTrainerProvider>
+                <OpponentProvider>
                   <BattleProvider>
                     <Battlefield />
                   </BattleProvider>
-                }
-              />
-              <Route path="pokedex" element={<Pokedex />} />
-            </Routes>
-          </Layout>
-        </OpponentProvider>
-      </PokeTrainerProvider>
+                </OpponentProvider>
+              </PokeTrainerProvider>
+            }
+          />
+          <Route path="pokedex" element={<Pokedex />} />
+        </Routes>
+      </Layout>
     </Provider>
   )
 }
