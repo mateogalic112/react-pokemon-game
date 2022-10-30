@@ -9,7 +9,13 @@ import { BrowserRouter } from 'react-router-dom'
 
 import { QueryClient, QueryClientProvider } from 'react-query'
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+    },
+  },
+})
 
 ReactDOM.render(
   <React.StrictMode>
@@ -21,7 +27,7 @@ ReactDOM.render(
       </ChakraProvider>
     </QueryClientProvider>
   </React.StrictMode>,
-  document.getElementById('root'),
+  document.getElementById('root')
 )
 
 // If you want to start measuring performance in your app, pass a function

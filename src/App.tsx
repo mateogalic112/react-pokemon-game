@@ -9,6 +9,7 @@ import Battlefield from './screens/Battlefield'
 import { OpponentProvider } from './contexts/opponent'
 import { BattleProvider } from './contexts/battle'
 import TownScreen from './phaser/game'
+import LoginPage from './screens/Login'
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
 
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/login" element={<LoginPage />} />
             <Route path="/town" element={<TownScreen />} />
             <Route path="game" element={<Game />} />
             <Route

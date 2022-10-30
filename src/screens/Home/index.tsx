@@ -31,9 +31,7 @@ const Home = () => {
     }, 1000)
   }
 
-  if (!trainer) return null
   if (!initialPokemonResults.every(({ data }) => Boolean(data))) return null
-
   const pokemons = initialPokemonResults.map(({ data }) => new Pokemon(data))
 
   return (
