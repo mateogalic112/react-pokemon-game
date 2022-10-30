@@ -1,8 +1,8 @@
 {
   "name": "react-pokemon-game",
+  "proxy": "http://localhost:5000",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:5000",
   "dependencies": {
     "@chakra-ui/icons": "^1.1.1",
     "@chakra-ui/react": "^1.7.3",

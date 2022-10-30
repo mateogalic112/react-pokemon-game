@@ -9,9 +9,7 @@ interface ILoginRequest {
 }
 
 const loginUser = async (request: ILoginRequest): Promise<AuthData> => {
-  const response = await api.post<AuthData>('auth/login', request, {
-    withCredentials: false,
-  })
+  const response = await api.post<AuthData>('auth/login', request)
   return response.data
 }
 
