@@ -27,10 +27,7 @@ const TownScreen = () => {
   return (
     <div style={{ position: 'relative' }}>
       <div id="game" tabIndex={0} />
-      <h1
-        style={{ position: 'absolute', top: '50%', left: '50%' }}
-        onClick={() => console.log('hello')}
-      >
+      <h1 style={{ position: 'absolute', top: '50%', left: '50%' }}>
         Hello world
       </h1>
     </div>

@@ -12,47 +12,50 @@ import TownScreen from './phaser/game'
 import LoginPage from './screens/Login'
 import { Provider } from 'react-redux'
 import { store } from './redux/store'
+import ProtectedRoute from './components/ProtectedRoute'
 
 function App() {
   return (
     <Provider store={store}>
-      <Layout>
-        <Navigation />
+      <PokeTrainerProvider>
+        <Layout>
+          <Navigation />
 
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <PokeTrainerProvider>
-                <Home />
-              </PokeTrainerProvider>
-            }
-          />
-          <Route path="login" element={<LoginPage />} />
-          <Route path="town" element={<TownScreen />} />
-          <Route
-            path="game"
-            element={
-              <OpponentProvider>
-                <Game />
-              </OpponentProvider>
-            }
-          />
-          <Route
-            path="battlefield"
-            element={
-              <PokeTrainerProvider>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <Home />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="login" element={<LoginPage />} />
+            <Route path="town" element={<TownScreen />} />
+            <Route
+              path="game"
+              element={
                 <OpponentProvider>
-                  <BattleProvider>
-                    <Battlefield />
-                  </BattleProvider>
+                  <Game />
                 </OpponentProvider>
-              </PokeTrainerProvider>
-            }
-          />
-          <Route path="pokedex" element={<Pokedex />} />
-        </Routes>
-      </Layout>
+              }
+            />
+            <Route
+              path="battlefield"
+              element={
+                <PokeTrainerProvider>
+                  <OpponentProvider>
+                    <BattleProvider>
+                      <Battlefield />
+                    </BattleProvider>
+                  </OpponentProvider>
+                </PokeTrainerProvider>
+              }
+            />
+            <Route path="pokedex" element={<Pokedex />} />
+          </Routes>
+        </Layout>
+      </PokeTrainerProvider>
     </Provider>
   )
 }

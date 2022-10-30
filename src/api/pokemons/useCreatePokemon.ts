@@ -19,9 +19,8 @@ const createPokemon = async (
 
 export const useCreatePokemon = () => {
   const queryClient = useQueryClient()
-  const {
-    authData: { trainerId },
-  } = useSelector(selectUser)
+  const user = useSelector(selectUser)
+  const trainerId = user.authData?.trainerId
 
   return useMutation(
     (request: ICreatePokemonRequest) => createPokemon(request),

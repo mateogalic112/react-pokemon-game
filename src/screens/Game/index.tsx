@@ -39,8 +39,6 @@ const goLeft = (position: number): number => position - 1
 
 const Game = () => {
   let navigate = useNavigate()
-  const user = useSelector(selectUser)
-  console.log({ user })
 
   const socket = useGameSocket()
   const { data: onlinePlayers } = useFetchGamePlayers()
