@@ -10,32 +10,36 @@ import { OpponentProvider } from './contexts/opponent'
 import { BattleProvider } from './contexts/battle'
 import TownScreen from './phaser/game'
 import LoginPage from './screens/Login'
+import { Provider } from 'react-redux'
+import { store } from './redux/store'
 
 function App() {
   return (
-    <PokeTrainerProvider>
-      <OpponentProvider>
-        <Layout>
-          <Navigation />
+    <Provider store={store}>
+      <PokeTrainerProvider>
+        <OpponentProvider>
+          <Layout>
+            <Navigation />
 
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/town" element={<TownScreen />} />
-            <Route path="game" element={<Game />} />
-            <Route
-              path="battlefield"
-              element={
-                <BattleProvider>
-                  <Battlefield />
-                </BattleProvider>
-              }
-            />
-            <Route path="pokedex" element={<Pokedex />} />
-          </Routes>
-        </Layout>
-      </OpponentProvider>
-    </PokeTrainerProvider>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/town" element={<TownScreen />} />
+              <Route path="game" element={<Game />} />
+              <Route
+                path="battlefield"
+                element={
+                  <BattleProvider>
+                    <Battlefield />
+                  </BattleProvider>
+                }
+              />
+              <Route path="pokedex" element={<Pokedex />} />
+            </Routes>
+          </Layout>
+        </OpponentProvider>
+      </PokeTrainerProvider>
+    </Provider>
   )
 }
 
