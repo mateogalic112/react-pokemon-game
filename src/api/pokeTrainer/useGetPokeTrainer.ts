@@ -29,6 +29,7 @@ const getPokeTrainer = async (
 export const useGetPokeTrainer = () => {
   const user = useSelector(selectUser)
   const trainerId = user.authData?.trainerId
+
   return useQuery(['trainers', trainerId], () => getPokeTrainer(trainerId), {
     enabled: !!trainerId,
   })

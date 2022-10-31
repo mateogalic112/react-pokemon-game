@@ -9,8 +9,6 @@ import useGameSocket from '../../api/useGameSocket'
 import { useFetchGamePlayers } from '../../api/sockets/useGamePlayers'
 import { useOpponentContext } from '../../contexts/opponent'
 import { usePokeTrainerContext } from '../../contexts/poke-trainer'
-import { selectUser } from '../../redux/user'
-import { useSelector } from 'react-redux'
 
 // Board dimensions
 const GRID_ROWS = 20

@@ -1,4 +1,4 @@
-import { useMutation } from 'react-query'
+import { useMutation, useQueryClient } from 'react-query'
 import api from '../base'
 import { AuthData } from '../models/AuthData'
 import { useDispatch } from 'react-redux'
@@ -16,12 +16,13 @@ const registerUser = async (request: IRegisterRequest): Promise<AuthData> => {
 }
 
 export const useRegister = () => {
-  // const queryClient = useQueryClient()
+  const queryClient = useQueryClient()
   const dispatch = useDispatch()
 
   return useMutation((request: IRegisterRequest) => registerUser(request), {
     onSuccess: (data: AuthData) => {
       dispatch(auth(data))
+      queryClient.invalidateQueries(['isLoggedIn'])
     },
     onError: (error: Error) => {},
   })
