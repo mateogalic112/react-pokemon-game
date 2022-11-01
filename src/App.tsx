@@ -18,37 +18,28 @@ function App() {
   return (
     <Provider store={store}>
       <PokeTrainerProvider>
-        <Layout>
-          <Navigation />
-          <Routes>
-            <Route element={<ProtectedRoute />}>
-              <Route path="/" element={<Home />} />
-              <Route
-                path="game"
-                element={
-                  <OpponentProvider>
-                    <Game />
-                  </OpponentProvider>
-                }
-              />
-              <Route
-                path="battlefield"
-                element={
-                  <PokeTrainerProvider>
-                    <OpponentProvider>
-                      <BattleProvider>
-                        <Battlefield />
-                      </BattleProvider>
-                    </OpponentProvider>
-                  </PokeTrainerProvider>
-                }
-              />
-            </Route>
-            <Route path="pokedex" element={<Pokedex />} />
-            <Route path="login" element={<LoginPage />} />
-            <Route path="town" element={<TownScreen />} />
-          </Routes>
-        </Layout>
+        <OpponentProvider>
+          <Layout>
+            <Navigation />
+            <Routes>
+              <Route element={<ProtectedRoute />}>
+                <Route path="/" element={<Home />} />
+                <Route path="game" element={<Game />} />
+                <Route
+                  path="battlefield"
+                  element={
+                    <BattleProvider>
+                      <Battlefield />
+                    </BattleProvider>
+                  }
+                />
+              </Route>
+              <Route path="pokedex" element={<Pokedex />} />
+              <Route path="login" element={<LoginPage />} />
+              <Route path="town" element={<TownScreen />} />
+            </Routes>
+          </Layout>
+        </OpponentProvider>
       </PokeTrainerProvider>
     </Provider>
   )

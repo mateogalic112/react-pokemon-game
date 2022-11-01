@@ -5,10 +5,12 @@ import FoePokemon from './FoePokemon'
 import { useFetchInitialPokemons } from '../../api/pokemons/useFetchInitialPokemons'
 import Pokemon from '../../models/Pokemon'
 import { useNavigate } from 'react-router-dom'
-import useGameSocket from '../../api/useGameSocket'
-import { useFetchGamePlayers } from '../../api/sockets/useGamePlayers'
+import useGameSocket from '../../api/sockets/useConnectGameSocket'
+import { useFetchGamePlayers } from '../../api/sockets/queries/useGamePlayers'
 import { useOpponentContext } from '../../contexts/opponent'
 import { usePokeTrainerContext } from '../../contexts/poke-trainer'
+import useJoinGameEmitter from '../../api/sockets/emitters/useJoinGameEmitter'
+import useGamePlayersListener from '../../api/sockets/listeners/useGamePlayersListener'
 
 // Board dimensions
 const GRID_ROWS = 20
@@ -39,9 +41,13 @@ const Game = () => {
   let navigate = useNavigate()
 
   const socket = useGameSocket()
-  const { data: onlinePlayers } = useFetchGamePlayers()
   const { trainer } = usePokeTrainerContext()
 
+  // register socket hooks
+  useJoinGameEmitter({ socket, trainer })
+  useGamePlayersListener({ socket })
+
+  const { data: onlinePlayers } = useFetchGamePlayers()
   const me = onlinePlayers?.find(
     (player) => player.trainerName === trainer?.name
   )

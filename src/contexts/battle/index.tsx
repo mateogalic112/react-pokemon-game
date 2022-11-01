@@ -79,6 +79,7 @@ export const BattleProvider: FC = ({ children }) => {
   const { trainer, catchPokemon } = usePokeTrainerContext()
   const updateHealth = usePatchPokemonHealth()
   let navigate = useNavigate()
+  console.log({ trainer })
 
   // Currently fighting pokemon
   const [pokemon, setPokemon] = useState<Pokemon>(trainer.pokemons[0])
