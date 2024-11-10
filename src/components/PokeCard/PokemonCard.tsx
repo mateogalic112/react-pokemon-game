@@ -1,20 +1,19 @@
-import { Box } from '@chakra-ui/react'
-import { getOpponentTurn, useBattleContext } from '../../contexts/battle'
-import CardAction from './components/CardAction'
-import CardImage from './components/CardImage'
-import CardStats from './components/CardStats'
+import { Box } from "@chakra-ui/react";
+import { getOpponentTurn, useBattleContext } from "../../contexts/battle";
+import CardAction from "./components/CardAction";
+import CardImage from "./components/CardImage";
+import CardStats from "./components/CardStats";
 
 export interface IPokemonCard {}
 
 const PokemonCard = () => {
-  const { pokemon, onPokemonAttack, opponentHealth, pokemonHealth, turn } =
-    useBattleContext()
-  const opponentTurn = getOpponentTurn(turn)
+  const { pokemon, onPokemonAttack, opponentHealth, pokemonHealth, turn } = useBattleContext();
+  const opponentTurn = getOpponentTurn(turn);
 
-  const { animations } = useBattleContext()
-  const isActive = !opponentTurn && !animations.pokeballActive
-  const isAttacking = !opponentTurn && animations.pokemonAttackActive
-  const isDamaging = opponentTurn && animations.pokemonDamageActive
+  const { animations } = useBattleContext();
+  const isActive = !opponentTurn && !animations.pokeballActive;
+  const isAttacking = !opponentTurn && animations.pokemonAttackActive;
+  const isDamaging = opponentTurn && animations.pokemonDamageActive;
 
   return (
     <Box maxW="sm" py={3} m="auto">
@@ -38,7 +37,7 @@ const PokemonCard = () => {
         />
       </CardStats>
     </Box>
-  )
-}
+  );
+};
 
-export default PokemonCard
+export default PokemonCard;

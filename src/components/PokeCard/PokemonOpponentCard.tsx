@@ -1,28 +1,29 @@
-import { Box } from '@chakra-ui/react'
-import { useEffect } from 'react'
-import { getOpponentTurn, useBattleContext } from '../../contexts/battle'
-import { useOpponentContext } from '../../contexts/opponent'
-import CardImage from './components/CardImage'
-import CardStats from './components/CardStats'
+import { Box } from "@chakra-ui/react";
+import { useEffect } from "react";
+import { getOpponentTurn, useBattleContext } from "../../contexts/battle";
+import { useOpponentContext } from "../../contexts/opponent";
+import CardImage from "./components/CardImage";
+import CardStats from "./components/CardStats";
 
 const PokemonOpponentCard = () => {
-  const { foe: opponent } = useOpponentContext()
-  const { animations, turn, onPokemonAttack, opponentHealth, pokemonHealth } =
-    useBattleContext()
-  const opponentTurn = getOpponentTurn(turn)
+  const { foe: opponent } = useOpponentContext();
+  const { animations, turn, onPokemonAttack, opponentHealth, pokemonHealth } = useBattleContext();
+  const opponentTurn = getOpponentTurn(turn);
 
   useEffect(() => {
-    if (!opponentTurn) return
+    if (!opponentTurn || !opponent) return;
 
-    const randomMoveIndex = Math.round(Math.random() * 3)
+    const randomMoveIndex = Math.round(Math.random() * 3);
     setTimeout(() => {
-      onPokemonAttack(opponent.moves[randomMoveIndex], pokemonHealth)
-    }, 500)
-  }, [opponentTurn])
+      onPokemonAttack(opponent.moves[randomMoveIndex], pokemonHealth);
+    }, 500);
+  }, [opponentTurn]);
 
-  const isAttacking = opponentTurn && animations.pokemonAttackActive
-  const isDamaging = !opponentTurn && animations.pokemonDamageActive
-  const isStruggling = !opponentTurn && animations.pokeballActive
+  const isAttacking = opponentTurn && animations.pokemonAttackActive;
+  const isDamaging = !opponentTurn && animations.pokemonDamageActive;
+  const isStruggling = !opponentTurn && animations.pokeballActive;
+
+  if (!opponent) return null;
 
   return (
     <Box maxW="sm" py={3} m="auto">
@@ -43,7 +44,7 @@ const PokemonOpponentCard = () => {
         isOpponent
       />
     </Box>
-  )
-}
+  );
+};
 
-export default PokemonOpponentCard
+export default PokemonOpponentCard;

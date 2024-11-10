@@ -1,10 +1,10 @@
-import { Flex, Button, Center, Text } from '@chakra-ui/react'
-import { Move } from '../../../models/Pokemon'
+import { Flex, Button, Center, Text } from "@chakra-ui/react";
+import { Move } from "../../../models/Pokemon";
 
 interface ICardActionProps {
-  moves: Move[]
-  attack: (move: Move) => void
-  active: boolean
+  moves: Move[];
+  attack: (move: Move) => void;
+  active: boolean;
 }
 
 const CardAction = ({ moves, attack, active }: ICardActionProps) => {
@@ -27,7 +27,7 @@ const CardAction = ({ moves, attack, active }: ICardActionProps) => {
         </Button>
       ))}
     </Flex>
-  )
-}
+  );
+};
 
-export default CardAction
+export default CardAction;

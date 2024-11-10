@@ -1,6 +1,6 @@
 enum PokeTrainerActionKind {
-  catchPokemon = 'CATCH_POKEMON',
-  setTrainer = 'SET_TRAINER',
+  catchPokemon = "CATCH_POKEMON",
+  setTrainer = "SET_TRAINER"
 }
 
-export default PokeTrainerActionKind
+export default PokeTrainerActionKind;

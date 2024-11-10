@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState } from "react";
 import {
   Flex,
   Heading,
@@ -12,33 +12,33 @@ import {
   Avatar,
   FormControl,
   FormHelperText,
-  InputRightElement,
-} from '@chakra-ui/react'
-import { useLogin } from '../../api/auth/use-login'
-import { useNavigate } from 'react-router-dom'
+  InputRightElement
+} from "@chakra-ui/react";
+import { useLogin } from "../../api/auth/use-login";
+import { useNavigate } from "react-router-dom";
 
 const initialLoginData = {
-  email: 'mateo@gmail.com',
-  password: '123456',
-}
+  email: "mateo@gmail.com",
+  password: "123456"
+};
 
 const LoginPage = () => {
-  const login = useLogin()
-  const navigate = useNavigate()
+  const login = useLogin();
+  const navigate = useNavigate();
 
-  const [loginData, setLoginData] = useState(initialLoginData)
+  const [loginData, setLoginData] = useState(initialLoginData);
   const handleLoginDataChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setLoginData({ ...loginData, [e.target.name]: e.target.value })
-  }
+    setLoginData({ ...loginData, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    await login.mutateAsync(loginData)
-    navigate('/')
-  }
+    e.preventDefault();
+    await login.mutateAsync(loginData);
+    navigate("/");
+  };
 
-  const [showPassword, setShowPassword] = useState(false)
-  const handleShowClick = () => setShowPassword(!showPassword)
+  const [showPassword, setShowPassword] = useState(false);
+  const handleShowClick = () => setShowPassword(!showPassword);
 
   return (
     <Flex
@@ -49,22 +49,12 @@ const LoginPage = () => {
       justifyContent="center"
       alignItems="center"
     >
-      <Stack
-        flexDir="column"
-        mb="2"
-        justifyContent="center"
-        alignItems="center"
-      >
+      <Stack flexDir="column" mb="2" justifyContent="center" alignItems="center">
         <Avatar bg="teal.500" />
         <Heading color="teal.400">Welcome</Heading>
-        <Box minW={{ base: '90%', md: '468px' }}>
+        <Box minW={{ base: "90%", md: "468px" }}>
           <form onSubmit={handleSubmit}>
-            <Stack
-              spacing={4}
-              p="1rem"
-              backgroundColor="whiteAlpha.900"
-              boxShadow="md"
-            >
+            <Stack spacing={4} p="1rem" backgroundColor="whiteAlpha.900" boxShadow="md">
               <FormControl>
                 <InputGroup>
                   <InputLeftElement pointerEvents="none" />
@@ -81,7 +71,7 @@ const LoginPage = () => {
                 <InputGroup>
                   <InputLeftElement pointerEvents="none" color="gray.300" />
                   <Input
-                    type={showPassword ? 'text' : 'password'}
+                    type={showPassword ? "text" : "password"}
                     placeholder="Password"
                     name="password"
                     value={loginData.password}
@@ -89,7 +79,7 @@ const LoginPage = () => {
                   />
                   <InputRightElement width="4.5rem">
                     <Button h="1.75rem" size="sm" onClick={handleShowClick}>
-                      {showPassword ? 'Hide' : 'Show'}
+                      {showPassword ? "Hide" : "Show"}
                     </Button>
                   </InputRightElement>
                 </InputGroup>
@@ -112,13 +102,13 @@ const LoginPage = () => {
         </Box>
       </Stack>
       <Box>
-        New to us?{' '}
+        New to us?{" "}
         <Link color="teal.500" href="#">
           Sign Up
         </Link>
       </Box>
     </Flex>
-  )
-}
+  );
+};
 
-export default LoginPage
+export default LoginPage;

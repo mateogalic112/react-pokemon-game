@@ -1,14 +1,12 @@
-import { useSelector } from 'react-redux'
-import { Navigate, Outlet } from 'react-router-dom'
-import { selectUser } from '../../redux/user'
+import { Navigate, Outlet } from "react-router-dom";
 
 const ProtectedRoute = () => {
-  const user = useSelector(selectUser)
+  const user = useSelector(selectUser);
   if (!user.authData?.userId) {
-    return <Navigate to="/login" replace />
+    return <Navigate to="/login" replace />;
   }
 
-  return <Outlet />
-}
+  return <Outlet />;
+};
 
-export default ProtectedRoute
+export default ProtectedRoute;

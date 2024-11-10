@@ -1,59 +1,59 @@
-import { createContext, FC, useContext, useReducer } from 'react'
-import Pokemon from '../../models/Pokemon'
-import OpponentActionKind from './actions'
-import opponentReducer from './reducer'
+import { createContext, FC, useContext, useReducer } from "react";
+import Pokemon from "../../models/Pokemon";
+import OpponentActionKind from "./actions";
+import opponentReducer from "./reducer";
 
 export interface OpponentState {
-  foe: Pokemon | null
+  foe: Pokemon | null;
 }
 
 const initialState: OpponentState = {
-  foe: null,
-}
+  foe: null
+};
 
 interface IOpponentContext extends OpponentState {
-  storeOpponent: (pokemon: Pokemon) => void
+  storeOpponent: (pokemon: Pokemon) => void;
 }
 
 const initialContext: IOpponentContext = {
   ...initialState,
-  storeOpponent: () => {},
-}
+  storeOpponent: () => {}
+};
 
-const OpponentContext = createContext<IOpponentContext>(initialContext)
+const OpponentContext = createContext<IOpponentContext>(initialContext);
 
 export const useOpponentContext = () => {
-  const context = useContext(OpponentContext)
+  const context = useContext(OpponentContext);
 
   if (!context) {
-    throw new Error('Context must be within OpponentContext.Provider!')
+    throw new Error("Context must be within OpponentContext.Provider!");
   }
 
-  return context
-}
+  return context;
+};
 
 export const OpponentProvider: FC = ({ children }) => {
-  const [{ foe }, dispatch] = useReducer(opponentReducer, initialState)
+  const [{ foe }, dispatch] = useReducer(opponentReducer, initialState);
 
   const storeOpponent = (foe: Pokemon) => {
     // Battle sound
-    const startBattle = new Audio('/battle.mp3')
-    startBattle.play()
+    const startBattle = new Audio("/battle.mp3");
+    startBattle.play();
 
     dispatch({
       type: OpponentActionKind.storeOpponent,
-      payload: { foe },
-    })
-  }
+      payload: { foe }
+    });
+  };
 
   return (
     <OpponentContext.Provider
       value={{
         foe,
-        storeOpponent,
+        storeOpponent
       }}
     >
       {children}
     </OpponentContext.Provider>
-  )
-}
+  );
+};

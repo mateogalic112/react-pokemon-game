@@ -1,17 +1,17 @@
-import { Button, Flex, Image, Box } from '@chakra-ui/react'
-import { useSpeechSynthesis } from 'react-speech-kit'
-import { useBattleContext } from '../contexts/battle'
+import { Button, Flex, Image, Box } from "@chakra-ui/react";
+import { useSpeechSynthesis } from "react-speech-kit";
+import { useBattleContext } from "../contexts/battle";
 
 const Pokedex = () => {
-  const { animations } = useBattleContext()
-  const { pokemon } = useBattleContext()
+  const { animations } = useBattleContext();
+  const { pokemon } = useBattleContext();
 
   // Pokedex speak
-  const { speak, speaking } = useSpeechSynthesis()
+  const { speak, speaking } = useSpeechSynthesis();
   const onPokedexClick = async () => {
-    const text = pokemon.getPokedexData()
-    speak({ text })
-  }
+    const text = pokemon.getPokedexData();
+    speak({ text });
+  };
 
   return (
     <>
@@ -26,11 +26,7 @@ const Pokedex = () => {
         Pokedex
       </Button>
 
-      <Flex
-        gap="0.25rem"
-        alignItems="center"
-        className={`pokedex ${speaking ? 'speaking' : ''}`}
-      >
+      <Flex gap="0.25rem" alignItems="center" className={`pokedex ${speaking ? "speaking" : ""}`}>
         <Image src="/pokedex.png" alt="Pokedex" w={80} />
         <Box pos="absolute" top="25%" left="0" w={40} h={20}>
           <Image
@@ -43,7 +39,7 @@ const Pokedex = () => {
         </Box>
       </Flex>
     </>
-  )
-}
+  );
+};
 
-export default Pokedex
+export default Pokedex;

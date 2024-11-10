@@ -1,5 +1,5 @@
 enum OpponentActionKind {
-  storeOpponent = 'STORE_OPPONENT',
+  storeOpponent = "STORE_OPPONENT"
 }
 
-export default OpponentActionKind
+export default OpponentActionKind;

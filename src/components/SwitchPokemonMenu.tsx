@@ -1,26 +1,15 @@
-import { ChevronDownIcon } from '@chakra-ui/icons'
-import {
-  Button,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  Image,
-  Box,
-  Text,
-} from '@chakra-ui/react'
-import { useBattleContext } from '../contexts/battle'
-import { usePokeTrainerContext } from '../contexts/poke-trainer'
+import { ChevronDownIcon } from "@chakra-ui/icons";
+import { Button, Menu, MenuButton, MenuList, MenuItem, Image, Box, Text } from "@chakra-ui/react";
+import { useBattleContext } from "../contexts/battle";
+import { usePokeTrainerContext } from "../contexts/poke-trainer";
 
 const SwitchPokemonMenu = () => {
-  const { trainer } = usePokeTrainerContext()
-  const { switchPokemon, pokemon } = useBattleContext()
+  const { trainer } = usePokeTrainerContext();
+  const { switchPokemon, pokemon } = useBattleContext();
 
-  const availablePokemons = trainer.pokemons.filter(
-    (item) => item.id !== pokemon.id
-  )
+  const availablePokemons = trainer.pokemons.filter((item) => item.id !== pokemon.id);
 
-  if (!availablePokemons.length) return null
+  if (!availablePokemons.length) return null;
 
   return (
     <Menu>
@@ -39,7 +28,7 @@ const SwitchPokemonMenu = () => {
         ))}
       </MenuList>
     </Menu>
-  )
-}
+  );
+};
 
-export default SwitchPokemonMenu
+export default SwitchPokemonMenu;

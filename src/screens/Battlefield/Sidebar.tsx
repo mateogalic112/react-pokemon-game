@@ -1,17 +1,17 @@
-import React, { FC } from 'react'
-import { Flex, Image, Button, Box } from '@chakra-ui/react'
-import { usePokeTrainerContext } from '../../contexts/poke-trainer'
-import { useBattleContext } from '../../contexts/battle'
+import React, { FC } from "react";
+import { Flex, Image, Button, Box } from "@chakra-ui/react";
+import { usePokeTrainerContext } from "../../contexts/poke-trainer";
+import { useBattleContext } from "../../contexts/battle";
 
 interface IBattlefieldSidebarProps {}
 
 const Sidebar: FC<IBattlefieldSidebarProps> = ({ children }) => {
-  const { trainer } = usePokeTrainerContext()
-  const { animations, battleMessages, onPokeballThrow } = useBattleContext()
+  const { trainer } = usePokeTrainerContext();
+  const { animations, battleMessages, onPokeballThrow } = useBattleContext();
   const isActive =
     !animations.pokemonAttackActive &&
     !animations.pokemonDamageActive &&
-    !animations.pokeballActive
+    !animations.pokeballActive;
 
   return (
     <Box
@@ -22,7 +22,7 @@ const Sidebar: FC<IBattlefieldSidebarProps> = ({ children }) => {
       flexBasis="40%"
       maxH="100vh"
       overflow="auto"
-      pointerEvents={isActive ? 'auto' : 'none'}
+      pointerEvents={isActive ? "auto" : "none"}
     >
       <Flex gap="3rem" mb={8} justifyContent="space-between">
         <Flex gap="0.25rem" alignItems="center">
@@ -40,7 +40,7 @@ const Sidebar: FC<IBattlefieldSidebarProps> = ({ children }) => {
           objectFit="cover"
           src="/pokeball.png"
           alt="Pokeball"
-          className={`pokeball ${animations.pokeballActive ? 'thrown' : ''}`}
+          className={`pokeball ${animations.pokeballActive ? "thrown" : ""}`}
         />
       </Flex>
 
@@ -55,7 +55,7 @@ const Sidebar: FC<IBattlefieldSidebarProps> = ({ children }) => {
         </React.Fragment>
       ))}
     </Box>
-  )
-}
+  );
+};
 
-export default Sidebar
+export default Sidebar;

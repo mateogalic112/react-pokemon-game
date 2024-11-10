@@ -1,9 +1,9 @@
-import { Button, VStack, Image } from '@chakra-ui/react'
+import { Button, VStack, Image } from "@chakra-ui/react";
 
 export interface IChooseCardProps {
-  src: string
-  alt: string
-  onClick: () => void
+  src: string;
+  alt: string;
+  onClick: () => void;
 }
 
 const ChooseCard = ({ src, alt, onClick }: IChooseCardProps) => {
@@ -13,7 +13,7 @@ const ChooseCard = ({ src, alt, onClick }: IChooseCardProps) => {
 
       <Button onClick={onClick}>Choose</Button>
     </VStack>
-  )
-}
+  );
+};
 
-export default ChooseCard
+export default ChooseCard;

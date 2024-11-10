@@ -1,5 +1,5 @@
-import { VStack, Container } from '@chakra-ui/react'
-import React from 'react'
+import { VStack, Container } from "@chakra-ui/react";
+import React from "react";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -8,7 +8,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         {children}
       </Container>
     </VStack>
-  )
-}
+  );
+};
 
-export default Layout
+export default Layout;

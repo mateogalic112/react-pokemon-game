@@ -1,10 +1,10 @@
-import { Box, Flex, VStack } from '@chakra-ui/react'
-import PokemonCard from '../../components/PokeCard/PokemonCard'
-import Sidebar from './Sidebar'
-import PokemonOpponentCard from '../../components/PokeCard/PokemonOpponentCard'
-import SwitchPokemonMenu from '../../components/SwitchPokemonMenu'
-import EscapePopover from '../../components/EscapePopover'
-import Pokedex from '../../components/Pokedex'
+import { Box, Flex, VStack } from "@chakra-ui/react";
+import PokemonCard from "../../components/PokeCard/PokemonCard";
+import Sidebar from "./Sidebar";
+import PokemonOpponentCard from "../../components/PokeCard/PokemonOpponentCard";
+import SwitchPokemonMenu from "../../components/SwitchPokemonMenu";
+import EscapePopover from "../../components/EscapePopover";
+import Pokedex from "../../components/Pokedex";
 
 const Battlefield = () => {
   return (
@@ -23,7 +23,7 @@ const Battlefield = () => {
         </VStack>
       </Sidebar>
     </Flex>
-  )
-}
+  );
+};
 
-export default Battlefield
+export default Battlefield;

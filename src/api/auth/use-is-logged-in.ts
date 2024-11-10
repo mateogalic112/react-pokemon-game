@@ -1,19 +1,20 @@
-import { useQuery } from '@tanstack/react-query'
-import apiConfig from '@/config/api'
+import { useQuery } from "@tanstack/react-query";
+import apiConfig from "@/config/api";
 
 const fetchMe = async () => {
-  return fetch(`${apiConfig.baseURL}/auth/me`, {
-    cache: 'no-cache',
+  const response = await fetch(`${apiConfig.baseURL}/auth/me`, {
+    cache: "no-cache",
     headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-}
+      "Content-Type": "application/json"
+    }
+  });
+  return response.json();
+};
 export const useIsLoggedIn = () =>
   useQuery({
-    queryKey: ['auth', 'me'],
+    queryKey: ["auth", "me"],
     queryFn: fetchMe,
     retry: false,
     refetchOnMount: false,
-    refetchOnWindowFocus: false,
-  })
+    refetchOnWindowFocus: false
+  });

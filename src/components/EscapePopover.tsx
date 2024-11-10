@@ -6,15 +6,15 @@ import {
   PopoverContent,
   PopoverHeader,
   PopoverTrigger,
-  Portal,
-} from '@chakra-ui/react'
-import { useNavigate } from 'react-router-dom'
+  Portal
+} from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 
 const EscapePopover = () => {
-  let navigate = useNavigate()
+  let navigate = useNavigate();
   const onEscape = () => {
-    navigate('/game')
-  }
+    navigate("/game");
+  };
 
   return (
     <Popover placement="bottom-start">
@@ -33,7 +33,7 @@ const EscapePopover = () => {
         </PopoverContent>
       </Portal>
     </Popover>
-  )
-}
+  );
+};
 
-export default EscapePopover
+export default EscapePopover;

@@ -1,11 +1,11 @@
-import { PokeTrainerState } from './index'
-import PokeTrainerActionKind from './actions'
-import PokeTrainer from '../../models/PokeTrainer'
+import { PokeTrainerState } from "./index";
+import PokeTrainerActionKind from "./actions";
+import PokeTrainer from "../../models/Trainer";
 
 type PokeTrainerAction = {
-  type: PokeTrainerActionKind.setTrainer
-  payload: { trainer: PokeTrainer }
-}
+  type: PokeTrainerActionKind.setTrainer;
+  payload: { trainer: PokeTrainer };
+};
 
 const pokeTrainerReducer = (
   state: PokeTrainerState,
@@ -15,11 +15,11 @@ const pokeTrainerReducer = (
     case PokeTrainerActionKind.setTrainer:
       return {
         ...state,
-        trainer: action.payload.trainer,
-      }
+        trainer: action.payload.trainer
+      };
     default:
-      throw new Error('Action not allowed')
+      throw new Error("Action not allowed");
   }
-}
+};
 
-export default pokeTrainerReducer
+export default pokeTrainerReducer;

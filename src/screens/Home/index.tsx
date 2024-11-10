@@ -1,38 +1,38 @@
-import { VStack, Text, HStack } from '@chakra-ui/react'
-import { useFetchInitialPokemons } from '../../api/pokemons/useFetchInitialPokemons'
-import Pokemon from '../../models/Pokemon'
-import ChooseCard from './ChooseCard'
-import { useNavigate } from 'react-router-dom'
-import { useLayoutEffect, useState } from 'react'
-import { useCreatePokemon } from '../../api/pokemons/useCreatePokemon'
-import { usePokeTrainerContext } from '../../contexts/poke-trainer'
+import { VStack, Text, HStack } from "@chakra-ui/react";
+import { useFetchInitialPokemons } from "../../api/pokemons/use-get-initial-pokemons";
+import Pokemon from "../../models/Pokemon";
+import ChooseCard from "./ChooseCard";
+import { useNavigate } from "react-router-dom";
+import { useLayoutEffect, useState } from "react";
+import { useCreatePokemon } from "../../api/pokemons/use-create-pokemon";
+import { usePokeTrainerContext } from "../../contexts/poke-trainer";
 
 const Home = () => {
-  const assignPokemon = useCreatePokemon()
-  const initialPokemonResults = useFetchInitialPokemons([1, 4, 7])
-  const { trainer } = usePokeTrainerContext()
+  const assignPokemon = useCreatePokemon();
+  const initialPokemonResults = useFetchInitialPokemons([1, 4, 7]);
+  const { trainer } = usePokeTrainerContext();
 
-  let navigate = useNavigate()
+  let navigate = useNavigate();
   // navigate before chance to paint the screen
   useLayoutEffect(() => {
-    if (trainer && trainer.pokemons.length > 0) navigate('/game')
-  }, [navigate, trainer])
+    if (trainer && trainer.pokemons.length > 0) navigate("/game");
+  }, [navigate, trainer]);
 
-  const [message, setMessage] = useState('')
+  const [message, setMessage] = useState("");
   const onPokemonChoose = async (pokemon: Pokemon): Promise<void> => {
-    setMessage(`You have choosen ${pokemon.name}`)
+    setMessage(`You have choosen ${pokemon.name}`);
     await assignPokemon.mutateAsync({
       hp: pokemon.hp,
       pokemonID: pokemon.id,
-      pokeTrainerId: trainer?.id,
-    })
+      pokeTrainerId: trainer?.id
+    });
     setTimeout(() => {
-      navigate('/game')
-    }, 1000)
-  }
+      navigate("/game");
+    }, 1000);
+  };
 
-  if (!initialPokemonResults.every(({ data }) => Boolean(data))) return null
-  const pokemons = initialPokemonResults.map(({ data }) => new Pokemon(data))
+  if (!initialPokemonResults.every(({ data }) => Boolean(data))) return null;
+  const pokemons = initialPokemonResults.map(({ data }) => new Pokemon(data));
 
   return (
     <VStack minH="60vh" alignItems="stretch" justifyContent="space-between">
@@ -44,7 +44,7 @@ const Home = () => {
         fontSize="6xl"
         fontWeight="extrabold"
       >
-        {message ? message : 'Welcome to Pokemon'}
+        {message ? message : "Welcome to Pokemon"}
       </Text>
 
       <HStack spacing="24px" wrap="wrap" justifyContent="space-around">
@@ -58,7 +58,7 @@ const Home = () => {
         ))}
       </HStack>
     </VStack>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

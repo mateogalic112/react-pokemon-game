@@ -1,11 +1,11 @@
-import { Flex, Box, Image, Spacer, Button } from '@chakra-ui/react'
-import { Link } from 'react-router-dom'
-import { useGetPokeTrainer } from '../api/pokeTrainer/useGetPokeTrainer'
+import { Flex, Box, Image, Spacer, Button } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
+import { useGetPokeTrainer } from "../api/trainer/use-get-trainer";
 
 const Navigation = () => {
-  const { data: trainer } = useGetPokeTrainer()
+  const { data: trainer } = useGetPokeTrainer();
 
-  const to = trainer && trainer.pokemons.length === 0 ? '/' : 'pokedex'
+  const to = trainer && trainer.pokemons.length === 0 ? "/" : "pokedex";
 
   return (
     <Flex py="3" alignItems="center">
@@ -22,7 +22,7 @@ const Navigation = () => {
         <Button colorScheme="teal">Log in</Button>
       </Box>
     </Flex>
-  )
-}
+  );
+};
 
-export default Navigation
+export default Navigation;

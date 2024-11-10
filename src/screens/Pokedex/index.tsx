@@ -1,17 +1,17 @@
-import { Heading, Text, VStack } from '@chakra-ui/react'
-import { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { usePokeTrainerContext } from '../../contexts/poke-trainer'
+import { Heading, Text, VStack } from "@chakra-ui/react";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { usePokeTrainerContext } from "../../contexts/poke-trainer";
 
 const Pokedex = () => {
-  let navigate = useNavigate()
-  const { trainer } = usePokeTrainerContext()
+  let navigate = useNavigate();
+  const { trainer } = usePokeTrainerContext();
 
   useEffect(() => {
     setTimeout(() => {
-      navigate('/game')
-    }, 1000)
-  })
+      navigate("/game");
+    }, 1000);
+  });
 
   return (
     <section>
@@ -25,7 +25,7 @@ const Pokedex = () => {
         ))}
       </VStack>
     </section>
-  )
-}
+  );
+};
 
-export default Pokedex
+export default Pokedex;

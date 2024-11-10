@@ -1,38 +1,18 @@
-import { Box, Center, Flex, Text } from '@chakra-ui/react'
-import { Stat } from '../../../models/Pokemon'
+import { Box, Center, Flex, Text } from "@chakra-ui/react";
+import { Stat } from "../../../models/Pokemon";
 
 interface ICardStatsProps {
-  title: string
-  stats: Stat[]
-  hp: number
-  children: React.ReactNode | null
-  isDamaging: boolean
+  title: string;
+  stats: Stat[];
+  hp: number;
+  children: React.ReactNode | null;
+  isDamaging: boolean;
 }
 
-const CardStats = ({
-  title,
-  stats,
-  hp,
-  children,
-  isDamaging,
-}: ICardStatsProps) => {
+const CardStats = ({ title, stats, hp, children, isDamaging }: ICardStatsProps) => {
   return (
-    <Box
-      px="6"
-      pt="2"
-      pb="4"
-      border="1px"
-      borderColor="gray.400"
-      borderRadius="lg"
-    >
-      <Box
-        my="1"
-        fontWeight="semibold"
-        as="h4"
-        lineHeight="tight"
-        isTruncated
-        fontSize={20}
-      >
+    <Box px="6" pt="2" pb="4" border="1px" borderColor="gray.400" borderRadius="lg">
+      <Box my="1" fontWeight="semibold" as="h4" lineHeight="tight" fontSize={20}>
         {title.toUpperCase()}
       </Box>
 
@@ -45,8 +25,8 @@ const CardStats = ({
           borderRightColor="gray.400"
         >
           <Text color="gray.700">HP</Text>
-          <Text color="black" size="xl">
-            <b className={`hp ${isDamaging ? 'damaging' : ''}`.trim()}>{hp}</b>
+          <Text color="black">
+            <b className={`hp ${isDamaging ? "damaging" : ""}`.trim()}>{hp}</b>
           </Text>
         </Center>
         {stats.map((stat) => (
@@ -61,7 +41,7 @@ const CardStats = ({
             borderRightColor="gray.400"
           >
             <Text color="gray.700">{stat.name.toUpperCase()}</Text>
-            <Text color="black" size="xl">
+            <Text color="black">
               <b>{stat.amount}</b>
             </Text>
           </Center>
@@ -70,7 +50,7 @@ const CardStats = ({
 
       {children}
     </Box>
-  )
-}
+  );
+};
 
-export default CardStats
+export default CardStats;
