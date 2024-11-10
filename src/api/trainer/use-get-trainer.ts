@@ -1,8 +1,8 @@
 import apiConfig from "@/config/api";
 import { useQuery } from "@tanstack/react-query";
-import { Trainer } from "../models/api";
+import { ApiTrainer } from "../models/api";
 
-const getTrainer = async (trainerId: number): Promise<Trainer> => {
+const getTrainer = async (trainerId: number): Promise<ApiTrainer> => {
   const response = await fetch(`${apiConfig.baseURL}/trainers/${trainerId}`, {
     headers: {
       "Content-Type": "application/json"

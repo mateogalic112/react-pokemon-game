@@ -1,17 +1,18 @@
-import React, { FC } from "react";
+import React, { FC, PropsWithChildren } from "react";
 import { Flex, Image, Button, Box } from "@chakra-ui/react";
-import { usePokeTrainerContext } from "../../contexts/trainer";
 import { useBattleContext } from "../../contexts/battle";
+import { useGetPokeTrainer } from "@/api/trainer/use-get-poke-trainer";
 
-interface IBattlefieldSidebarProps {}
+const Sidebar: FC<PropsWithChildren> = ({ children }) => {
+  const trainer = useGetPokeTrainer();
 
-const Sidebar: FC<IBattlefieldSidebarProps> = ({ children }) => {
-  const { trainer } = usePokeTrainerContext();
   const { animations, battleMessages, onPokeballThrow } = useBattleContext();
   const isActive =
     !animations.pokemonAttackActive &&
     !animations.pokemonDamageActive &&
     !animations.pokeballActive;
+
+  if (!trainer) return null;
 
   return (
     <Box

@@ -1,17 +1,19 @@
+import { useGetPokeTrainer } from "@/api/trainer/use-get-poke-trainer";
 import { Heading, Text, VStack } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { usePokeTrainerContext } from "../../contexts/trainer";
 
 const Pokedex = () => {
   let navigate = useNavigate();
-  const { trainer } = usePokeTrainerContext();
+  const trainer = useGetPokeTrainer();
 
   useEffect(() => {
     setTimeout(() => {
       navigate("/game");
     }, 1000);
   });
+
+  if (!trainer) return null;
 
   return (
     <section>

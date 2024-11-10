@@ -9,12 +9,12 @@ import {
 } from "react";
 import Battle from "../../models/Battle";
 import { Pokemon, Move } from "../../models/Pokemon";
-import { usePokeTrainerContext } from "../trainer";
 import BattleActionKind from "./actions";
 import battleReducer from "./reducer";
 import { useNavigate } from "react-router-dom";
 import { useOpponentContext } from "../opponent";
 import { usePatchPokemonHealth } from "@/api/pokemons/use-update-pokemon-hp";
+import { useCreatePokemon } from "@/api/pokemons/use-create-pokemon";
 
 export interface BattleState {
   turn: number;
@@ -27,7 +27,7 @@ const initialState: BattleState = {
 };
 
 interface IBattleContext extends BattleState {
-  pokemon: Pokemon;
+  pokemon: Pokemon | null;
   pokemonHealth: number;
   opponentHealth: number;
   animations: {
@@ -73,13 +73,15 @@ export const getOpponentTurn = (turn: number) => turn % 2 === 1;
 
 export const BattleProvider: FC<PropsWithChildren> = ({ children }) => {
   const [{ turn, battleMessages }, dispatch] = useReducer(battleReducer, initialState);
+
   const { foe } = useOpponentContext();
-  const { trainer, catchPokemon } = usePokeTrainerContext();
   const updateHealth = usePatchPokemonHealth();
+  const capturePokemon = useCreatePokemon();
+
   let navigate = useNavigate();
 
   // Currently fighting pokemon
-  const [pokemon, setPokemon] = useState<Pokemon>(trainer.pokemons[0]);
+  const [pokemon, setPokemon] = useState<Pokemon | null>(null);
   const switchPokemon = (newPokemon: Pokemon) => {
     setPokemon(newPokemon);
   };
@@ -90,8 +92,8 @@ export const BattleProvider: FC<PropsWithChildren> = ({ children }) => {
   const [pokemonDamageActive, setPokemonDamageActive] = useState(false);
 
   const battle = new Battle(pokemon, foe);
-  const [pokemonHealth, setPokemonHealth] = useState(pokemon.hp);
-  const [opponentHealth, setOpponentHealth] = useState(foe.hp);
+  const [pokemonHealth, setPokemonHealth] = useState(0);
+  const [opponentHealth, setOpponentHealth] = useState(0);
   const opponentTurn = getOpponentTurn(turn);
 
   const onPokemonAttack = async (move: Move, health: number) => {
@@ -130,6 +132,26 @@ export const BattleProvider: FC<PropsWithChildren> = ({ children }) => {
     } else {
       setOpponentHealth((prevHealth) => prevHealth - damage);
     }
+  };
+
+  const catchPokemon = async (pokemon: Pokemon, isCaught: boolean) => {
+    const currentPokeballCount = trainer.throwPokeball();
+    if (!currentPokeballCount) {
+      return "You ran out of pokeballs!";
+    }
+    await updatePokeballs.mutateAsync(currentPokeballCount);
+
+    if (isCaught) {
+      await capturePokemon.mutateAsync({
+        hp: pokemon.hp,
+        pokemon_id: pokemon.id,
+        trainer_id: trainer.id
+      });
+
+      return `You caught ${pokemon.name}!`;
+    }
+
+    return `${pokemon.name} escaped!`;
   };
 
   // Throw pokeball to catch opponent pokemon

@@ -1,6 +1,6 @@
 import { PokeTrainerState } from "./index";
 import PokeTrainerActionKind from "./actions";
-import PokeTrainer from "../../models/Trainer";
+import PokeTrainer from "../../models/PokeTrainer";
 
 type PokeTrainerAction = {
   type: PokeTrainerActionKind.setTrainer;

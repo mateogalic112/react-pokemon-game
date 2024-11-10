@@ -2,15 +2,15 @@ import { Box, Grid, GridItem } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import Player from "./Player";
 import FoePokemon from "./FoePokemon";
-import { useFetchInitialPokemons } from "../../api/pokemons/use-get-initial-pokemons";
-import Pokemon from "../../models/Pokemon";
 import { useNavigate } from "react-router-dom";
 import useGameSocket from "../../api/sockets/use-connect-game-socket";
-import { useFetchGamePlayers } from "../../api/sockets/queries/use-game-players";
 import { useOpponentContext } from "../../contexts/opponent";
-import { usePokeTrainerContext } from "../../contexts/trainer";
 import useJoinGameEmitter from "../../api/sockets/emitters/use-join-game-emitter";
 import useGamePlayersListener from "../../api/sockets/listeners/use-game-players-listener";
+import { useGamePlayers } from "@/api/sockets/queries/use-game-players";
+import { useGetPokeTrainer } from "@/api/trainer/use-get-poke-trainer";
+import { Pokemon } from "@/models/Pokemon";
+import { useGetPokemons } from "@/api/pokemons/use-get-pokemons";
 
 // Board dimensions
 const GRID_ROWS = 20;
@@ -38,23 +38,25 @@ const Game = () => {
   let navigate = useNavigate();
 
   const socket = useGameSocket();
-  const { trainer } = usePokeTrainerContext();
+  const trainer = useGetPokeTrainer();
 
   // register socket hooks
   useJoinGameEmitter({ socket, trainer });
   useGamePlayersListener({ socket });
 
-  const { data: onlinePlayers } = useFetchGamePlayers();
-  const me = onlinePlayers?.find((player) => player.trainerName === trainer?.name);
+  const { data: onlinePlayers } = useGamePlayers();
+  const me = onlinePlayers?.find((player) => player.name === trainer?.name);
 
   const [freezePlayer, setFreezePlayer] = useState(false);
 
   const { storeOpponent } = useOpponentContext();
-  const foePokemonsResult = useFetchInitialPokemons([20, 50, 80]);
+  const foePokemonsResult = useGetPokemons([20, 50, 80]);
 
   const gameBoardRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
-    gameBoardRef.current.focus();
+    if (gameBoardRef.current) {
+      gameBoardRef.current.focus();
+    }
   }, []);
 
   const foePokemons = foePokemonsResult
@@ -84,7 +86,8 @@ const Game = () => {
   };
 
   const onKeyDownHandler = (event: React.KeyboardEvent<HTMLDivElement>, playerPosition: number) => {
-    if (freezePlayer) return;
+    if (freezePlayer || !socket || !trainer) return;
+
     switch (event.code) {
       case "ArrowDown":
         if (invalidGoDown(playerPosition)) return;
@@ -138,7 +141,9 @@ const Game = () => {
       p={12}
       tabIndex={0}
       position="relative"
-      onKeyDown={(e) => onKeyDownHandler(e, me?.position)}
+      onKeyDown={(e) => {
+        if (me) onKeyDownHandler(e, me.position);
+      }}
       ref={gameBoardRef}
     >
       <Grid

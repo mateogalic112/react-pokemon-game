@@ -1,9 +1,9 @@
+import { useGetPokeTrainer } from "@/api/trainer/use-get-poke-trainer";
 import { Flex, Box, Image, Spacer, Button } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
-import { useGetPokeTrainer } from "../api/trainer/use-get-trainer";
 
 const Navigation = () => {
-  const { data: trainer } = useGetPokeTrainer();
+  const trainer = useGetPokeTrainer();
 
   const to = trainer && trainer.pokemons.length === 0 ? "/" : "pokedex";
 

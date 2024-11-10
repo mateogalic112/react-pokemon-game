@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import apiConfig from "@/config/api";
+import { ApiTrainer } from "../models/api";
 
-const fetchMe = async () => {
+const fetchMe = async (): Promise<ApiTrainer> => {
   const response = await fetch(`${apiConfig.baseURL}/auth/me`, {
     cache: "no-cache",
     headers: {
@@ -11,7 +12,7 @@ const fetchMe = async () => {
   return response.json();
 };
 
-export const useIsLoggedIn = () =>
+export const useGetMe = () =>
   useQuery({
     queryKey: ["auth", "me"],
     queryFn: fetchMe,

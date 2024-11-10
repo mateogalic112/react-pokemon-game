@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { Socket } from "socket.io-client";
 
 interface IGamePlayersListenerProps {
-  socket: Socket;
+  socket: Socket | null;
 }
 
 const useGamePlayersListener = ({ socket }: IGamePlayersListenerProps) => {

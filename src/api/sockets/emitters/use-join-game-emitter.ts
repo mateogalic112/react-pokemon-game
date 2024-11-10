@@ -1,10 +1,10 @@
-import { Trainer } from "@/models/Trainer";
+import { PokeTrainer } from "@/models/PokeTrainer";
 import { useEffect } from "react";
 import { Socket } from "socket.io-client";
 
 interface IJoinGameEmitterProps {
-  socket: Socket;
-  trainer: Trainer;
+  socket: Socket | null;
+  trainer: PokeTrainer | null;
 }
 
 const useJoinGameEmitter = ({ socket, trainer }: IJoinGameEmitterProps) => {

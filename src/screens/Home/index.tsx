@@ -1,16 +1,16 @@
 import { VStack, Text, HStack } from "@chakra-ui/react";
-import { useFetchInitialPokemons } from "../../api/pokemons/use-get-initial-pokemons";
-import Pokemon from "../../models/Pokemon";
 import ChooseCard from "./ChooseCard";
 import { useNavigate } from "react-router-dom";
 import { useLayoutEffect, useState } from "react";
 import { useCreatePokemon } from "../../api/pokemons/use-create-pokemon";
-import { usePokeTrainerContext } from "../../contexts/trainer";
+import { Pokemon } from "@/models/Pokemon";
+import { useGetPokeTrainer } from "@/api/trainer/use-get-poke-trainer";
+import { useGetPokemons } from "@/api/pokemons/use-get-pokemons";
 
 const Home = () => {
   const assignPokemon = useCreatePokemon();
-  const initialPokemonResults = useFetchInitialPokemons([1, 4, 7]);
-  const { trainer } = usePokeTrainerContext();
+  const initialPokemonResults = useGetPokemons([1, 4, 7]);
+  const trainer = useGetPokeTrainer();
 
   let navigate = useNavigate();
   // navigate before chance to paint the screen
@@ -20,11 +20,13 @@ const Home = () => {
 
   const [message, setMessage] = useState("");
   const onPokemonChoose = async (pokemon: Pokemon): Promise<void> => {
+    if (!trainer) return;
+
     setMessage(`You have choosen ${pokemon.name}`);
     await assignPokemon.mutateAsync({
       hp: pokemon.hp,
-      pokemonID: pokemon.id,
-      pokeTrainerId: trainer?.id
+      pokemon_id: pokemon.id,
+      trainer_id: trainer?.id
     });
     setTimeout(() => {
       navigate("/game");
@@ -32,7 +34,12 @@ const Home = () => {
   };
 
   if (!initialPokemonResults.every(({ data }) => Boolean(data))) return null;
-  const pokemons = initialPokemonResults.map(({ data }) => new Pokemon(data));
+  const pokemons = initialPokemonResults.reduce((acc, { data }) => {
+    if (data) {
+      acc.push(new Pokemon(data));
+    }
+    return acc;
+  }, [] as Pokemon[]);
 
   return (
     <VStack minH="60vh" alignItems="stretch" justifyContent="space-between">
@@ -47,7 +54,7 @@ const Home = () => {
         {message ? message : "Welcome to Pokemon"}
       </Text>
 
-      <HStack spacing="24px" wrap="wrap" justifyContent="space-around">
+      <HStack wrap="wrap" justifyContent="space-around">
         {pokemons.map((pokemon) => (
           <ChooseCard
             key={pokemon.id}

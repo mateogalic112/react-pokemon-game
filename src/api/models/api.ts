@@ -5,7 +5,7 @@ export interface Pokemon {
   trainer_id: number;
 }
 
-export interface Trainer {
+export interface ApiTrainer {
   id: number;
   email: string;
   password: string;

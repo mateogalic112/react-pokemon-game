@@ -1,8 +1,8 @@
 import apiConfig from "@/config/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Trainer } from "../models/api";
+import { ApiTrainer } from "../models/api";
 
-const updatePokeballs = async (trainerId: number, pokeballs: number): Promise<Trainer> => {
+const updatePokeballs = async (trainerId: number, pokeballs: number): Promise<ApiTrainer> => {
   const response = await fetch(`${apiConfig.baseURL}/pokemons/${trainerId}`, {
     method: "PATCH",
     headers: {
@@ -23,10 +23,10 @@ export const useUpdatePokeballs = (trainerId: number) => {
       await queryClient.cancelQueries({ queryKey: ["trainers", trainerId] });
 
       // Snapshot the previous value
-      const previousTrainer = queryClient.getQueryData(["trainers", trainerId]);
+      const previousTrainer = queryClient.getQueryData(["trainers", trainerId]) as ApiTrainer;
 
       // Optimistically update to the new value
-      queryClient.setQueryData(["trainers", trainerId], (old: Trainer) => ({
+      queryClient.setQueryData(["trainers", trainerId], (old: ApiTrainer) => ({
         ...old,
         pokeballs
       }));

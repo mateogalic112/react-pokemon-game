@@ -1,21 +1,19 @@
-import { ChevronDownIcon } from "@chakra-ui/icons";
 import { Button, Menu, MenuButton, MenuList, MenuItem, Image, Box, Text } from "@chakra-ui/react";
 import { useBattleContext } from "../contexts/battle";
-import { usePokeTrainerContext } from "../contexts/trainer";
+import { useGetPokeTrainer } from "@/api/trainer/use-get-poke-trainer";
 
 const SwitchPokemonMenu = () => {
-  const { trainer } = usePokeTrainerContext();
+  const trainer = useGetPokeTrainer();
+
   const { switchPokemon, pokemon } = useBattleContext();
 
-  const availablePokemons = trainer.pokemons.filter((item) => item.id !== pokemon.id);
+  const availablePokemons = trainer?.pokemons.filter((item) => item.id !== pokemon?.id);
 
-  if (!availablePokemons.length) return null;
+  if (!availablePokemons) return null;
 
   return (
     <Menu>
-      <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
-        Switch pokemon
-      </MenuButton>
+      <MenuButton as={Button}>Switch pokemon</MenuButton>
       <MenuList>
         {availablePokemons.map((pokemon) => (
           <MenuItem key={pokemon.id} onClick={() => switchPokemon(pokemon)}>

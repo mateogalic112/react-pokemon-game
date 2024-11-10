@@ -1,11 +1,11 @@
 import { createContext, FC, PropsWithChildren, useContext, useEffect, useReducer } from "react";
 import { useCreatePokemon } from "../../api/pokemons/use-create-pokemon";
-import { useGetTrainerPokemons } from "../../api/pokemons/use-get-pokemons";
 import PokeTrainerActionKind from "./actions";
 import pokeTrainerReducer from "./reducer";
-import { Trainer } from "@/models/Trainer";
+import { Trainer } from "@/models/PokeTrainer";
 import { Pokemon } from "@/models/Pokemon";
 import { useUpdatePokeballs } from "@/api/trainer/use-update-pokeballs";
+import { useGetMe } from "@/api/auth/use-get-me";
 
 export type TrainerState = {
   trainer: Trainer | null;
@@ -24,6 +24,8 @@ const initialContext: ITrainerContext = {
 const PokeTrainerContext = createContext<ITrainerContext>(initialContext);
 
 export const PokeTrainerProvider: FC<PropsWithChildren> = ({ children }) => {
+  const { data: apiTrainer } = useGetMe();
+
   const [{ trainer }, dispatch] = useReducer(pokeTrainerReducer, {
     trainer: null
   });
@@ -31,41 +33,7 @@ export const PokeTrainerProvider: FC<PropsWithChildren> = ({ children }) => {
   const capturePokemon = useCreatePokemon();
   const updatePokeballs = useUpdatePokeballs();
 
-  const { data: queryTrainer } = useGetPokeTrainer();
   const trainerPokemonResults = useGetTrainerPokemons(queryTrainer);
-
-  const hasFetchedTrainerPokemons = trainerPokemonResults.every(({ data }) => Boolean(data));
-  const hasFetchedData = queryTrainer && hasFetchedTrainerPokemons;
-
-  useEffect(() => {
-    if (!hasFetchedData) return;
-
-    const trainerPokemons = queryTrainer.pokemons.map((trainerPokemon) => {
-      const fetchedPokemon = trainerPokemonResults.find(
-        ({ data }) => data.id === trainerPokemon.pokemonID
-      );
-      return new Pokemon(
-        {
-          ...fetchedPokemon.data,
-          id: trainerPokemon.id
-        },
-        trainerPokemon.hp
-      );
-    });
-
-    dispatch({
-      type: PokeTrainerActionKind.setTrainer,
-      payload: {
-        trainer: new PokeTrainer(
-          queryTrainer.id,
-          queryTrainer.name,
-          queryTrainer.pokeballs,
-          trainerPokemons
-        )
-      }
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hasFetchedData, queryTrainer]);
 
   const catchPokemon = async (pokemon: Pokemon, isCaught: boolean) => {
     const currentPokeballCount = trainer.throwPokeball();

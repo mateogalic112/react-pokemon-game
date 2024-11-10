@@ -1,6 +1,6 @@
 import { Pokemon } from "./Pokemon";
 
-export class Trainer {
+export class PokeTrainer {
   public readonly id: number;
   public readonly name: string;
   public pokeballs: number;

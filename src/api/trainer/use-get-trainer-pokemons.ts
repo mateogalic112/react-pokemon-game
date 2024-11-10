@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
-import { PokeApiPokemon } from "../models/poke-api";
 import apiConfig from "@/config/api";
+import { Pokemon } from "../models/api";
 
-export const getTrainerPokemons = async (trainerId: number): Promise<PokeApiPokemon> => {
+export const getTrainerPokemons = async (trainerId: number): Promise<Array<Pokemon>> => {
   const response = await fetch(`${apiConfig.baseURL}/trainers/${trainerId}/pokemons`, {
     headers: {
       "Content-Type": "application/json"
@@ -11,9 +11,10 @@ export const getTrainerPokemons = async (trainerId: number): Promise<PokeApiPoke
   return response.json();
 };
 
-export const useGetTrainerPokemons = (trainerid: number) => {
+export const useGetTrainerPokemons = (trainerId: number) => {
   return useQuery({
-    queryKey: ["trainers", trainerid, "pokemons"],
-    queryFn: () => getTrainerPokemons(trainerid)
+    queryKey: ["trainers", trainerId, "pokemons"],
+    queryFn: () => getTrainerPokemons(trainerId),
+    enabled: !!trainerId
   });
 };
