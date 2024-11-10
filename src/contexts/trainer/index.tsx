@@ -1,30 +1,27 @@
 import { createContext, FC, PropsWithChildren, useContext, useEffect, useReducer } from "react";
 import { useCreatePokemon } from "../../api/pokemons/use-create-pokemon";
-import { useGetPokeTrainer } from "../../api/trainer/use-get-trainer";
 import { useGetTrainerPokemons } from "../../api/trainer/use-get-trainer-pokemons";
-import { useUpdatePokeballs } from "../../api/trainer/useUpdatePokeballs";
-import Pokemon from "../../models/Pokemon";
-import PokeTrainer from "../../models/PokeTrainer";
 import PokeTrainerActionKind from "./actions";
 import pokeTrainerReducer from "./reducer";
+import { Trainer } from "@/models/Trainer";
+import { Pokemon } from "@/models/Pokemon";
+import { useUpdatePokeballs } from "@/api/trainer/use-update-pokeballs";
 
-export type PokeTrainerState = {
-  trainer: PokeTrainer | null;
+export type TrainerState = {
+  trainer: Trainer | null;
 };
 
-interface IPokeTrainerContext {
-  trainer: PokeTrainer | null;
-
+interface ITrainerContext {
+  trainer: Trainer | null;
   catchPokemon: (pokemon: Pokemon, isCaught: boolean) => Promise<string>;
 }
 
-const initialContext: IPokeTrainerContext = {
+const initialContext: ITrainerContext = {
   trainer: null,
-
   catchPokemon: async () => ""
 };
 
-const PokeTrainerContext = createContext<IPokeTrainerContext>(initialContext);
+const PokeTrainerContext = createContext<ITrainerContext>(initialContext);
 
 export const PokeTrainerProvider: FC<PropsWithChildren> = ({ children }) => {
   const [{ trainer }, dispatch] = useReducer(pokeTrainerReducer, {

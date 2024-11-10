@@ -11,7 +11,7 @@ type BattleAction =
       payload: { newMessage: string };
     };
 
-const battleReducer = (state: BattleState, action: BattleAction): BattleState => {
+const battleReducer = (state: BattleState, action: BattleAction) => {
   switch (action.type) {
     case BattleActionKind.pokemonAttack:
       return {

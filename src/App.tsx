@@ -1,5 +1,5 @@
 import Navigation from "./layout/Navigation";
-import { PokeTrainerProvider } from "./contexts/poke-trainer";
+import { PokeTrainerProvider } from "./contexts/trainer";
 import Layout from "./layout/Layout";
 import { Route, Routes } from "react-router-dom";
 import Home from "./screens/Home";

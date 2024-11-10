@@ -5,7 +5,7 @@ import ChooseCard from "./ChooseCard";
 import { useNavigate } from "react-router-dom";
 import { useLayoutEffect, useState } from "react";
 import { useCreatePokemon } from "../../api/pokemons/use-create-pokemon";
-import { usePokeTrainerContext } from "../../contexts/poke-trainer";
+import { usePokeTrainerContext } from "../../contexts/trainer";
 
 const Home = () => {
   const assignPokemon = useCreatePokemon();

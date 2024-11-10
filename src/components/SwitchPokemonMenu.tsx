@@ -1,7 +1,7 @@
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { Button, Menu, MenuButton, MenuList, MenuItem, Image, Box, Text } from "@chakra-ui/react";
 import { useBattleContext } from "../contexts/battle";
-import { usePokeTrainerContext } from "../contexts/poke-trainer";
+import { usePokeTrainerContext } from "../contexts/trainer";
 
 const SwitchPokemonMenu = () => {
   const { trainer } = usePokeTrainerContext();

@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { Flex, Image, Button, Box } from "@chakra-ui/react";
-import { usePokeTrainerContext } from "../../contexts/poke-trainer";
+import { usePokeTrainerContext } from "../../contexts/trainer";
 import { useBattleContext } from "../../contexts/battle";
 
 interface IBattlefieldSidebarProps {}

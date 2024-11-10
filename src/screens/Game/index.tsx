@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import useGameSocket from "../../api/sockets/use-connect-game-socket";
 import { useFetchGamePlayers } from "../../api/sockets/queries/use-game-players";
 import { useOpponentContext } from "../../contexts/opponent";
-import { usePokeTrainerContext } from "../../contexts/poke-trainer";
+import { usePokeTrainerContext } from "../../contexts/trainer";
 import useJoinGameEmitter from "../../api/sockets/emitters/use-join-game-emitter";
 import useGamePlayersListener from "../../api/sockets/listeners/use-game-players-listener";
 

@@ -1,7 +1,7 @@
 import { Heading, Text, VStack } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { usePokeTrainerContext } from "../../contexts/poke-trainer";
+import { usePokeTrainerContext } from "../../contexts/trainer";
 
 const Pokedex = () => {
   let navigate = useNavigate();

@@ -1,12 +1,20 @@
-import { createContext, FC, useContext, useMemo, useReducer, useState } from "react";
+import {
+  createContext,
+  FC,
+  PropsWithChildren,
+  useContext,
+  useMemo,
+  useReducer,
+  useState
+} from "react";
 import Battle from "../../models/Battle";
-import Pokemon, { Move } from "../../models/Pokemon";
-import { usePokeTrainerContext } from "../poke-trainer";
+import { Pokemon, Move } from "../../models/Pokemon";
+import { usePokeTrainerContext } from "../trainer";
 import BattleActionKind from "./actions";
 import battleReducer from "./reducer";
 import { useNavigate } from "react-router-dom";
 import { useOpponentContext } from "../opponent";
-import { usePatchPokemonHealth } from "../../api/pokemons/usePatchPokemonHealth";
+import { usePatchPokemonHealth } from "@/api/pokemons/use-update-pokemon-hp";
 
 export interface BattleState {
   turn: number;
@@ -63,13 +71,12 @@ export const useBattleContext = () => {
 
 export const getOpponentTurn = (turn: number) => turn % 2 === 1;
 
-export const BattleProvider: FC = ({ children }) => {
+export const BattleProvider: FC<PropsWithChildren> = ({ children }) => {
   const [{ turn, battleMessages }, dispatch] = useReducer(battleReducer, initialState);
   const { foe } = useOpponentContext();
   const { trainer, catchPokemon } = usePokeTrainerContext();
   const updateHealth = usePatchPokemonHealth();
   let navigate = useNavigate();
-  console.log({ trainer });
 
   // Currently fighting pokemon
   const [pokemon, setPokemon] = useState<Pokemon>(trainer.pokemons[0]);

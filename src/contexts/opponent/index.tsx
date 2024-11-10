@@ -1,7 +1,7 @@
-import { createContext, FC, useContext, useReducer } from "react";
-import Pokemon from "../../models/Pokemon";
+import { createContext, FC, PropsWithChildren, useContext, useReducer } from "react";
 import OpponentActionKind from "./actions";
 import opponentReducer from "./reducer";
+import { Pokemon } from "@/models/Pokemon";
 
 export interface OpponentState {
   foe: Pokemon | null;
@@ -32,7 +32,7 @@ export const useOpponentContext = () => {
   return context;
 };
 
-export const OpponentProvider: FC = ({ children }) => {
+export const OpponentProvider: FC<PropsWithChildren> = ({ children }) => {
   const [{ foe }, dispatch] = useReducer(opponentReducer, initialState);
 
   const storeOpponent = (foe: Pokemon) => {

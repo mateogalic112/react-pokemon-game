@@ -1,5 +1,5 @@
+import { Pokemon } from "@/models/Pokemon";
 import { OpponentState } from ".";
-import Pokemon from "../../models/Pokemon";
 import OpponentActionKind from "./actions";
 
 type OpponentAction = {
