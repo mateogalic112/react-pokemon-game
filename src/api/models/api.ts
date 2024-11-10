@@ -4,3 +4,11 @@ export interface Pokemon {
   hp: number;
   trainer_id: number;
 }
+
+export interface Trainer {
+  id: number;
+  email: string;
+  password: string;
+  name: string;
+  pokeballs: number;
+}

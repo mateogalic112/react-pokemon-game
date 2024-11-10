@@ -10,6 +10,7 @@ const fetchMe = async () => {
   });
   return response.json();
 };
+
 export const useIsLoggedIn = () =>
   useQuery({
     queryKey: ["auth", "me"],

@@ -1,6 +1,6 @@
 import { createContext, FC, PropsWithChildren, useContext, useEffect, useReducer } from "react";
 import { useCreatePokemon } from "../../api/pokemons/use-create-pokemon";
-import { useGetTrainerPokemons } from "../../api/trainer/use-get-trainer-pokemons";
+import { useGetTrainerPokemons } from "../../api/pokemons/use-get-pokemons";
 import PokeTrainerActionKind from "./actions";
 import pokeTrainerReducer from "./reducer";
 import { Trainer } from "@/models/Trainer";
