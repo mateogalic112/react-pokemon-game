@@ -1,6 +1,6 @@
 const apiConfig = {
-  baseURL: process.env.REACT_APP_BASE_URL,
-  pokeApiURL: process.env.REACT_APP_POKE_API_URL,
+  baseURL: import.meta.env.VITE_API_URL,
+  pokeApiURL: import.meta.env.VITE_POKE_API_URL,
 }
 
 export default apiConfig

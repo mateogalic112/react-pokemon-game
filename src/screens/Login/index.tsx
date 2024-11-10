@@ -14,12 +14,12 @@ import {
   FormHelperText,
   InputRightElement,
 } from '@chakra-ui/react'
-import { useLogin } from '../../api/auth/useLogin'
+import { useLogin } from '../../api/auth/use-login'
 import { useNavigate } from 'react-router-dom'
 
 const initialLoginData = {
-  email: 'mateogalic112@gmail.com',
-  password: 'hello-there',
+  email: 'mateo@gmail.com',
+  password: '123456',
 }
 
 const LoginPage = () => {
